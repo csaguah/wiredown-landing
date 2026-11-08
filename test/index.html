@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Título y descripción fijos: nunca cambian según respuestas o resultado. -->
+<title>Test orientativo · Wire Down</title>
+<meta name="description" content="Una autoevaluación orientativa de 10 preguntas para reconocer tu punto de partida y decidir por dónde empezar con la guía Wire Down.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --verde:    #2D5A3D;
+  --verde-m:  #3D7A50;
+  --verde-l:  #74C69D;
+  --verde-xl: #D8F3DC;
+  --sage:     #D8E4D0;
+  --sage-d:   #C4D4BB;
+  --dorado:   #C8A84B;
+  --dorado-l: #F5EDD0;
+  --tierra:   #8B5E3C;
+  --beige:    #F8F4EE;
+  --gris:     #5A6B5D;
+  --osc:      #1C2B20;
+  --rojo:     #8B2020;
+}
+body { font-family: 'DM Sans', sans-serif; color: var(--osc); background: var(--beige); line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column; }
+h1, h2, h3 { font-family: 'Lora', serif; line-height: 1.25; color: var(--verde); }
+a { color: var(--verde-m); }
+[hidden] { display: none !important; }
+:focus-visible { outline: 3px solid var(--verde-m); outline-offset: 3px; }
+[tabindex="-1"]:focus { outline: none; }
+
+.topbar { background: var(--verde); color: #fff; text-align: center; padding: 12px 20px; font-size: 14px; }
+.topbar a { color: #fff; text-decoration: none; font-family: 'Lora', serif; font-weight: 600; font-size: 17px; letter-spacing: .3px; }
+
+main { flex: 1; width: 100%; max-width: 640px; margin: 0 auto; padding: 40px 20px 64px; }
+.card { background: #fff; border: 1.5px solid var(--sage-d); border-radius: 18px; padding: 32px 26px; }
+@media (min-width: 600px) { .card { padding: 40px 40px; } main { padding-top: 56px; } }
+
+.eyebrow { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--verde-m); font-weight: 600; margin-bottom: 12px; }
+.screen h1 { font-size: clamp(28px, 6vw, 38px); margin-bottom: 16px; }
+.lead { font-size: 17px; color: var(--osc); margin-bottom: 20px; }
+.note { background: var(--dorado-l); border-left: 4px solid var(--dorado); border-radius: 10px; padding: 14px 16px; font-size: 15px; margin-bottom: 20px; }
+.instruction { font-family: 'Lora', serif; font-style: italic; color: var(--gris); font-size: 17px; margin-bottom: 28px; }
+
+.btn { display: inline-block; font: 600 16px 'DM Sans', sans-serif; padding: 16px 36px; border-radius: 50px; cursor: pointer; text-decoration: none; text-align: center; transition: background .2s, transform .15s; }
+.btn-primary { background: var(--verde); color: #fff; border: none; }
+.btn-primary:hover { background: #1e4029; transform: translateY(-2px); }
+.btn-outline { background: #fff; color: var(--verde); border: 1.5px solid var(--verde); }
+.btn-outline:hover { background: var(--verde-xl); }
+.btn-link { background: none; border: none; color: var(--verde-m); font: 500 15px 'DM Sans', sans-serif; text-decoration: underline; cursor: pointer; padding: 8px 4px; }
+.btn-link:disabled { color: #8a968c; text-decoration: none; cursor: default; }
+
+/* Progreso */
+.progress-label { font-size: 14px; color: var(--gris); font-weight: 500; margin-bottom: 8px; }
+.progress-track { height: 6px; background: var(--sage); border-radius: 6px; overflow: hidden; margin-bottom: 28px; }
+.progress-fill { height: 100%; width: 10%; background: var(--verde-m); border-radius: 6px; transition: width .3s ease; }
+
+/* Pregunta */
+fieldset { border: none; }
+legend { width: 100%; margin-bottom: 22px; }
+legend h2 { font-size: clamp(21px, 4.6vw, 26px); color: var(--osc); font-weight: 600; }
+.options { display: grid; gap: 12px; }
+.option { position: relative; }
+.option input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.option label { display: flex; align-items: center; gap: 14px; min-height: 58px; padding: 14px 18px; background: #fff; border: 1.5px solid var(--sage-d); border-radius: 14px; font-size: 17px; font-weight: 500; cursor: pointer; transition: border-color .15s, background .15s; }
+.option label::before { content: ''; flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--gris); background: #fff; transition: all .15s; }
+.option label:hover { border-color: var(--verde-m); background: #fbfdfa; }
+.option input:checked + label { border-color: var(--verde); background: var(--verde-xl); }
+.option input:checked + label::before { border-color: var(--verde); background: var(--verde); box-shadow: inset 0 0 0 4px #fff; }
+.option input:focus-visible + label { outline: 3px solid var(--verde-m); outline-offset: 2px; }
+.q-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 24px; min-height: 44px; }
+
+/* Resultado */
+.result-block { margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--sage); }
+.result-block.first { border-top: none; padding-top: 0; margin-top: 8px; }
+.label { font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gris); font-weight: 600; margin-bottom: 6px; }
+.result-block h2 { font-size: 24px; margin-bottom: 8px; }
+.result-block h3 { font-size: 19px; margin: 14px 0 6px; }
+.score { font-size: 15px; color: var(--gris); margin-bottom: 10px; }
+.reco { background: var(--beige); border-radius: 10px; padding: 12px 14px; margin-top: 10px; font-size: 15px; }
+.reco strong { color: var(--verde); }
+.pro-support { background: #fff; border: 2px solid var(--tierra); border-radius: 14px; padding: 20px 20px; margin-bottom: 26px; }
+.pro-support h2 { color: var(--tierra); font-size: 22px; margin-bottom: 8px; }
+.pro-support p { font-size: 17px; }
+.disclaimer { font-size: 15px; color: var(--gris); margin-top: 26px; }
+.result-actions { margin-top: 26px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.result-actions .btn { width: 100%; max-width: 360px; }
+.severe .result-actions .btn-primary { background: #fff; color: var(--verde); border: 1.5px solid var(--verde); }
+.severe .result-actions .btn-primary:hover { background: var(--verde-xl); transform: none; }
+
+footer { text-align: center; padding: 28px 20px 110px; font-size: 13px; color: var(--gris); }
+footer a { color: inherit; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+</style>
+
+<!-- Meta Pixel — Wire Down (se carga solo con consentimiento). Igual que en la home. -->
+<script>
+function wdLoadPixel(){
+  if (window.fbq) return;
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('set', 'autoConfig', false, '4406846419603179');
+  fbq('init', '4406846419603179');
+  fbq('track', 'PageView');
+}
+try { if (localStorage.getItem('wd_consent') === 'granted') wdLoadPixel(); } catch(e) {}
+</script>
+<!-- End Meta Pixel -->
+</head>
+<body>
+
+<header class="topbar"><a href="/">Wire Down</a></header>
+
+<main>
+  <!-- 1. INTRO -->
+  <section class="screen card" id="screen-intro" aria-labelledby="intro-title">
+    <p class="eyebrow">Autoevaluación</p>
+    <h1 id="intro-title" tabindex="-1">Test orientativo Wire Down</h1>
+    <p class="lead">Una autoevaluación de 10 preguntas para reconocer tu punto de partida y decidir por dónde empezar. Toma unos 5 minutos.</p>
+    <p class="note">Este test fue construido desde la experiencia clínica y el marco de Wire Down. No ha sido validado como instrumento clínico, no es un diagnóstico y no reemplaza la evaluación de un profesional de salud.</p>
+    <p class="instruction">Responde pensando en cómo te has sentido durante los últimos 14 días.</p>
+    <button type="button" class="btn btn-primary" id="btn-start">Comenzar</button>
+  </section>
+
+  <!-- 2. PREGUNTAS -->
+  <section class="screen card" id="screen-question" hidden aria-label="Preguntas">
+    <p class="progress-label" id="progress-label">1 de 10</p>
+    <div class="progress-track" role="progressbar" aria-labelledby="progress-label" aria-valuemin="1" aria-valuemax="10" aria-valuenow="1" id="progress-bar">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <form id="q-form" novalidate>
+      <fieldset>
+        <legend><h2 id="q-text" tabindex="-1"></h2></legend>
+        <div class="options" id="q-options"></div>
+      </fieldset>
+      <div class="q-nav">
+        <button type="button" class="btn-link" id="btn-prev">← Anterior</button>
+        <button type="submit" class="btn-link" id="btn-next" hidden>Siguiente →</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- 3. RESULTADO -->
+  <section class="screen card" id="screen-result" hidden aria-labelledby="result-title">
+    <h1 id="result-title" tabindex="-1">Tu punto de partida</h1>
+
+    <!-- Solo en Sobrecarga severa: va antes del CTA y con más jerarquía que él. -->
+    <div class="pro-support" id="pro-support" hidden>
+      <h2>Considera apoyo profesional</h2>
+      <p id="pro-support-text"></p>
+    </div>
+
+    <div class="result-block first">
+      <p class="label">Tu rango</p>
+      <h2 id="range-name"></h2>
+      <p class="score" id="range-score"></p>
+      <p id="range-text"></p>
+      <p class="reco" id="range-reco-wrap"><strong>Por dónde empezar:</strong> <span id="range-reco"></span></p>
+    </div>
+
+    <div class="result-block">
+      <p class="label" id="profile-label">Tu perfil predominante</p>
+      <div id="profiles"></div>
+    </div>
+
+    <p class="disclaimer">Este resultado es orientativo. Si tu dolor es reciente, intenso o viene acompañado de otros síntomas, consulta con un profesional de salud.</p>
+
+    <!--
+      FASE 2 (no activo): captura opcional de email.
+      Insertar aquí un formulario con casilla de consentimiento separada y sin marcar,
+      que explique qué se guarda (email y perfil) y para qué, con integración a MailerLite.
+      Mientras no exista, la página no recoge ningún dato.
+    -->
+    <div id="wd-email-slot" hidden></div>
+
+    <div class="result-actions">
+      <a class="btn btn-primary" id="cta-guide" href="/">Conocer la guía Wire Down</a>
+      <button type="button" class="btn-link" id="btn-restart">Volver a hacer el test</button>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <strong>Wire Down</strong> · Santiago, Chile<br>
+  <a href="/privacidad.html">Política de privacidad</a> · <a href="#" id="cookie-settings">Preferencias de cookies</a>
+</footer>
+
+<script src="test-data.js"></script>
+<script src="scoring.js"></script>
+<script>
+/*
+ * Interfaz del test. Reglas de privacidad:
+ * - Las respuestas viven solo en memoria (variable `answers`). Al recargar, se pierden.
+ * - No se toca la URL (ni query, ni hash, ni history), ni document.title, ni dataLayer.
+ * - Al Pixel solo van TestStarted y TestCompleted, sin parámetros, y solo si hay consentimiento.
+ */
+(function () {
+  var DATA = window.WD_TEST_DATA, S = window.WD_SCORING;
+  var QUESTIONS = DATA.questions, N = QUESTIONS.length;
+  var answers = {}, current = 0, advanceTimer = null, arrowNav = false;
+
+  var $ = function (id) { return document.getElementById(id); };
+  var screens = { intro: $('screen-intro'), question: $('screen-question'), result: $('screen-result') };
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function track(eventName) {
+    // Sin parámetros a propósito. fbq solo existe si la persona aceptó cookies.
+    if (typeof window.fbq === 'function') window.fbq('trackCustom', eventName);
+  }
+
+  function show(name, focusEl) {
+    Object.keys(screens).forEach(function (k) { screens[k].hidden = (k !== name); });
+    window.scrollTo(0, 0);
+    if (focusEl) focusEl.focus();
+  }
+
+  function renderQuestion() {
+    var q = QUESTIONS[current];
+    clearTimeout(advanceTimer);
+    $('progress-label').textContent = (current + 1) + ' de ' + N;
+    $('progress-bar').setAttribute('aria-valuenow', current + 1);
+    $('progress-bar').setAttribute('aria-valuetext', (current + 1) + ' de ' + N);
+    $('progress-fill').style.width = ((current + 1) / N * 100) + '%';
+    $('q-text').textContent = q.text;
+
+    var box = $('q-options');
+    box.innerHTML = '';
+    DATA.options.forEach(function (opt) {
+      var wrap = document.createElement('div');
+      wrap.className = 'option';
+      var input = document.createElement('input');
+      input.type = 'radio';
+      input.name = 'answer';
+      input.id = 'opt-' + opt.value;
+      input.value = String(opt.value);
+      if (answers[q.id] === opt.value) input.checked = true;
+      var label = document.createElement('label');
+      label.htmlFor = input.id;
+      label.textContent = opt.label;
+      wrap.appendChild(input);
+      wrap.appendChild(label);
+      box.appendChild(wrap);
+    });
+
+    $('btn-prev').disabled = current === 0;
+    $('btn-next').hidden = !(q.id in answers);
+    show('question', $('q-text'));
+  }
+
+  function next() {
+    clearTimeout(advanceTimer);
+    if (!(QUESTIONS[current].id in answers)) return;
+    if (current < N - 1) { current++; renderQuestion(); }
+    else renderResult();
+  }
+
+  function renderResult() {
+    var r = S.evaluate(DATA, answers);
+    var severe = !!r.range.professionalFirst;
+
+    screens.result.classList.toggle('severe', severe);
+    $('pro-support').hidden = !severe;
+    $('pro-support-text').textContent = severe ? r.range.recommendation : '';
+
+    $('range-name').textContent = r.range.name;
+    $('range-score').textContent = 'Puntaje: ' + r.score + ' de 30';
+    $('range-text').textContent = r.range.text;
+    $('range-reco').textContent = r.range.recommendation;
+    $('range-reco-wrap').hidden = severe; // en severa la recomendación ya está arriba, destacada
+
+    $('profile-label').textContent = r.profiles.length > 1 ? 'Tus perfiles predominantes' : 'Tu perfil predominante';
+    var box = $('profiles');
+    box.innerHTML = '';
+    r.profiles.forEach(function (p) {
+      var h = document.createElement('h3'); h.textContent = p.name;
+      var t = document.createElement('p'); t.textContent = p.text;
+      var reco = document.createElement('p'); reco.className = 'reco';
+      var strong = document.createElement('strong'); strong.textContent = 'Prioriza: ';
+      reco.appendChild(strong); reco.appendChild(document.createTextNode(p.priority));
+      box.appendChild(h); box.appendChild(t); box.appendChild(reco);
+    });
+
+    show('result', $('result-title'));
+    track('TestCompleted');
+  }
+
+  function restart() {
+    answers = {}; current = 0;
+    show('intro', $('intro-title'));
+  }
+
+  $('btn-start').addEventListener('click', function () {
+    answers = {}; current = 0;
+    track('TestStarted');
+    renderQuestion();
+  });
+
+  // Las flechas solo mueven la selección (patrón estándar de radios); no avanzan solas.
+  $('q-options').addEventListener('keydown', function (e) {
+    if (/^Arrow/.test(e.key)) arrowNav = true;
+  });
+
+  $('q-options').addEventListener('change', function (e) {
+    var value = Number(e.target.value);
+    answers[QUESTIONS[current].id] = value;
+    $('btn-next').hidden = false;
+    if (arrowNav) { arrowNav = false; return; }
+    clearTimeout(advanceTimer);
+    advanceTimer = setTimeout(next, reduceMotion ? 0 : 280);
+  });
+
+  // Enter dentro del formulario o el botón «Siguiente».
+  $('q-form').addEventListener('submit', function (e) { e.preventDefault(); next(); });
+
+  $('btn-prev').addEventListener('click', function () {
+    if (current > 0) { current--; renderQuestion(); }
+  });
+
+  $('btn-restart').addEventListener('click', restart);
+})();
+</script>
+
+<!-- COOKIE CONSENT (mismo aviso y clave que la home) -->
+<style>
+.wd-consent{position:fixed;left:16px;right:16px;bottom:16px;max-width:560px;margin:0 auto;background:#fff;
+  border:1px solid var(--sage-d);border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.12);padding:18px 20px;
+  z-index:1000;font-size:13px;color:var(--osc);display:none}
+.wd-consent p{margin-bottom:12px;line-height:1.5}
+.wd-consent a{color:var(--verde-m)}
+.wd-consent-btns{display:flex;gap:10px;flex-wrap:wrap}
+.wd-consent button{flex:1;min-width:120px;padding:10px 14px;border-radius:8px;font:600 13px 'DM Sans',sans-serif;cursor:pointer;
+  border:1px solid var(--verde);background:#fff;color:var(--verde)}
+</style>
+<div class="wd-consent" id="wd-consent" role="dialog" aria-label="Preferencias de cookies">
+  <p>Usamos cookies de Meta para medir qué contenidos llegan a las personas indicadas. Solo se activan si las aceptas. Más detalles en la <a href="/privacidad.html">política de privacidad</a>.</p>
+  <div class="wd-consent-btns">
+    <button type="button" id="wd-reject">Rechazar</button>
+    <button type="button" id="wd-accept">Aceptar</button>
+  </div>
+</div>
+<script>
+(function(){
+  var box=document.getElementById('wd-consent'), v=null;
+  try { v=localStorage.getItem('wd_consent'); } catch(e) {}
+  function save(x){ try { localStorage.setItem('wd_consent', x); } catch(e) {} box.style.display='none'; }
+  if (!v) box.style.display='block';
+  document.getElementById('wd-accept').onclick=function(){ save('granted'); wdLoadPixel(); };
+  document.getElementById('wd-reject').onclick=function(){ save('denied'); };
+  document.getElementById('cookie-settings').onclick=function(e){ e.preventDefault(); box.style.display='block'; };
+})();
+</script>
+</body>
+</html>
