@@ -286,7 +286,9 @@ try { if (localStorage.getItem('wd_consent') === 'granted') wdLoadPixel(); } cat
     $('range-reco').textContent = r.range.recommendation;
     $('range-reco-wrap').hidden = severe; // en severa la recomendación ya está arriba, destacada
 
-    $('profile-label').textContent = r.profiles.length > 1 ? 'Tus perfiles predominantes' : 'Tu perfil predominante';
+    $('profile-label').textContent =
+      r.profiles[0].id === DATA.noDominantProfile ? 'Tu perfil' :
+      r.profiles.length > 1 ? 'Tus perfiles predominantes' : 'Tu perfil predominante';
     var box = $('profiles');
     box.innerHTML = '';
     r.profiles.forEach(function (p) {
