@@ -75,11 +75,39 @@ test('empate triple', () => {
   assert.deepEqual(ids(all3), ['hiperalerta', 'colapso', 'tension']);
 });
 
-test('todas las respuestas < 2 → Regulado', () => {
-  const ones = answers();
-  Object.keys(ones).forEach(k => { ones[k] = 1; });
-  assert.deepEqual(ids(ones), ['regulado']);
-  assert.deepEqual(ids(answers()), ['regulado']);
+test('todas < 2 y puntaje 0–8 → Regulado', () => {
+  assert.deepEqual(ids(answers()), ['regulado']);                                // 0 puntos
+  assert.deepEqual(ids(answers({ 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1 })), ['regulado']); // 8 puntos
+});
+
+test('todas < 2 y puntaje 9 o más → Sin un perfil que destaque', () => {
+  const nine = answers({ 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1 }); // 9 puntos
+  assert.deepEqual(ids(nine), ['sinPerfil']);
+
+  const allOnes = answers();                                                       // todo «A veces» = 10
+  Object.keys(allOnes).forEach(k => { allOnes[k] = 1; });
+  const r = S.evaluate(data, allOnes);
+  assert.equal(r.score, 10);
+  assert.equal(r.range.id, 'moderada');
+  assert.deepEqual(r.profiles.map(p => p.id), ['sinPerfil']);
+  assert.equal(r.profiles[0].name, 'Sin un perfil que destaque');
+  assert.equal(r.profiles[0].priority, null);
+});
+
+test('Regulado nunca aparece con puntaje de 9 o más', () => {
+  // Recorre todas las combinaciones de respuestas 0/1 (todas < 2).
+  for (let mask = 0; mask < 1 << 10; mask++) {
+    const a = answers();
+    data.questions.forEach((q, i) => { a[q.id] = (mask >> i) & 1; });
+    const r = S.evaluate(data, a);
+    assert.equal(r.profiles[0].id, r.score <= 8 ? 'regulado' : 'sinPerfil', `puntaje ${r.score}`);
+  }
+});
+
+test('la pregunta 3 no cuenta para ningún perfil', () => {
+  for (const v of [0, 1, 2, 3]) {
+    assert.deepEqual(S.profileCounts(data, answers({ 3: v, 1: 2 })), { hiperalerta: 1, tension: 0, colapso: 0 });
+  }
 });
 
 test('la pregunta 3 suma al puntaje pero no altera el perfil', () => {

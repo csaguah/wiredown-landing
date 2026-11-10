@@ -77,10 +77,19 @@
         name: 'Regulado',
         text: 'No marcaste síntomas frecuentes en ningún grupo.',
         priority: 'Módulo 7 y Bitácora para sostener tus hábitos.'
+      },
+      sinPerfil: {
+        name: 'Sin un perfil que destaque',
+        text: 'Tus síntomas aparecen de vez en cuando y repartidos, sin un grupo que predomine. Sigue la recomendación de tu rango.',
+        priority: null // sin bloque «Prioriza»
       }
     },
 
-    fallbackProfile: 'regulado'
+    // Cuando ningún perfil tiene preguntas >= umbral:
+    // - si el rango es uno de estos, se muestra el perfil indicado;
+    // - si no, se muestra noDominantProfile.
+    fallbackProfileByRange: { regulado: 'regulado' },
+    noDominantProfile: 'sinPerfil'
   };
 
   if (typeof module !== 'undefined' && module.exports) module.exports = data;

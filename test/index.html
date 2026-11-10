@@ -216,8 +216,14 @@ try { if (localStorage.getItem('wd_consent') === 'granted') wdLoadPixel(); } cat
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function track(eventName) {
-    // Sin parámetros a propósito. fbq solo existe si la persona aceptó cookies.
-    if (typeof window.fbq === 'function') window.fbq('trackCustom', eventName);
+    // Se revisa el consentimiento en el momento de cada evento (no solo al cargar),
+    // así respeta un «Aceptar» o un «Rechazar» hecho estando ya en esta página.
+    // Sin parámetros a propósito.
+    var consent = null;
+    try { consent = localStorage.getItem('wd_consent'); } catch (e) {}
+    if (consent !== 'granted') return;
+    if (typeof window.fbq !== 'function') wdLoadPixel();
+    window.fbq('trackCustom', eventName);
   }
 
   function show(name, focusEl) {
@@ -286,10 +292,13 @@ try { if (localStorage.getItem('wd_consent') === 'granted') wdLoadPixel(); } cat
     r.profiles.forEach(function (p) {
       var h = document.createElement('h3'); h.textContent = p.name;
       var t = document.createElement('p'); t.textContent = p.text;
-      var reco = document.createElement('p'); reco.className = 'reco';
-      var strong = document.createElement('strong'); strong.textContent = 'Prioriza: ';
-      reco.appendChild(strong); reco.appendChild(document.createTextNode(p.priority));
-      box.appendChild(h); box.appendChild(t); box.appendChild(reco);
+      box.appendChild(h); box.appendChild(t);
+      if (p.priority) {
+        var reco = document.createElement('p'); reco.className = 'reco';
+        var strong = document.createElement('strong'); strong.textContent = 'Prioriza: ';
+        reco.appendChild(strong); reco.appendChild(document.createTextNode(p.priority));
+        box.appendChild(reco);
+      }
     });
 
     show('result', $('result-title'));

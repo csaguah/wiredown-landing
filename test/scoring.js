@@ -36,7 +36,10 @@
     var counts = profileCounts(data, answers);
     var max = 0;
     Object.keys(counts).forEach(function (k) { if (counts[k] > max) max = counts[k]; });
-    if (max === 0) return [data.fallbackProfile];
+    if (max === 0) {
+      var rangeId = getRange(data, totalScore(data, answers)).id;
+      return [data.fallbackProfileByRange[rangeId] || data.noDominantProfile];
+    }
     return Object.keys(data.profiles).filter(function (k) { return counts[k] === max; });
   }
 
