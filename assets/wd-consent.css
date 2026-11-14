@@ -1,0 +1,9 @@
+/* Aviso de cookies — Wire Down. Usa las variables de wd-base.css. */
+.wd-consent{position:fixed;left:16px;right:16px;bottom:16px;max-width:560px;margin:0 auto;background:#fff;
+  border:1px solid var(--sage-d);border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.12);padding:18px 20px;
+  z-index:1000;font-size:13px;color:var(--osc);display:none}
+.wd-consent p{margin-bottom:12px;line-height:1.5}
+.wd-consent a{color:var(--verde-m)}
+.wd-consent-btns{display:flex;gap:10px;flex-wrap:wrap}
+.wd-consent button{flex:1;min-width:120px;padding:10px 14px;border-radius:8px;font:600 13px 'DM Sans',sans-serif;cursor:pointer;
+  border:1px solid var(--verde);background:#fff;color:var(--verde)}
