@@ -8,23 +8,10 @@
 <meta name="description" content="Una autoevaluación orientativa de 10 preguntas para reconocer tu punto de partida y decidir por dónde empezar con la guía Wire Down.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/wd-base.css">
+<link rel="stylesheet" href="/assets/wd-consent.css">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --verde:    #2D5A3D;
-  --verde-m:  #3D7A50;
-  --verde-l:  #74C69D;
-  --verde-xl: #D8F3DC;
-  --sage:     #D8E4D0;
-  --sage-d:   #C4D4BB;
-  --dorado:   #C8A84B;
-  --dorado-l: #F5EDD0;
-  --tierra:   #8B5E3C;
-  --beige:    #F8F4EE;
-  --gris:     #5A6B5D;
-  --osc:      #1C2B20;
-  --rojo:     #8B2020;
-}
+/* Reset y variables de marca: /assets/wd-base.css */
 body { font-family: 'DM Sans', sans-serif; color: var(--osc); background: var(--beige); line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column; }
 h1, h2, h3 { font-family: 'Lora', serif; line-height: 1.25; color: var(--verde); }
 a { color: var(--verde-m); }
@@ -100,24 +87,7 @@ footer a { color: inherit; }
 </style>
 
 <!-- Meta Pixel — Wire Down (se carga solo con consentimiento). Igual que en la home. -->
-<script>
-function wdLoadPixel(){
-  if (window.fbq) return;
-  !function(f,b,e,v,n,t,s)
-  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-  n.queue=[];t=b.createElement(e);t.async=!0;
-  t.src=v;s=b.getElementsByTagName(e)[0];
-  s.parentNode.insertBefore(t,s)}(window, document,'script',
-  'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('set', 'autoConfig', false, '4406846419603179');
-  fbq('init', '4406846419603179');
-  fbq('track', 'PageView');
-}
-try { if (localStorage.getItem('wd_consent') === 'granted') wdLoadPixel(); } catch(e) {}
-</script>
-<!-- End Meta Pixel -->
+<script src="/assets/wd-pixel.js"></script>
 </head>
 <body>
 
@@ -343,17 +313,7 @@ try { if (localStorage.getItem('wd_consent') === 'granted') wdLoadPixel(); } cat
 })();
 </script>
 
-<!-- COOKIE CONSENT (mismo aviso y clave que la home) -->
-<style>
-.wd-consent{position:fixed;left:16px;right:16px;bottom:16px;max-width:560px;margin:0 auto;background:#fff;
-  border:1px solid var(--sage-d);border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.12);padding:18px 20px;
-  z-index:1000;font-size:13px;color:var(--osc);display:none}
-.wd-consent p{margin-bottom:12px;line-height:1.5}
-.wd-consent a{color:var(--verde-m)}
-.wd-consent-btns{display:flex;gap:10px;flex-wrap:wrap}
-.wd-consent button{flex:1;min-width:120px;padding:10px 14px;border-radius:8px;font:600 13px 'DM Sans',sans-serif;cursor:pointer;
-  border:1px solid var(--verde);background:#fff;color:var(--verde)}
-</style>
+<!-- COOKIE CONSENT (mismo aviso y clave que la home; estilos y lógica en /assets/) -->
 <div class="wd-consent" id="wd-consent" role="dialog" aria-label="Preferencias de cookies">
   <p>Usamos cookies de Meta para medir qué contenidos llegan a las personas indicadas. Solo se activan si las aceptas. Más detalles en la <a href="/privacidad.html">política de privacidad</a>.</p>
   <div class="wd-consent-btns">
@@ -361,16 +321,6 @@ try { if (localStorage.getItem('wd_consent') === 'granted') wdLoadPixel(); } cat
     <button type="button" id="wd-accept">Aceptar</button>
   </div>
 </div>
-<script>
-(function(){
-  var box=document.getElementById('wd-consent'), v=null;
-  try { v=localStorage.getItem('wd_consent'); } catch(e) {}
-  function save(x){ try { localStorage.setItem('wd_consent', x); } catch(e) {} box.style.display='none'; }
-  if (!v) box.style.display='block';
-  document.getElementById('wd-accept').onclick=function(){ save('granted'); wdLoadPixel(); };
-  document.getElementById('wd-reject').onclick=function(){ save('denied'); };
-  document.getElementById('cookie-settings').onclick=function(e){ e.preventDefault(); box.style.display='block'; };
-})();
-</script>
+<script src="/assets/wd-consent.js"></script>
 </body>
 </html>
