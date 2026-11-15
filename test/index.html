@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- GTM con Consent Mode v2 (todo denegado por defecto). Va antes de cualquier otro script de medición. -->
 <script src="/assets/wd-gtm.js"></script>
+<!-- Eventos al dataLayer (solo con consentimiento de Analítica y con GTM ya cargado). -->
+<script src="/assets/wd-events.js" defer></script>
 <!-- Título y descripción fijos: nunca cambian según respuestas o resultado. -->
 <title>Test orientativo · Wire Down</title>
 <meta name="description" content="Una autoevaluación orientativa de 10 preguntas para reconocer tu punto de partida y decidir por dónde empezar con la guía Wire Down.">
@@ -98,17 +100,17 @@ footer a { color: inherit; }
 
 <main>
   <!-- 1. INTRO -->
-  <section class="screen card" id="screen-intro" aria-labelledby="intro-title">
+  <section class="screen card" id="screen-intro" data-track-section="test_intro" aria-labelledby="intro-title">
     <p class="eyebrow">Autoevaluación</p>
     <h1 id="intro-title" tabindex="-1">Test orientativo Wire Down</h1>
     <p class="lead">Una autoevaluación de 10 preguntas para reconocer tu punto de partida y decidir por dónde empezar. Toma unos 5 minutos.</p>
     <p class="note">Este test fue construido desde la experiencia clínica y el marco de Wire Down. No ha sido validado como instrumento clínico, no es un diagnóstico y no reemplaza la evaluación de un profesional de salud.</p>
     <p class="instruction">Responde pensando en cómo te has sentido durante los últimos 14 días.</p>
-    <button type="button" class="btn btn-primary" id="btn-start">Comenzar</button>
+    <button type="button" class="btn btn-primary" id="btn-start" data-cta="comenzar_test" data-cta-location="intro">Comenzar</button>
   </section>
 
   <!-- 2. PREGUNTAS -->
-  <section class="screen card" id="screen-question" hidden aria-label="Preguntas">
+  <section class="screen card" id="screen-question" data-track-section="test_preguntas" hidden aria-label="Preguntas">
     <p class="progress-label" id="progress-label">1 de 10</p>
     <div class="progress-track" role="progressbar" aria-labelledby="progress-label" aria-valuemin="1" aria-valuemax="10" aria-valuenow="1" id="progress-bar">
       <div class="progress-fill" id="progress-fill"></div>
@@ -126,7 +128,7 @@ footer a { color: inherit; }
   </section>
 
   <!-- 3. RESULTADO -->
-  <section class="screen card" id="screen-result" hidden aria-labelledby="result-title">
+  <section class="screen card" id="screen-result" data-track-section="test_resultado" hidden aria-labelledby="result-title">
     <h1 id="result-title" tabindex="-1">Tu punto de partida</h1>
 
     <!-- Solo en Sobrecarga severa: va antes del CTA y con más jerarquía que él. -->
@@ -159,8 +161,8 @@ footer a { color: inherit; }
     <div id="wd-email-slot" hidden></div>
 
     <div class="result-actions">
-      <a class="btn btn-primary" id="cta-guide" href="/">Conocer la guía Wire Down</a>
-      <button type="button" class="btn-link" id="btn-restart">Volver a hacer el test</button>
+      <a class="btn btn-primary" id="cta-guide" href="/" data-cta="ver_guia" data-cta-location="resultado">Conocer la guía Wire Down</a>
+      <button type="button" class="btn-link" id="btn-restart" data-cta="repetir_test" data-cta-location="resultado">Volver a hacer el test</button>
     </div>
   </section>
 </main>
@@ -176,8 +178,10 @@ footer a { color: inherit; }
 /*
  * Interfaz del test. Reglas de privacidad:
  * - Las respuestas viven solo en memoria (variable `answers`). Al recargar, se pierden.
- * - No se toca la URL (ni query, ni hash, ni history), ni document.title, ni dataLayer.
+ * - No se toca la URL (ni query, ni hash, ni history) ni document.title.
  * - Al Pixel solo van TestStarted y TestCompleted, sin parámetros, y solo con consentimiento de Marketing.
+ * - Al dataLayer (GA4) solo van test_start, test_complete y test_to_guide, sin parámetros, vía
+ *   wdTrack (/assets/wd-events.js), que exige consentimiento de Analítica.
  */
 (function () {
   var DATA = window.WD_TEST_DATA, S = window.WD_SCORING;
@@ -195,6 +199,11 @@ footer a { color: inherit; }
     if (!wdHasConsent()) return; // Marketing aceptado (wd-pixel.js)
     if (typeof window.fbq !== 'function') wdLoadPixel();
     window.fbq('trackCustom', eventName);
+  }
+
+  function trackGA(eventName) {
+    // Solo el nombre del evento: esta función no acepta parámetros a propósito.
+    if (typeof window.wdTrack === 'function') window.wdTrack(eventName);
   }
 
   function show(name, focusEl) {
@@ -276,6 +285,7 @@ footer a { color: inherit; }
 
     show('result', $('result-title'));
     track('TestCompleted');
+    trackGA('test_complete');
   }
 
   function restart() {
@@ -296,6 +306,7 @@ footer a { color: inherit; }
 
   $('q-options').addEventListener('change', function (e) {
     var value = Number(e.target.value);
+    if (Object.keys(answers).length === 0) trackGA('test_start'); // primera respuesta de este intento
     answers[QUESTIONS[current].id] = value;
     $('btn-next').hidden = false;
     if (arrowNav) { arrowNav = false; return; }
@@ -311,6 +322,7 @@ footer a { color: inherit; }
   });
 
   $('btn-restart').addEventListener('click', restart);
+  $('cta-guide').addEventListener('click', function () { trackGA('test_to_guide'); });
 })();
 </script>
 

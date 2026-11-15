@@ -11,6 +11,17 @@ var WD_GTM_ID = 'GTM-T47WBMN9';
 var WD_CONSENT_KEY = 'wd_consent_v2';
 var WD_CONSENT_MAX_AGE = 180 * 24 * 60 * 60 * 1000;
 
+// Página de agradecimiento: Hotmart puede agregar a la URL datos de la compra (transacción, nombre,
+// email). Se quitan query y hash antes de cargar GTM y el Pixel, para que no lleguen a GA4 ni a Meta.
+// Solo en /gracias.html y /gracias; ninguna otra página se toca (las UTM de la home se conservan).
+(function () {
+  var p = location.pathname;
+  if ((p === '/gracias.html' || p === '/gracias') && (location.search || location.hash) &&
+      window.history && typeof history.replaceState === 'function') {
+    history.replaceState(null, '', p);
+  }
+})();
+
 window.dataLayer = window.dataLayer || [];
 function gtag() { dataLayer.push(arguments); }
 
