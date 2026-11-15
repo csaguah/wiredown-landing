@@ -3,15 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- GTM con Consent Mode v2 (todo denegado por defecto). Va antes de cualquier otro script de medición. -->
+<script src="/assets/wd-gtm.js"></script>
 <!-- Título y descripción fijos: nunca cambian según respuestas o resultado. -->
 <title>Test orientativo · Wire Down</title>
 <meta name="description" content="Una autoevaluación orientativa de 10 preguntas para reconocer tu punto de partida y decidir por dónde empezar con la guía Wire Down.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/wd-tokens.css">
 <link rel="stylesheet" href="/assets/wd-base.css">
 <link rel="stylesheet" href="/assets/wd-consent.css">
 <style>
-/* Reset y variables de marca: /assets/wd-base.css */
+/* Variables de marca: /assets/wd-tokens.css · Reset: /assets/wd-base.css */
 body { font-family: 'DM Sans', sans-serif; color: var(--osc); background: var(--beige); line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column; }
 h1, h2, h3 { font-family: 'Lora', serif; line-height: 1.25; color: var(--verde); }
 a { color: var(--verde-m); }
@@ -174,7 +177,7 @@ footer a { color: inherit; }
  * Interfaz del test. Reglas de privacidad:
  * - Las respuestas viven solo en memoria (variable `answers`). Al recargar, se pierden.
  * - No se toca la URL (ni query, ni hash, ni history), ni document.title, ni dataLayer.
- * - Al Pixel solo van TestStarted y TestCompleted, sin parámetros, y solo si hay consentimiento.
+ * - Al Pixel solo van TestStarted y TestCompleted, sin parámetros, y solo con consentimiento de Marketing.
  */
 (function () {
   var DATA = window.WD_TEST_DATA, S = window.WD_SCORING;
@@ -189,9 +192,7 @@ footer a { color: inherit; }
     // Se revisa el consentimiento en el momento de cada evento (no solo al cargar),
     // así respeta un «Aceptar» o un «Rechazar» hecho estando ya en esta página.
     // Sin parámetros a propósito.
-    var consent = null;
-    try { consent = localStorage.getItem('wd_consent'); } catch (e) {}
-    if (consent !== 'granted') return;
+    if (!wdHasConsent()) return; // Marketing aceptado (wd-pixel.js)
     if (typeof window.fbq !== 'function') wdLoadPixel();
     window.fbq('trackCustom', eventName);
   }
@@ -315,10 +316,17 @@ footer a { color: inherit; }
 
 <!-- COOKIE CONSENT (mismo aviso y clave que la home; estilos y lógica en /assets/) -->
 <div class="wd-consent" id="wd-consent" role="dialog" aria-label="Preferencias de cookies">
-  <p>Usamos cookies de Meta para medir qué contenidos llegan a las personas indicadas. Solo se activan si las aceptas. Más detalles en la <a href="/privacidad.html">política de privacidad</a>.</p>
-  <div class="wd-consent-btns">
-    <button type="button" id="wd-reject">Rechazar</button>
-    <button type="button" id="wd-accept">Aceptar</button>
+  <p>Usamos Google Analytics para medir cómo se usa el sitio y cookies de Meta para medir qué anuncios llegan a las personas indicadas. Solo se activan si las aceptas. Más detalles en la <a href="/privacidad.html">política de privacidad</a><span id="wd-customize-wrap"> o <button type="button" class="wd-consent-link" id="wd-customize">personaliza tu elección</button></span>.</p>
+  <div class="wd-consent-panel" id="wd-consent-panel" hidden>
+    <label class="wd-consent-opt"><input type="checkbox" id="wd-opt-analytics"><span><strong>Analítica</strong> · Google Analytics: cuántas personas visitan el sitio y qué páginas leen.</span></label>
+    <label class="wd-consent-opt"><input type="checkbox" id="wd-opt-marketing"><span><strong>Marketing</strong> · Meta: medir nuestros anuncios y mostrarlos a personas a las que puedan servirles.</span></label>
+  </div>
+  <div class="wd-consent-btns" id="wd-consent-main">
+    <button type="button" id="wd-reject">Rechazar todo</button>
+    <button type="button" id="wd-accept">Aceptar todo</button>
+  </div>
+  <div class="wd-consent-btns" id="wd-consent-save-row" hidden>
+    <button type="button" id="wd-save">Guardar selección</button>
   </div>
 </div>
 <script src="/assets/wd-consent.js"></script>

@@ -3,8 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- GTM con Consent Mode v2 (todo denegado por defecto). Va antes de cualquier otro script de medición. -->
+<script src="/assets/wd-gtm.js"></script>
 <title>Política de privacidad — Wire Down</title>
 <meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/wd-tokens.css">
+<link rel="stylesheet" href="/assets/wd-consent.css">
 <style>
 body{font-family:Georgia,'Times New Roman',serif;color:#1C2B20;background:#F8F4EE;line-height:1.7;margin:0}
 main{max-width:720px;margin:0 auto;padding:48px 24px 72px}
@@ -14,23 +20,27 @@ p,li{font-size:16px}
 .small{color:#5A6B5D;font-size:14px}
 a{color:#3D7A50}
 </style>
+<!-- Meta Pixel — Wire Down (solo con consentimiento de Marketing). Lo usa el aviso de cookies. -->
+<script src="/assets/wd-pixel.js"></script>
 </head>
 <body>
 <main>
 <h1>Política de privacidad</h1>
-<p class="small">Última actualización: 8 de noviembre de 2026</p>
+<p class="small">Última actualización: 15 de noviembre de 2026</p>
 
 <h2>Quién es responsable de tus datos</h2>
 <p>El responsable del tratamiento de los datos personales recogidos en wire-down.com es Carlos Sagua Henriquez, persona natural, con domicilio en Santiago, Chile. Puedes escribirnos a <a href="mailto:soporte@wire-down.com">soporte@wire-down.com</a>.</p>
 
 <h2>Qué datos tratamos y para qué</h2>
-<p><strong>Cookies de medición (Meta Pixel).</strong> Solo si las aceptas en el aviso de cookies, usamos el Pixel de Meta para saber cuántas personas visitan la página y cuántas inician una compra, y así mostrar nuestros contenidos a personas a las que puedan servirles. Si las rechazas, no se cargan. Puedes cambiar tu decisión en cualquier momento desde «Preferencias de cookies», al final de la página.</p>
+<!-- PENDIENTE DE REVISIÓN LEGAL: párrafo sobre Google Analytics 4 (Fase consent-gtm). -->
+<p><strong>Cookies de analítica (Google Analytics).</strong> Solo si aceptas la categoría «Analítica» en el aviso de cookies, usamos Google Analytics 4, a través de Google Tag Manager, para saber cuántas personas visitan el sitio, qué páginas leen y desde dónde llegan. Google Analytics guarda cookies propias (como <code>_ga</code>) por hasta dos años. Si no la aceptas, Google solo recibe avisos sin cookies ni identificadores, que no permiten reconocerte entre visitas. Tus respuestas y tu resultado del test orientativo nunca se envían a Google.</p>
+<p><strong>Cookies de marketing (Meta Pixel).</strong> Solo si aceptas la categoría «Marketing» en el aviso de cookies, usamos el Pixel de Meta para saber cuántas personas visitan la página y cuántas inician una compra, y así mostrar nuestros contenidos a personas a las que puedan servirles. Si las rechazas, no se cargan. Puedes cambiar tu decisión en cualquier momento desde «Preferencias de cookies», al final de la página. Guardamos tu decisión en tu navegador durante 180 días; después te la volvemos a preguntar.</p>
 <p><strong>Compras.</strong> El pago se realiza en Hotmart, que trata tus datos de compra según su propia política de privacidad. Nosotros recibimos de Hotmart la información necesaria para entregarte el producto y atender consultas sobre tu compra.</p>
 <p><strong>Test orientativo.</strong> El test orientativo se calcula en tu navegador. Tus respuestas y tu resultado no se envían ni se almacenan.</p>
 <p>No usamos tus datos para tomar decisiones automatizadas que te afecten ni los vendemos a terceros.</p>
 
 <h2>Proveedores y transferencias internacionales</h2>
-<p>Algunos proveedores que usamos, como Meta y Hotmart, procesan datos fuera de Chile. Trabajamos solo con proveedores que declaran medidas de protección adecuadas para esos datos.</p>
+<p>Algunos proveedores que usamos, como Google, Meta y Hotmart, procesan datos fuera de Chile. Trabajamos solo con proveedores que declaran medidas de protección adecuadas para esos datos.</p>
 
 <h2>Cuánto tiempo los conservamos</h2>
 <p>Conservamos tus datos solo mientras sean necesarios para la finalidad por la que se recogieron o mientras la ley nos obligue a mantenerlos.</p>
@@ -41,7 +51,24 @@ a{color:#3D7A50}
 <h2>Cambios en esta política</h2>
 <p>Si cambiamos la forma en que tratamos tus datos, por ejemplo al incorporar nuevas herramientas, actualizaremos esta página e indicaremos la fecha de la última modificación.</p>
 
-<p class="small"><a href="./">← Volver a Wire Down</a></p>
+<p class="small"><a href="./">← Volver a Wire Down</a> · <a href="#" id="cookie-settings">Preferencias de cookies</a></p>
 </main>
+
+<!-- COOKIE CONSENT (mismo aviso y clave que la home; estilos y lógica en /assets/) -->
+<div class="wd-consent" id="wd-consent" role="dialog" aria-label="Preferencias de cookies">
+  <p>Usamos Google Analytics para medir cómo se usa el sitio y cookies de Meta para medir qué anuncios llegan a las personas indicadas. Solo se activan si las aceptas. Más detalles en la <a href="/privacidad.html">política de privacidad</a><span id="wd-customize-wrap"> o <button type="button" class="wd-consent-link" id="wd-customize">personaliza tu elección</button></span>.</p>
+  <div class="wd-consent-panel" id="wd-consent-panel" hidden>
+    <label class="wd-consent-opt"><input type="checkbox" id="wd-opt-analytics"><span><strong>Analítica</strong> · Google Analytics: cuántas personas visitan el sitio y qué páginas leen.</span></label>
+    <label class="wd-consent-opt"><input type="checkbox" id="wd-opt-marketing"><span><strong>Marketing</strong> · Meta: medir nuestros anuncios y mostrarlos a personas a las que puedan servirles.</span></label>
+  </div>
+  <div class="wd-consent-btns" id="wd-consent-main">
+    <button type="button" id="wd-reject">Rechazar todo</button>
+    <button type="button" id="wd-accept">Aceptar todo</button>
+  </div>
+  <div class="wd-consent-btns" id="wd-consent-save-row" hidden>
+    <button type="button" id="wd-save">Guardar selección</button>
+  </div>
+</div>
+<script src="/assets/wd-consent.js"></script>
 </body>
 </html>

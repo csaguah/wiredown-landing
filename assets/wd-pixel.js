@@ -1,19 +1,19 @@
 /*
- * Meta Pixel — Wire Down. Se carga solo con consentimiento (clave `wd_consent` en localStorage).
- * Se incluye sin `defer` en el <head>: las páginas y wd-consent.js usan estas funciones globales.
+ * Meta Pixel — Wire Down. Script propio (no pasa por GTM). Se carga solo con consentimiento
+ * de Marketing. Requiere wd-gtm.js antes (wdGetConsent). Se incluye sin `defer` en el <head>:
+ * las páginas y wd-consent.js usan estas funciones globales.
  */
 var WD_PIXEL_ID = '4406846419603179';
 
-function wdConsent() {
-  try { return localStorage.getItem('wd_consent'); } catch (e) { return null; }
-}
-
+// true solo si hay una decisión vigente con Marketing aceptado.
 function wdHasConsent() {
-  return wdConsent() === 'granted';
+  var c = wdGetConsent();
+  return !!(c && c.marketing);
 }
 
 function wdLoadPixel() {
-  // Si el Pixel ya estaba cargado (aceptar, rechazar y volver a aceptar en la misma visita), se reactiva.
+  // Init y PageView van una sola vez por página. Si el Pixel ya estaba cargado
+  // (aceptar, rechazar y volver a aceptar en la misma visita), solo se reactiva.
   if (window.fbq) { window.fbq('consent', 'grant'); return; }
   !function(f,b,e,v,n,t,s)
   {if(f.fbq)return;n=f.fbq=function(){n.callMethod?

@@ -66,7 +66,7 @@ Este repo es **público**. Por eso:
 
 1. Antes de planificar, **leer el código real**. No asumir nombres de campos ni rutas.
 2. Rama corta (≤ 28 caracteres): `art/<tema>`, `feat/<tema>`, `fix/<tema>`.
-3. Tests sin errores antes de cada commit. Hoy no hay `package.json`: se corren con `node --test test/scoring.test.js` desde la raíz. Desde la fase 5a (Astro), `npm run build` y `npm test`, que ejecutará esos mismos tests.
+3. Tests sin errores antes de cada commit. Hoy no hay `package.json`: se corren con `node --test "test/*.test.js"` desde la raíz (con comillas: en Node 24, `node --test test/` falla porque toma la carpeta como módulo). Desde la fase 5a (Astro), `npm run build` y `npm test`, que ejecutará esos mismos tests.
 4. Detenerse y pedir confirmación antes de cada commit, push, PR y merge.
 5. Commit con `Co-Authored-By: Claude <noreply@anthropic.com>`.
 6. Un PR por tema, squash merge. Nunca hacer merge sin que Carlos lo apruebe.

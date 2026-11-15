@@ -3,14 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- GTM con Consent Mode v2 (todo denegado por defecto). Va antes de cualquier otro script de medición. -->
+<script src="/assets/wd-gtm.js"></script>
 <title>Wire Down — Calma tu sistema nervioso y sana tu cuerpo</title>
 <meta name="description" content="Una guía de herramientas simples para personas que viven con dolor y tensión asociados al estrés. Ebook + Bitácora + test orientativo. Escrito por un kinesiólogo y quiropráctico con más de 20 años de experiencia clínica.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/wd-tokens.css">
 <link rel="stylesheet" href="/assets/wd-base.css">
 <link rel="stylesheet" href="/assets/wd-consent.css">
 <style>
-/* Reset y variables de marca: /assets/wd-base.css */
+/* Variables de marca: /assets/wd-tokens.css · Reset: /assets/wd-base.css */
 html { scroll-behavior: smooth; }
 body { font-family: 'DM Sans', sans-serif; color: var(--osc); background: #fff; line-height: 1.6; }
 img { max-width: 100%; display: block; }
@@ -999,10 +1002,17 @@ document.querySelectorAll('a[href*="pay.hotmart.com"]').forEach(function(btn) {
 
 <!-- COOKIE CONSENT (estilos: /assets/wd-consent.css · lógica: /assets/wd-consent.js) -->
 <div class="wd-consent" id="wd-consent" role="dialog" aria-label="Preferencias de cookies">
-  <p>Usamos cookies de Meta para medir qué contenidos llegan a las personas indicadas. Solo se activan si las aceptas. Más detalles en la <a href="/privacidad.html">política de privacidad</a>.</p>
-  <div class="wd-consent-btns">
-    <button type="button" id="wd-reject">Rechazar</button>
-    <button type="button" id="wd-accept">Aceptar</button>
+  <p>Usamos Google Analytics para medir cómo se usa el sitio y cookies de Meta para medir qué anuncios llegan a las personas indicadas. Solo se activan si las aceptas. Más detalles en la <a href="/privacidad.html">política de privacidad</a><span id="wd-customize-wrap"> o <button type="button" class="wd-consent-link" id="wd-customize">personaliza tu elección</button></span>.</p>
+  <div class="wd-consent-panel" id="wd-consent-panel" hidden>
+    <label class="wd-consent-opt"><input type="checkbox" id="wd-opt-analytics"><span><strong>Analítica</strong> · Google Analytics: cuántas personas visitan el sitio y qué páginas leen.</span></label>
+    <label class="wd-consent-opt"><input type="checkbox" id="wd-opt-marketing"><span><strong>Marketing</strong> · Meta: medir nuestros anuncios y mostrarlos a personas a las que puedan servirles.</span></label>
+  </div>
+  <div class="wd-consent-btns" id="wd-consent-main">
+    <button type="button" id="wd-reject">Rechazar todo</button>
+    <button type="button" id="wd-accept">Aceptar todo</button>
+  </div>
+  <div class="wd-consent-btns" id="wd-consent-save-row" hidden>
+    <button type="button" id="wd-save">Guardar selección</button>
   </div>
 </div>
 <script src="/assets/wd-consent.js"></script>
