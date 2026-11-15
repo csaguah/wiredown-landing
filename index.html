@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- GTM con Consent Mode v2 (todo denegado por defecto). Va antes de cualquier otro script de medición. -->
 <script src="/assets/wd-gtm.js"></script>
+<!-- Eventos al dataLayer (solo con consentimiento de Analítica y con GTM ya cargado). -->
+<script src="/assets/wd-events.js" defer></script>
 <title>Wire Down — Calma tu sistema nervioso y sana tu cuerpo</title>
 <meta name="description" content="Una guía de herramientas simples para personas que viven con dolor y tensión asociados al estrés. Ebook + Bitácora + test orientativo. Escrito por un kinesiólogo y quiropráctico con más de 20 años de experiencia clínica.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -690,7 +692,7 @@ footer strong { color: rgba(255,255,255,0.8); }
 </div>
 
 <!-- HERO -->
-<section class="hero">
+<section class="hero" data-track-section="hero">
   <div class="container">
     <p class="hero-eyebrow">Wire Down · Guía práctica de regulación</p>
     <h1>Herramientas simples para cuando el estrés se instala en el cuerpo.</h1>
@@ -701,7 +703,7 @@ footer strong { color: rgba(255,255,255,0.8); }
       <span class="price-tag">Pago único</span>
     </div>
 
-    <a onclick="return false;" href="https://pay.hotmart.com/K105460326C?checkoutMode=2" class="hotmart-fb hotmart__button-checkout btn-primary" id="cta-hero">Acceder a la guía →</a>
+    <a onclick="return false;" href="https://pay.hotmart.com/K105460326C?checkoutMode=2" class="hotmart-fb hotmart__button-checkout btn-primary" id="cta-hero" data-cta="checkout" data-cta-location="hero">Acceder a la guía →</a>
 
     <p class="hero-guarantee">
       <span>✓ Acceso inmediato</span> &nbsp;·&nbsp;
@@ -712,7 +714,7 @@ footer strong { color: rgba(255,255,255,0.8); }
 </section>
 
 <!-- PAIN -->
-<section class="pain">
+<section class="pain" data-track-section="dolor">
   <div class="container">
     <h2>¿Te reconoces en alguna de estas frases?</h2>
     <p class="pain-intro">Si es así, puede que tu cuerpo no necesite más esfuerzo, sino algo distinto: señales de que puede bajar la guardia.</p>
@@ -752,7 +754,7 @@ footer strong { color: rgba(255,255,255,0.8); }
 </section>
 
 <!-- QUOTE -->
-<section class="quote-section">
+<section class="quote-section" data-track-section="cita">
   <div class="container">
     <p class="quote-text">«Tu cuerpo no está roto. Solo está sobrecargado. Y lo que necesita no es más esfuerzo: son señales de seguridad.»</p>
     <p class="quote-sub">— Wire Down</p>
@@ -760,7 +762,7 @@ footer strong { color: rgba(255,255,255,0.8); }
 </section>
 
 <!-- PRODUCT -->
-<section class="product">
+<section class="product" data-track-section="producto">
   <div class="container-wide">
     <h2>Cómo está organizada la guía</h2>
     <p class="product-intro">7 módulos que van de entender a practicar: primero qué le pasa a tu cuerpo con el estrés, luego cómo reconocer tu estado, y finalmente herramientas concretas para el día a día.</p>
@@ -819,7 +821,7 @@ footer strong { color: rgba(255,255,255,0.8); }
 </section>
 
 <!-- BONOS -->
-<section class="bonos">
+<section class="bonos" data-track-section="bonos">
   <div class="container-wide">
     <h2>Herramientas incluidas</h2>
     <p class="bonos-intro">El libro te explica. Estas dos te acompañan mientras lo aplicas.</p>
@@ -860,12 +862,12 @@ footer strong { color: rgba(255,255,255,0.8); }
       </div>
 
     </div>
-    <p class="test-link">¿No sabes por dónde empezar? <a href="test/">Haz el test orientativo</a></p>
+    <p class="test-link">¿No sabes por dónde empezar? <a href="test/" data-cta="hacer_test" data-cta-location="bonos">Haz el test orientativo</a></p>
   </div>
 </section>
 
 <!-- AUTHOR -->
-<section class="author">
+<section class="author" data-track-section="autor">
   <div class="container">
     <div class="author-inner">
       <div class="author-avatar">WD</div>
@@ -891,7 +893,7 @@ footer strong { color: rgba(255,255,255,0.8); }
 </section>
 
 <!-- CTA FINAL -->
-<section class="cta-final">
+<section class="cta-final" data-track-section="cta_final">
   <div class="container">
     <h2>Herramientas para empezar<br>a tu ritmo.</h2>
     <p class="cta-final-sub">Una guía para leer, practicar y volver a ella cada vez que la necesites.</p>
@@ -901,37 +903,37 @@ footer strong { color: rgba(255,255,255,0.8); }
       <span class="cta-include-item">Test orientativo</span>
       <span class="cta-include-item">Acceso inmediato</span>
     </div>
-    <a onclick="return false;" href="https://pay.hotmart.com/K105460326C?checkoutMode=2" class="hotmart-fb hotmart__button-checkout btn-cta-final" id="cta-final">Acceder a Wire Down · USD 17</a>
+    <a onclick="return false;" href="https://pay.hotmart.com/K105460326C?checkoutMode=2" class="hotmart-fb hotmart__button-checkout btn-cta-final" id="cta-final" data-cta="checkout" data-cta-location="final">Acceder a Wire Down · USD 17</a>
     <p class="cta-price-note">Pago único · <strong>Sin suscripción</strong> · Acceso de por vida</p>
   </div>
 </section>
 
 <!-- FAQ -->
-<section class="faq">
+<section class="faq" data-track-section="faq">
   <div class="container">
     <h2>Preguntas frecuentes</h2>
     <div class="faq-item">
-      <div class="faq-q">¿En qué formato recibiré el ebook y las herramientas?</div>
+      <div class="faq-q" data-faq="formato">¿En qué formato recibiré el ebook y las herramientas?</div>
       <div class="faq-a">Todo en formato PDF. Acceso inmediato tras la compra a través de Hotmart. Puedes leerlo en cualquier dispositivo.</div>
     </div>
     <div class="faq-item">
-      <div class="faq-q">¿Necesito conocimientos médicos previos?</div>
+      <div class="faq-q" data-faq="conocimientos">¿Necesito conocimientos médicos previos?</div>
       <div class="faq-a">No. Wire Down está escrito en lenguaje accesible para cualquier persona, sin formación médica. Los conceptos científicos se explican de forma simple y práctica.</div>
     </div>
     <div class="faq-item">
-      <div class="faq-q">¿Cuánto tiempo necesito dedicarle al día?</div>
+      <div class="faq-q" data-faq="tiempo">¿Cuánto tiempo necesito dedicarle al día?</div>
       <div class="faq-a">Los ejercicios están diseñados como microintervenciones de 1 a 5 minutos. El ritual matutino toma 5 minutos. Puedes empezar con eso y construir desde ahí.</div>
     </div>
     <div class="faq-item">
-      <div class="faq-q">¿Funciona si tengo dolor crónico diagnosticado?</div>
+      <div class="faq-q" data-faq="dolor_cronico">¿Funciona si tengo dolor crónico diagnosticado?</div>
       <div class="faq-a">Wire Down es un complemento educativo y de autorregulación; no reemplaza la evaluación ni el tratamiento clínico. Muchos contenidos son especialmente relevantes para personas con dolor crónico funcional o nociplástico. Si tu dolor es reciente, intenso o viene acompañado de otros síntomas, consulta primero con un profesional de salud.</div>
     </div>
     <div class="faq-item">
-      <div class="faq-q">¿El test es un diagnóstico?</div>
+      <div class="faq-q" data-faq="test_diagnostico">¿El test es un diagnóstico?</div>
       <div class="faq-a">No. Es una autoevaluación orientativa, construida desde la experiencia clínica y el marco de la guía. Te ayuda a reconocer tu punto de partida y a decidir por dónde empezar, pero no ha sido validado como instrumento clínico ni reemplaza una evaluación profesional.</div>
     </div>
     <div class="faq-item">
-      <div class="faq-q">¿Puedo pagar con tarjeta de crédito?</div>
+      <div class="faq-q" data-faq="pago">¿Puedo pagar con tarjeta de crédito?</div>
       <div class="faq-a">Sí. Hotmart acepta tarjetas de crédito, débito, PayPal y otros métodos de pago locales según tu país.</div>
     </div>
   </div>
@@ -947,7 +949,7 @@ footer strong { color: rgba(255,255,255,0.8); }
 
 <!-- STICKY MOBILE CTA -->
 <div class="sticky-cta">
-  <a onclick="return false;" href="https://pay.hotmart.com/K105460326C?checkoutMode=2" class="hotmart-fb hotmart__button-checkout">Acceder a la guía · USD 17</a>
+  <a onclick="return false;" href="https://pay.hotmart.com/K105460326C?checkoutMode=2" class="hotmart-fb hotmart__button-checkout" data-cta="checkout" data-cta-location="sticky">Acceder a la guía · USD 17</a>
 </div>
 
 <script>

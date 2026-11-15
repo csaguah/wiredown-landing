@@ -47,7 +47,7 @@ Este repo es **público**. Por eso:
 - La clave de consentimiento actual es `wd_consent` en `localStorage`. Si se cambia el formato, migrar el valor antiguo en vez de volver a preguntar a quien ya decidió.
 - **Las respuestas y el perfil del test nunca salen del navegador hacia GA4, GTM ni Meta.** Solo se envían eventos sin parámetros. Esta regla ya está en `test/index.html` y se mantiene.
   - En Meta: `TestStarted` y `TestCompleted` (`trackCustom`). Se mantienen con esos nombres; no se renombran.
-  - En dataLayer/GA4 (fase 2): `test_start` y `test_complete`. Conviven con los de Meta.
+  - En dataLayer/GA4: `test_start` y `test_complete`. Conviven con los de Meta.
 - Sin email capture hasta que exista el formulario con casilla de consentimiento separada y sin marcar (pendiente, fuera de esta etapa).
 
 ## Contenido del blog (YMYL)
