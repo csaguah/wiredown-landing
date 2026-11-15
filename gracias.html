@@ -7,19 +7,9 @@
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/wd-base.css">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --verde:    #2D5A3D;
-  --verde-m:  #3D7A50;
-  --verde-l:  #74C69D;
-  --verde-xl: #D8F3DC;
-  --sage:     #D8E4D0;
-  --dorado:   #C8A84B;
-  --beige:    #F8F4EE;
-  --gris:     #5A6B5D;
-  --osc:      #1C2B20;
-}
+/* Reset y variables de marca: /assets/wd-base.css */
 html { scroll-behavior: smooth; }
 body {
   font-family: 'DM Sans', sans-serif;
@@ -150,104 +140,19 @@ h1 {
   margin: 32px 0;
 }
 
-/* ── Sección de enrolamiento ── */
-.enroll-title {
+/* ── Ayuda si no llega el email (mismos estilos que la antigua sección de enrolamiento) ── */
+.help-title {
   font-family: 'Lora', serif;
   font-size: 20px;
   color: var(--verde);
   margin-bottom: 8px;
 }
-.enroll-sub {
+.help-text {
   font-size: 14px;
   color: var(--gris);
-  margin-bottom: 24px;
   line-height: 1.6;
 }
-
-/* ── Form ── */
-.enroll-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.enroll-form input {
-  width: 100%;
-  padding: 13px 18px;
-  border: 1.5px solid #D8E4D0;
-  border-radius: 50px;
-  font-size: 14px;
-  font-family: 'DM Sans', sans-serif;
-  color: var(--osc);
-  background: #fff;
-  outline: none;
-  transition: border-color 0.2s;
-}
-.enroll-form input:focus { border-color: var(--verde); }
-.enroll-form button {
-  background: var(--verde);
-  color: #fff;
-  border: none;
-  padding: 14px 24px;
-  border-radius: 50px;
-  font-size: 14px;
-  font-weight: 600;
-  font-family: 'DM Sans', sans-serif;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.enroll-form button:hover { background: #1e4029; }
-
-.enroll-note {
-  font-size: 11px;
-  color: var(--gris);
-  margin-top: 8px;
-}
-
-/* ── Success state ── */
-.enroll-success {
-  display: none;
-  background: var(--verde-xl);
-  border-radius: 12px;
-  padding: 20px 24px;
-  font-size: 14px;
-  color: var(--verde);
-  font-weight: 500;
-  line-height: 1.6;
-}
-
-/* ── Lo que viene ── */
-.coming-soon {
-  margin-top: 32px;
-  background: var(--sage);
-  border-radius: 14px;
-  padding: 22px 24px;
-  text-align: left;
-}
-.coming-title {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--verde-m);
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  margin-bottom: 12px;
-}
-.coming-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 13px;
-  color: var(--gris);
-  margin-bottom: 8px;
-  line-height: 1.4;
-}
-.coming-item:last-child { margin-bottom: 0; }
-.coming-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--dorado);
-  flex-shrink: 0;
-}
+.help-text strong { color: var(--verde); }
 
 /* ── Footer ── */
 .footer-note {
@@ -263,30 +168,9 @@ h1 {
 }
 </style>
 
-<!-- Meta Pixel -->
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '4406846419603179');
-fbq('track', 'PageView');
-fbq('track', 'Purchase', {
-  value: 17.00,
-  currency: 'USD',
-  content_name: 'Wire Down Ebook',
-  content_ids: ['wiredown_ebook_usd17'],
-  content_type: 'product'
-});
-</script>
-<noscript>
-  <img height="1" width="1" style="display:none"
-  src="https://www.facebook.com/tr?id=4406846419603179&ev=Purchase&noscript=1"/>
-</noscript>
+<!-- Meta Pixel — Wire Down (se carga solo con consentimiento, igual que en la home).
+     Purchase lo envía Hotmart desde su integración nativa; esta página no lo dispara. -->
+<script src="/assets/wd-pixel.js"></script>
 </head>
 <body>
 
@@ -298,7 +182,7 @@ fbq('track', 'Purchase', {
   </div>
 
   <p class="eyebrow">Wire Down · Acceso confirmado</p>
-  <h1>¡Bienvenido al sistema, Carlos!</h1>
+  <h1>¡Te damos la bienvenida a Wire Down!</h1>
   <p class="subtitle">
     Tu compra fue procesada. En unos minutos recibirás un email de Hotmart
     con el acceso a tu ebook y los 2 bonos.
@@ -314,7 +198,7 @@ fbq('track', 'Purchase', {
     </div>
     <div class="step-item">
       <div class="step-num">2</div>
-      <div class="step-text">Descarga los 3 archivos: <strong>Ebook Wire Down</strong>, <strong>Bitácora</strong> y <strong>Test Neurovegetativo</strong>.</div>
+      <div class="step-text">Descarga los 3 archivos: <strong>Ebook Wire Down</strong>, <strong>Bitácora</strong> y <strong>test orientativo</strong>.</div>
     </div>
     <div class="step-item">
       <div class="step-num">3</div>
@@ -324,92 +208,19 @@ fbq('track', 'Purchase', {
 
   <div class="sep"></div>
 
-  <!-- Enrolamiento -->
-  <h2 class="enroll-title">Mantente al día con Wire Down</h2>
-  <p class="enroll-sub">
-    El ecosistema Wire Down está creciendo — audios guiados, el Coach IA,
-    el Reto de 7 días y más. Déjame tu WhatsApp o email y serás el primero
-    en saber cuando estén disponibles.
+  <!-- Ayuda si no llega el email -->
+  <h2 class="help-title">¿No te llegó el email?</h2>
+  <p class="help-text">
+    Si no recibes el email de Hotmart en unos minutos, revisa tu carpeta de spam
+    o escríbenos a <strong>soporte@wire-down.com</strong>.
   </p>
-
-  <form class="enroll-form" id="enrollForm">
-    <input type="text" id="enroll-nombre" placeholder="Tu nombre" required autocomplete="given-name">
-    <input type="tel" id="enroll-whatsapp" placeholder="Tu WhatsApp (ej: +56912345678)" autocomplete="tel">
-    <input type="email" id="enroll-email" placeholder="Tu email (opcional)" autocomplete="email">
-    <button type="submit">Quiero estar al tanto →</button>
-  </form>
-  <div class="enroll-success" id="enrollSuccess">
-    ✓ ¡Listo! Te avisaré personalmente cuando haya novedades del ecosistema Wire Down.
-    <br><br>Mientras tanto — empieza hoy con el Protocolo SOS.
-  </div>
-  <p class="enroll-note">Sin spam. Solo novedades relevantes del ecosistema Wire Down.</p>
-
-  <!-- Lo que viene -->
-  <div class="coming-soon">
-    <div class="coming-title">Próximamente en Wire Down</div>
-    <div class="coming-item"><span class="coming-dot"></span>Audios guiados — respiración, escaneo y SOS con voz</div>
-    <div class="coming-item"><span class="coming-dot"></span>Coach Wire Down IA — check-in diario personalizado</div>
-    <div class="coming-item"><span class="coming-dot"></span>Reto 7 días — secuencia guiada para instalar el hábito</div>
-    <div class="coming-item"><span class="coming-dot"></span>Membresía — contenido nuevo cada mes</div>
-  </div>
 
   <p class="footer-note">
     <strong>Wire Down</strong> · Carlos Sagua H. · Kinesiólogo y Quiropráctico<br>
-    ¿Tienes dudas? Escríbenos a <strong>hola@wire-down.com</strong>
+    ¿Tienes dudas? Escríbenos a <strong>soporte@wire-down.com</strong>
   </p>
 
 </div>
-
-<script>
-document.getElementById('enrollForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  const nombre    = document.getElementById('enroll-nombre').value.trim();
-  const whatsapp  = document.getElementById('enroll-whatsapp').value.trim();
-  const email     = document.getElementById('enroll-email').value.trim();
-  if (!nombre) return;
-
-  const btn = this.querySelector('button');
-  btn.textContent = 'Guardando...';
-  btn.disabled = true;
-
-  const payload = {
-    nombre,
-    telefono: whatsapp || email,
-    condicion: "wiredown_comprador",
-    estado: "calificado",
-    canal: "pagina_gracias_wiredown",
-    metadata: {
-      fuente: "gracias_wire-down.com",
-      producto: "ebook_wiredown_usd17",
-      tipo: "comprador_enrolamiento",
-      whatsapp,
-      email,
-      calificacion: "hot"
-    }
-  };
-
-  try {
-    await fetch('https://marketing-gpt.onrender.com/webhook/leads', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Internal-Key': 'WIREDOWN_LEADS_KEY'
-      },
-      body: JSON.stringify(payload)
-    });
-  } catch(err) {
-    console.log('Webhook:', err.message);
-  }
-
-  // Pixel Lead event
-  if (typeof fbq !== 'undefined') {
-    fbq('track', 'Lead', { content_name: 'Wire Down Comprador Enrolado' });
-  }
-
-  document.getElementById('enrollForm').style.display = 'none';
-  document.getElementById('enrollSuccess').style.display = 'block';
-});
-</script>
 
 </body>
 </html>

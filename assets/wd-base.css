@@ -1,0 +1,18 @@
+/* Wire Down — base compartida: reset y variables de marca.
+ * Se enlaza antes del <style> propio de cada página para mantener el orden de la cascada. */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --verde:    #2D5A3D;
+  --verde-m:  #3D7A50;
+  --verde-l:  #74C69D;
+  --verde-xl: #D8F3DC;
+  --sage:     #D8E4D0;
+  --sage-d:   #C4D4BB;
+  --dorado:   #C8A84B;
+  --dorado-l: #F5EDD0;
+  --tierra:   #8B5E3C;
+  --beige:    #F8F4EE;
+  --gris:     #5A6B5D;
+  --osc:      #1C2B20;
+  --rojo:     #8B2020;
+}
