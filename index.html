@@ -651,6 +651,19 @@ footer strong { color: rgba(255,255,255,0.8); }
   width: 100% !important;
   max-width: 360px !important;
 }
+/* hotmart-fb.min.css también le da a .hotmart__button-checkout borde, sombras, line-height, fuente y
+   transition propios. Se anulan con los valores del diseño Wire Down (los que tienen sin esa hoja). */
+.hotmart-fb.hotmart__button-checkout {
+  border: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  line-height: 1.6 !important;
+}
+.hotmart-fb.btn-cta-final { transition: all 0.2s !important; }
+.sticky-cta .hotmart-fb {
+  font-family: 'DM Sans', sans-serif !important;
+  transition: none !important;
+}
 /* Hide Hotmart default green button image */
 .hotmart-fb img { display: none !important; }
 
@@ -666,6 +679,8 @@ footer strong { color: rgba(255,255,255,0.8); }
 .hero-price-wrap { animation-delay: 0.2s; }
 .hero .btn-primary { animation-delay: 0.3s; }
 </style>
+  <!-- Evita que el widget borre los botones de checkout cuando falla su health check (ver el archivo). Va antes del widget. -->
+  <script src="/assets/wd-hotmart-guard.js"></script>
   <!-- Hotmart Widget -->
   <script type="text/javascript">
     function importHotmart(){

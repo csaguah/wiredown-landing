@@ -79,3 +79,4 @@ Este repo es **público**. Por eso:
 - Revisar límites de longitud en toda la cadena cuando se agregan códigos de atribución a una URL o mensaje.
 - En Hotmart, el parámetro `sck` no admite guion bajo (`_`); usar guiones.
 - Reemplazos con tildes: editar el archivo directamente en vez de usar `sed`.
+- El widget de Hotmart borra todos los `a[href*="hotmart.com"]` si falla su health check (`api-checkout-vue.hotmart.com`, que dejó de existir en DNS). `/assets/wd-hotmart-guard.js` los repone; va antes del widget en toda página con botones de checkout. Probar los botones con Hotmart **sin bloquear** (bloquear solo GTM y Meta).
