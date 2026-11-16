@@ -149,7 +149,7 @@ test('el contenedor equivocado no cuenta como GTM cargado', () => {
 
 // ── Marcado de las páginas ────────────────────────────────
 
-const PAGES = ['index.html', 'test/index.html', 'gracias.html', 'privacidad.html'];
+const PAGES = ['index.html', 'test/index.html', 'gracias.html', 'privacidad.html', '404.html'];
 
 test('todas las páginas cargan wd-events.js con defer después de wd-gtm.js', () => {
   for (const f of PAGES) {
@@ -160,14 +160,35 @@ test('todas las páginas cargan wd-events.js con defer después de wd-gtm.js', (
   }
 });
 
+test('todas las páginas enlazan el favicon (ICO, SVG y apple-touch-icon) y los archivos existen', () => {
+  const links = ['<link rel="icon" href="/favicon.ico" sizes="32x32">', '<link rel="icon" href="/favicon.svg" type="image/svg+xml">', '<link rel="apple-touch-icon" href="/apple-touch-icon.png">'];
+  for (const f of PAGES) for (const l of links) assert.ok(read(f).includes(l), `${f}: ${l}`);
+  for (const f of ['favicon.ico', 'favicon.svg', 'apple-touch-icon.png']) assert.ok(fs.existsSync(path.join(ROOT, f)), f);
+});
+
 test('cada <section> tiene data-track-section, sin nombres repetidos', () => {
-  for (const f of ['index.html', 'test/index.html']) {
+  for (const f of ['index.html', 'test/index.html', '404.html']) {
     const tags = read(f).match(/<section\b[^>]*>/g) || [];
     assert.ok(tags.length > 0, f);
     const names = tags.map(t => (t.match(/data-track-section="([a-z0-9_]+)"/) || [])[1]);
     assert.ok(names.every(Boolean), `${f}: sección sin data-track-section`);
     assert.equal(new Set(names).size, names.length, `${f}: nombres repetidos`);
   }
+});
+
+test('404.html: noindex, aviso de cookies y CTA con ubicación, sin checkout ni rutas relativas', () => {
+  const html = read('404.html');
+  assert.match(html, /<meta name="robots" content="noindex">/);
+  assert.match(html, /<body data-page-code="404">/);
+  for (const s of ['/assets/wd-pixel.js', '/assets/wd-consent.js']) assert.ok(html.includes(`<script src="${s}"></script>`), s);
+  assert.ok(html.includes('id="wd-consent"'));
+  assert.ok(!/hotmart/i.test(html), 'la 404 no lleva checkout');
+  // GitHub Pages la sirve en cualquier ruta: src y href internos deben ser absolutos.
+  const refs = [...html.matchAll(/\b(?:src|href)="([^"]+)"/g)].map(m => m[1]);
+  assert.ok(refs.every(r => /^(\/|#|https:)/.test(r)), refs.filter(r => !/^(\/|#|https:)/.test(r)).join(', '));
+  const ctas = html.match(/<a\b[^>]*data-cta=[^>]*>/g) || [];
+  assert.equal(ctas.length, 2);
+  assert.ok(ctas.every(a => /data-cta-location="404"/.test(a)));
 });
 
 test('cada enlace a pay.hotmart.com tiene data-cta y una ubicación válida', () => {

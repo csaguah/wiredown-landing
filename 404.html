@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- GTM con Consent Mode v2 (todo denegado por defecto). Va antes de cualquier otro script de medición. -->
+<script src="/assets/wd-gtm.js"></script>
+<!-- Eventos al dataLayer (solo con consentimiento de Analítica y con GTM ya cargado). -->
+<script src="/assets/wd-events.js" defer></script>
+<title>Página no encontrada — Wire Down</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/wd-tokens.css">
+<link rel="stylesheet" href="/assets/wd-base.css">
+<link rel="stylesheet" href="/assets/wd-consent.css">
+<style>
+/* Variables de marca: /assets/wd-tokens.css · Reset: /assets/wd-base.css
+ * Misma estructura que /test/ (topbar, tarjeta, botones). GitHub Pages sirve esta página en
+ * cualquier ruta inexistente, por eso todas las rutas son absolutas. */
+body { font-family: 'DM Sans', sans-serif; color: var(--osc); background: var(--beige); line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column; }
+h1 { font-family: 'Lora', serif; line-height: 1.25; color: var(--verde); }
+a { color: var(--verde-m); }
+:focus-visible { outline: 3px solid var(--verde-m); outline-offset: 3px; }
+
+.topbar { background: var(--verde); color: #fff; text-align: center; padding: 12px 20px; font-size: 14px; }
+.topbar a { color: #fff; text-decoration: none; font-family: 'Lora', serif; font-weight: 600; font-size: 17px; letter-spacing: .3px; }
+
+main { flex: 1; width: 100%; max-width: 640px; margin: 0 auto; padding: 40px 20px 64px; }
+.card { background: #fff; border: 1.5px solid var(--sage-d); border-radius: 18px; padding: 32px 26px; text-align: center; }
+@media (min-width: 600px) { .card { padding: 40px 40px; } main { padding-top: 56px; } }
+
+.eyebrow { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--verde-m); font-weight: 600; margin-bottom: 12px; }
+.card h1 { font-size: clamp(28px, 6vw, 38px); margin-bottom: 16px; }
+.lead { font-family: 'Lora', serif; font-style: italic; color: var(--gris); font-size: 17px; margin-bottom: 28px; }
+
+.actions { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.btn { display: inline-block; width: 100%; max-width: 360px; font: 600 16px 'DM Sans', sans-serif; padding: 16px 36px; border-radius: 50px; cursor: pointer; text-decoration: none; text-align: center; transition: background .2s, transform .15s; }
+.btn-primary { background: var(--verde); color: #fff; border: none; }
+.btn-primary:hover { background: #1e4029; transform: translateY(-2px); }
+.btn-outline { background: #fff; color: var(--verde); border: 1.5px solid var(--verde); }
+.btn-outline:hover { background: var(--verde-xl); }
+
+footer { text-align: center; padding: 28px 20px 110px; font-size: 13px; color: var(--gris); }
+footer a { color: inherit; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+</style>
+<!-- Meta Pixel — Wire Down (se carga solo con consentimiento). Igual que en la home. -->
+<script src="/assets/wd-pixel.js"></script>
+</head>
+<body data-page-code="404">
+
+<header class="topbar"><a href="/">Wire Down</a></header>
+
+<main>
+  <section class="card" data-track-section="no_encontrada" aria-labelledby="nf-title">
+    <p class="eyebrow">Error 404</p>
+    <h1 id="nf-title">No encontramos esta página</h1>
+    <p class="lead">Puede que el enlace esté mal escrito o que la página ya no exista. Desde aquí puedes seguir.</p>
+    <div class="actions">
+      <a href="/test/" class="btn btn-primary" data-cta="hacer_test" data-cta-location="404">Hacer el test orientativo</a>
+      <a href="/" class="btn btn-outline" data-cta="ver_guia" data-cta-location="404">Conocer la guía Wire Down</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <strong>Wire Down</strong> · Santiago, Chile<br>
+  <a href="/privacidad.html">Política de privacidad</a> · <a href="#" id="cookie-settings">Preferencias de cookies</a>
+</footer>
+
+<!-- COOKIE CONSENT (mismo aviso y clave que la home; estilos y lógica en /assets/) -->
+<div class="wd-consent" id="wd-consent" role="dialog" aria-label="Preferencias de cookies">
+  <p>Usamos Google Analytics para medir cómo se usa el sitio y cookies de Meta para medir qué anuncios llegan a las personas indicadas. Solo se activan si las aceptas. Más detalles en la <a href="/privacidad.html">política de privacidad</a><span id="wd-customize-wrap"> o <button type="button" class="wd-consent-link" id="wd-customize">personaliza tu elección</button></span>.</p>
+  <div class="wd-consent-panel" id="wd-consent-panel" hidden>
+    <label class="wd-consent-opt"><input type="checkbox" id="wd-opt-analytics"><span><strong>Analítica</strong> · Google Analytics: cuántas personas visitan el sitio y qué páginas leen.</span></label>
+    <label class="wd-consent-opt"><input type="checkbox" id="wd-opt-marketing"><span><strong>Marketing</strong> · Meta: medir nuestros anuncios y mostrarlos a personas a las que puedan servirles.</span></label>
+  </div>
+  <div class="wd-consent-btns" id="wd-consent-main">
+    <button type="button" id="wd-reject">Rechazar todo</button>
+    <button type="button" id="wd-accept">Aceptar todo</button>
+  </div>
+  <div class="wd-consent-btns" id="wd-consent-save-row" hidden>
+    <button type="button" id="wd-save">Guardar selección</button>
+  </div>
+</div>
+<script src="/assets/wd-consent.js"></script>
+</body>
+</html>
