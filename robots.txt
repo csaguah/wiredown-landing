@@ -1,0 +1,22 @@
+# robots.txt — wire-down.com
+# Todo el sitio es rastreable. /gracias.html y /privacidad.html no se bloquean aquí a propósito:
+# llevan <meta name="robots" content="noindex"> y Google necesita rastrearlas para leerlo.
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: *
+Allow: /
+
+# PENDIENTE (fase 4b): el sitemap aún no existe. Lo generará @astrojs/sitemap en la
+# migración a Astro; hasta entonces esta URL responde 404 y los buscadores la ignoran.
+Sitemap: https://wire-down.com/sitemap-index.xml

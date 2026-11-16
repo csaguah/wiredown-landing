@@ -46,7 +46,7 @@ Un clic en un botón de checkout envía **solo** `click_checkout`, nunca `cta_cl
 
 ### Valores de los parámetros
 
-**`page_code`** — se deduce de la URL: `/` → `guia`, `/test/` → `test`, `/gracias.html` → `gracias`, `/privacidad.html` → `privacidad`, `/blog/<slug>/` → `<slug>`. Un `data-page-code` en `<body>` tiene prioridad.
+**`page_code`** — se deduce de la URL: `/` → `guia`, `/test/` → `test`, `/gracias.html` → `gracias`, `/privacidad.html` → `privacidad`, `/blog/<slug>/` → `<slug>`. Un `data-page-code` en `<body>` tiene prioridad: `404.html` usa `data-page-code="404"`, porque GitHub Pages la sirve en cualquier ruta inexistente.
 
 **`cta_location`** — atributo `data-cta-location` del elemento o de un ancestro. Si falta: `sin_definir` (revisar el marcado).
 
@@ -59,12 +59,15 @@ Un clic en un botón de checkout envía **solo** `click_checkout`, nunca `cta_cl
 | `/test/` | «Comenzar» | `comenzar_test` | `intro` |
 | `/test/` | «Conocer la guía Wire Down» | `ver_guia` | `resultado` |
 | `/test/` | «Volver a hacer el test» | `repetir_test` | `resultado` |
+| 404 | «Hacer el test orientativo» | `hacer_test` | `404` |
+| 404 | «Conocer la guía Wire Down» | `ver_guia` | `404` |
 | artículos | Enlace a checkout dentro del artículo | — (solo `click_checkout`) | `articulo` |
 
 **`section_name`**
 
 - `/`: `hero`, `dolor`, `cita`, `producto`, `bonos`, `autor`, `cta_final`, `faq`
 - `/test/`: `test_intro`, `test_preguntas`, `test_resultado`
+- 404: `no_encontrada`
 
 **`faq_id`** (`/`): `formato`, `conocimientos`, `tiempo`, `dolor_cronico`, `test_diagnostico`, `pago`
 
