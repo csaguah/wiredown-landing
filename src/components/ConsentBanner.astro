@@ -1,0 +1,20 @@
+---
+// Aviso de cookies: marcado de #wd-consent. Estilos en /assets/wd-consent.css y lógica en
+// /assets/wd-consent.js (va después, con <script is:inline src="/assets/wd-consent.js">).
+// El HTML resultante debe ser idéntico al que tenían las páginas antes de Astro: no agregar
+// <style> ni <script> aquí (Astro los procesaría) ni cambiar ids, que usa wd-consent.js.
+---
+<div class="wd-consent" id="wd-consent" role="dialog" aria-label="Preferencias de cookies">
+  <p>Usamos Google Analytics para medir cómo se usa el sitio y cookies de Meta para medir qué anuncios llegan a las personas indicadas. Solo se activan si las aceptas. Más detalles en la <a href="/privacidad.html">política de privacidad</a><span id="wd-customize-wrap"> o <button type="button" class="wd-consent-link" id="wd-customize">personaliza tu elección</button></span>.</p>
+  <div class="wd-consent-panel" id="wd-consent-panel" hidden>
+    <label class="wd-consent-opt"><input type="checkbox" id="wd-opt-analytics"><span><strong>Analítica</strong> · Google Analytics: cuántas personas visitan el sitio y qué páginas leen.</span></label>
+    <label class="wd-consent-opt"><input type="checkbox" id="wd-opt-marketing"><span><strong>Marketing</strong> · Meta: medir nuestros anuncios y mostrarlos a personas a las que puedan servirles.</span></label>
+  </div>
+  <div class="wd-consent-btns" id="wd-consent-main">
+    <button type="button" id="wd-reject">Rechazar todo</button>
+    <button type="button" id="wd-accept">Aceptar todo</button>
+  </div>
+  <div class="wd-consent-btns" id="wd-consent-save-row" hidden>
+    <button type="button" id="wd-save">Guardar selección</button>
+  </div>
+</div>

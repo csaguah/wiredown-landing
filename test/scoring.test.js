@@ -1,8 +1,8 @@
-// Ejecutar desde la raíz del repo con: node --test test/scoring.test.js
+// Ejecutar desde la raíz del repo con: npm test (o node --test "test/*.test.js")
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const data = require('./test-data.js');
-const S = require('./scoring.js');
+const data = require('../public/test/test-data.js');
+const S = require('../public/test/scoring.js');
 
 // Respuestas a partir de un mapa parcial; las demás quedan en 0.
 function answers(partial = {}) {

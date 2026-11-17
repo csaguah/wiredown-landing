@@ -3,10 +3,15 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const E = require('../assets/wd-events.js');
+const E = require('../public/assets/wd-events.js');
 
 const ROOT = path.join(__dirname, '..');
-const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8');
+// Las páginas se leen del build (dist/), que es lo que se publica: `npm test` corre `astro build`
+// antes (pretest). Los scripts de /assets/ se leen de public/, su fuente.
+const DIST = path.join(ROOT, 'dist');
+if (!fs.existsSync(path.join(DIST, 'index.html'))) throw new Error('Falta dist/: correr `npm test` (hace el build) o `npm run build` antes.');
+const read = f => fs.readFileSync(path.join(DIST, f), 'utf8');
+const readPublic = f => fs.readFileSync(path.join(ROOT, 'public', f), 'utf8');
 
 // ── Lógica pura ────────────────────────────────────────────
 
@@ -163,7 +168,7 @@ test('todas las páginas cargan wd-events.js con defer después de wd-gtm.js', (
 test('todas las páginas enlazan el favicon (ICO, SVG y apple-touch-icon) y los archivos existen', () => {
   const links = ['<link rel="icon" href="/favicon.ico" sizes="32x32">', '<link rel="icon" href="/favicon.svg" type="image/svg+xml">', '<link rel="apple-touch-icon" href="/apple-touch-icon.png">'];
   for (const f of PAGES) for (const l of links) assert.ok(read(f).includes(l), `${f}: ${l}`);
-  for (const f of ['favicon.ico', 'favicon.svg', 'apple-touch-icon.png']) assert.ok(fs.existsSync(path.join(ROOT, f)), f);
+  for (const f of ['favicon.ico', 'favicon.svg', 'apple-touch-icon.png']) assert.ok(fs.existsSync(path.join(DIST, f)), f);
 });
 
 test('cada <section> tiene data-track-section, sin nombres repetidos', () => {
@@ -225,7 +230,7 @@ test('el test solo llama a wdTrack/trackGA con un nombre fijo y sin parámetros'
 });
 
 test('wd-events.js no usa los identificadores de quiropractica.cl ni lee texto de la página', () => {
-  const js = read('assets/wd-events.js');
+  const js = readPublic('assets/wd-events.js');
   const code = js.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
   assert.ok(!code.includes('GTM-T9TJMDP3'));
   assert.ok(!/textContent|innerText|innerHTML|\.value\b/.test(code));
@@ -290,7 +295,7 @@ function runGtm(pathname, search = '', hash = '') {
     }
   };
   ctx.window = ctx;
-  vm.runInNewContext(read('assets/wd-gtm.js'), ctx);
+  vm.runInNewContext(readPublic('assets/wd-gtm.js'), ctx);
   return log;
 }
 

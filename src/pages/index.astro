@@ -1,12 +1,15 @@
+---
+import ConsentBanner from '../components/ConsentBanner.astro';
+---
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- GTM con Consent Mode v2 (todo denegado por defecto). Va antes de cualquier otro script de medición. -->
-<script src="/assets/wd-gtm.js"></script>
+<script is:inline src="/assets/wd-gtm.js"></script>
 <!-- Eventos al dataLayer (solo con consentimiento de Analítica y con GTM ya cargado). -->
-<script src="/assets/wd-events.js" defer></script>
+<script is:inline src="/assets/wd-events.js" defer></script>
 <title>Wire Down — Calma tu sistema nervioso y sana tu cuerpo</title>
 <meta name="description" content="Una guía de herramientas simples para personas que viven con dolor y tensión asociados al estrés. Ebook + Bitácora + test orientativo. Escrito por un kinesiólogo y quiropráctico con más de 20 años de experiencia clínica.">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
@@ -17,7 +20,7 @@
 <link rel="stylesheet" href="/assets/wd-tokens.css">
 <link rel="stylesheet" href="/assets/wd-base.css">
 <link rel="stylesheet" href="/assets/wd-consent.css">
-<style>
+<style is:inline>
 /* Variables de marca: /assets/wd-tokens.css · Reset: /assets/wd-base.css */
 html { scroll-behavior: smooth; }
 body { font-family: 'DM Sans', sans-serif; color: var(--osc); background: #fff; line-height: 1.6; }
@@ -683,9 +686,9 @@ footer strong { color: rgba(255,255,255,0.8); }
 .hero .btn-primary { animation-delay: 0.3s; }
 </style>
   <!-- Evita que el widget borre los botones de checkout cuando falla su health check (ver el archivo). Va antes del widget. -->
-  <script src="/assets/wd-hotmart-guard.js"></script>
+  <script is:inline src="/assets/wd-hotmart-guard.js"></script>
   <!-- Hotmart Widget -->
-  <script type="text/javascript">
+  <script is:inline type="text/javascript">
     function importHotmart(){
       var imported = document.createElement('script');
       imported.src = 'https://static.hotmart.com/checkout/widget.min.js';
@@ -700,7 +703,7 @@ footer strong { color: rgba(255,255,255,0.8); }
   </script>
 
   <!-- Meta Pixel — Wire Down (se carga solo con consentimiento) -->
-  <script src="/assets/wd-pixel.js"></script>
+  <script is:inline src="/assets/wd-pixel.js"></script>
 </head>
 <body>
 
@@ -970,7 +973,7 @@ footer strong { color: rgba(255,255,255,0.8); }
   <a onclick="return false;" href="https://pay.hotmart.com/K105460326C?checkoutMode=2" class="hotmart-fb hotmart__button-checkout" data-cta="checkout" data-cta-location="sticky">Acceder a la guía · USD 17</a>
 </div>
 
-<script>
+<script is:inline>
 // ── FAQ accordion ──────────────────────────────────────────
 document.querySelectorAll('.faq-q').forEach(q => {
   q.addEventListener('click', () => {
@@ -1001,7 +1004,7 @@ document.querySelectorAll('a[href="#comprar"]').forEach(a => {
 });
 </script>
 
-<script>
+<script is:inline>
 // Meta Pixel — InitiateCheckout al hacer clic en un CTA de Hotmart.
 // Revisa el consentimiento en el momento del clic: respeta un «Rechazar» hecho en esta visita.
 document.querySelectorAll('a[href*="pay.hotmart.com"]').forEach(function(btn) {
@@ -1021,21 +1024,8 @@ document.querySelectorAll('a[href*="pay.hotmart.com"]').forEach(function(btn) {
 </script>
 
 <!-- COOKIE CONSENT (estilos: /assets/wd-consent.css · lógica: /assets/wd-consent.js) -->
-<div class="wd-consent" id="wd-consent" role="dialog" aria-label="Preferencias de cookies">
-  <p>Usamos Google Analytics para medir cómo se usa el sitio y cookies de Meta para medir qué anuncios llegan a las personas indicadas. Solo se activan si las aceptas. Más detalles en la <a href="/privacidad.html">política de privacidad</a><span id="wd-customize-wrap"> o <button type="button" class="wd-consent-link" id="wd-customize">personaliza tu elección</button></span>.</p>
-  <div class="wd-consent-panel" id="wd-consent-panel" hidden>
-    <label class="wd-consent-opt"><input type="checkbox" id="wd-opt-analytics"><span><strong>Analítica</strong> · Google Analytics: cuántas personas visitan el sitio y qué páginas leen.</span></label>
-    <label class="wd-consent-opt"><input type="checkbox" id="wd-opt-marketing"><span><strong>Marketing</strong> · Meta: medir nuestros anuncios y mostrarlos a personas a las que puedan servirles.</span></label>
-  </div>
-  <div class="wd-consent-btns" id="wd-consent-main">
-    <button type="button" id="wd-reject">Rechazar todo</button>
-    <button type="button" id="wd-accept">Aceptar todo</button>
-  </div>
-  <div class="wd-consent-btns" id="wd-consent-save-row" hidden>
-    <button type="button" id="wd-save">Guardar selección</button>
-  </div>
-</div>
-<script src="/assets/wd-consent.js"></script>
+<ConsentBanner />
+<script is:inline src="/assets/wd-consent.js"></script>
 </body>
 </html>
 
