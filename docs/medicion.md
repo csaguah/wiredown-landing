@@ -24,7 +24,7 @@ página ──► /assets/wd-pixel.js  ──► Meta Pixel (TestStarted, TestCo
 - **GTM primero:** nada se empuja antes de que GTM haya cargado (`window.google_tag_manager['GTM-T47WBMN9']`). Mientras tanto los eventos esperan en una cola; si GTM no carga en ~10 s (bloqueador), la cola se descarta.
 - **Lista blanca de parámetros:** cada evento solo puede llevar los parámetros de su fila en la tabla de abajo. Cualquier otro se descarta. Los parámetros de otros eventos se envían como `undefined` para que el modelo de datos de GTM no arrastre valores de un evento al siguiente.
 - **Nada de texto de la página:** los nombres salen de atributos `data-*` fijos. `faq_id` es un identificador corto, no el texto de la pregunta; `link_domain` es solo el dominio, sin ruta ni query.
-- **Test:** las respuestas y el perfil nunca salen del navegador, ni a GA4 ni a Meta. `test/index.html` llama a `wdTrack('test_start')`, `wdTrack('test_complete')` y `wdTrack('test_to_guide')` sin parámetros. Los eventos de Meta `TestStarted` (al pulsar «Comenzar») y `TestCompleted` (resultado) siguen igual.
+- **Test:** las respuestas y el perfil nunca salen del navegador, ni a GA4 ni a Meta. `src/pages/test/index.astro` (`/test/`) llama a `wdTrack('test_start')`, `wdTrack('test_complete')` y `wdTrack('test_to_guide')` sin parámetros. Los eventos de Meta `TestStarted` (al pulsar «Comenzar») y `TestCompleted` (resultado) siguen igual.
 - **Una vez por página:** `section_view` (por sección), `faq_open` (por pregunta) y `scroll_depth` (por umbral) se envían como máximo una vez por carga de página.
 
 ## Eventos
@@ -179,4 +179,4 @@ Si se agrega un evento a `wd-events.js`, agregarlo también a esta expresión re
 
 ## Tests
 
-`node --test "test/*.test.js"` desde la raíz. `test/wd-events.test.js` cubre la lista blanca de parámetros, la espera de GTM y el consentimiento, que un checkout envíe solo `click_checkout`, la limpieza de la URL de `/gracias.html` en `wd-gtm.js` (y que no toque otras páginas), y el marcado de las páginas (cada `<section>` con `data-track-section`, cada checkout con su ubicación, cada pregunta con `data-faq`, y que el test solo envíe nombres de evento sin parámetros).
+`npm test` desde la raíz (hace `astro build` y luego `node --test "test/*.test.js"`; ver CLAUDE.md). Los archivos de `/assets/` están en `public/assets/` y las páginas en `src/pages/`. `test/wd-events.test.js` cubre la lista blanca de parámetros, la espera de GTM y el consentimiento, que un checkout envíe solo `click_checkout`, la limpieza de la URL de `/gracias.html` en `wd-gtm.js` (y que no toque otras páginas), y el marcado de las páginas (cada `<section>` con `data-track-section`, cada checkout con su ubicación, cada pregunta con `data-faq`, y que el test solo envíe nombres de evento sin parámetros). El marcado se comprueba sobre el HTML generado en `dist/`.

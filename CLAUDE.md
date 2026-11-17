@@ -13,7 +13,7 @@ Reglas de trabajo para Claude Code en este repositorio. Si una regla resulta equ
 
 - La estética de la landing actual **se mantiene tal cual**: paleta (`--verde #2D5A3D`, `--dorado #C8A84B`, sage, tierra, beige), tipografía Lora + DM Sans, botones, espaciados y tono.
 - De quiropractica.cl se replican la **estructura técnica, la medición y el formato editorial**, nunca su diseño (navy, cobre, Cormorant).
-- Cualquier página nueva (blog, artículo, 404) reutiliza las variables y clases que ya existen en `index.html`. Nada de colores sueltos.
+- Cualquier página nueva (blog, artículo, 404) reutiliza las variables de `public/assets/wd-tokens.css` y las clases que ya existen en `src/pages/index.astro`. Nada de colores sueltos.
 - Una migración o refactor se considera correcto solo si la página se ve **idéntica** antes y después (comparar capturas en móvil y escritorio).
 
 ## Aislamiento respecto de quiropractica.cl
@@ -38,14 +38,14 @@ Este repo es **público**. Por eso:
 - `/` (página de la guía), `/test/`, `/gracias.html` (página de agradecimiento configurada en Hotmart) y `/privacidad.html` deben seguir respondiendo en la misma URL tras cualquier migración.
 - `/gracias.html` y `/privacidad.html` mantienen `noindex` y quedan fuera del sitemap.
 - Los enlaces de checkout `https://pay.hotmart.com/K105460326C?checkoutMode=2` y el widget de Hotmart deben seguir funcionando igual.
-- El dominio se publica con el archivo `CNAME` (`wire-down.com`). El DNS está en Squarespace: no se delega a otro proveedor ni se tocan los registros MX ni los A/CNAME del sitio. Agregar un registro TXT de verificación (Search Console) sí está permitido; lo hace Carlos a mano.
+- El dominio personalizado (`wire-down.com`) está en Settings → Pages → Custom domain, con «Enforce HTTPS». `public/CNAME` se mantiene por compatibilidad, pero con el deploy por GitHub Actions manda lo que diga Settings. El DNS está en Squarespace: no se delega a otro proveedor ni se tocan los registros MX ni los A/CNAME del sitio. Agregar un registro TXT de verificación (Search Console) sí está permitido; lo hace Carlos a mano.
 - Correo de contacto único en todo el sitio: `soporte@wire-down.com`.
 
 ## Privacidad y consentimiento (Ley 21.719 y GDPR)
 
 - Nada que mida o rastree se carga sin consentimiento. Consent Mode v2 con todo en `denied` por defecto.
 - La clave de consentimiento actual es `wd_consent` en `localStorage`. Si se cambia el formato, migrar el valor antiguo en vez de volver a preguntar a quien ya decidió.
-- **Las respuestas y el perfil del test nunca salen del navegador hacia GA4, GTM ni Meta.** Solo se envían eventos sin parámetros. Esta regla ya está en `test/index.html` y se mantiene.
+- **Las respuestas y el perfil del test nunca salen del navegador hacia GA4, GTM ni Meta.** Solo se envían eventos sin parámetros. Esta regla ya está en `src/pages/test/index.astro` y se mantiene.
   - En Meta: `TestStarted` y `TestCompleted` (`trackCustom`). Se mantienen con esos nombres; no se renombran.
   - En dataLayer/GA4: `test_start` y `test_complete`. Conviven con los de Meta.
 - Sin email capture hasta que exista el formulario con casilla de consentimiento separada y sin marcar (pendiente, fuera de esta etapa).
@@ -66,11 +66,36 @@ Este repo es **público**. Por eso:
 
 1. Antes de planificar, **leer el código real**. No asumir nombres de campos ni rutas.
 2. Rama corta (≤ 28 caracteres): `art/<tema>`, `feat/<tema>`, `fix/<tema>`.
-3. Tests sin errores antes de cada commit. Hoy no hay `package.json`: se corren con `node --test "test/*.test.js"` desde la raíz (con comillas: en Node 24, `node --test test/` falla porque toma la carpeta como módulo). Desde la fase 5a (Astro), `npm run build` y `npm test`, que ejecutará esos mismos tests.
+3. Tests sin errores antes de cada commit: `npm test` (ver «Build, tests y deploy»).
 4. Detenerse y pedir confirmación antes de cada commit, push, PR y merge.
 5. Commit con `Co-Authored-By: Claude <noreply@anthropic.com>`.
 6. Un PR por tema, squash merge. Nunca hacer merge sin que Carlos lo apruebe.
 7. Tras el merge: verificar en producción (iPhone y pestaña privada), pedir indexación en Search Console con la URL con barra final, borrar la rama local y remota.
+
+## Build, tests y deploy (Astro)
+
+El sitio es Astro 6 con salida estática (`astro.config.mjs`: `build.format: 'preserve'`, `compressHTML: false`). Node ≥ 22.12 (se usa 24).
+
+- `npm install` una vez. `npm run dev` para trabajar (http://localhost:4321), `npm run build` genera `dist/`, `npm run preview` sirve `dist/`.
+- `npm test` corre `astro build` (en `pretest`) y luego `node --test "test/*.test.js"`. Los tests de marcado leen `dist/`, lo que se publica; los de lógica leen `public/assets/` y `public/test/`. Las comillas importan: en Node 24, `node --test test/` falla porque toma la carpeta como módulo.
+- Deploy: `.github/workflows/deploy.yml` (workflow oficial de Astro). Cada push a `main` corre `npm test` y, si pasa, publica `dist/` en GitHub Pages. Settings → Pages → Source: **GitHub Actions**. Solo `main` puede publicar (regla del entorno `github-pages`).
+- `.nojekyll` ya no hace falta: con Actions no corre Jekyll.
+
+Estructura:
+
+- `src/pages/` → páginas. Con `format: 'preserve'`, `src/pages/gracias.astro` → `/gracias.html`, `src/pages/test/index.astro` → `/test/` y `src/pages/404.astro` → `/404.html`.
+- `src/components/ConsentBanner.astro` → marcado del aviso de cookies (`#wd-consent`). Se usa como `<ConsentBanner />` justo antes de `<script is:inline src="/assets/wd-consent.js"></script>`.
+- `public/` → se copia tal cual: `assets/` (CSS y JS compartidos, en `/assets/`), `test/scoring.js` y `test/test-data.js` (los carga `/test/`), `CNAME`, `robots.txt` y favicons.
+- `test/` en la raíz → solo tests de Node (`*.test.js`). No se publica.
+
+Cómo agregar una página:
+
+1. Crear `src/pages/<nombre>.astro` (→ `/<nombre>.html`) o `src/pages/<carpeta>/index.astro` (→ `/<carpeta>/`). Partir de una página existente con el mismo `<head>` (GTM y eventos primero, favicons, fuentes, `wd-tokens.css`, `wd-base.css`, `wd-consent.css`, `wd-pixel.js`) y `data-track-section`/`data-cta` según `docs/medicion.md`.
+2. **Todo `<script>` y `<style>` lleva `is:inline`**. Sin él, Astro hace scoped el CSS, agrupa y mueve los scripts a `/_astro/` y cambia el orden de carga, lo que rompe los overrides de Hotmart (`.hotmart-fb…`, con `!important`) y la regla de cargar `wd-hotmart-guard.js` antes del widget. `test/astro-build.test.js` falla si eso pasa.
+3. Si la página mide o tiene enlaces internos: aviso con `import ConsentBanner from '../components/ConsentBanner.astro';` en el frontmatter y `<ConsentBanner />` + `wd-consent.js` al final del `<body>`.
+4. Llaves `{ }` fuera de `<script>`/`<style>`: en Astro son expresiones. Si un texto las necesita, escribir `{'{'}`.
+5. Agregar la página a `PAGES` en `test/wd-events.test.js` y `test/astro-build.test.js`. `npm test`.
+6. Verificar que se ve igual en 390 y 1280 px (`npm run preview`).
 
 ## Trampas conocidas (heredadas de quiropractica.cl)
 

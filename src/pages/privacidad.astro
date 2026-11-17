@@ -1,12 +1,15 @@
+---
+import ConsentBanner from '../components/ConsentBanner.astro';
+---
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- GTM con Consent Mode v2 (todo denegado por defecto). Va antes de cualquier otro script de medición. -->
-<script src="/assets/wd-gtm.js"></script>
+<script is:inline src="/assets/wd-gtm.js"></script>
 <!-- Eventos al dataLayer (solo con consentimiento de Analítica y con GTM ya cargado). -->
-<script src="/assets/wd-events.js" defer></script>
+<script is:inline src="/assets/wd-events.js" defer></script>
 <title>Política de privacidad — Wire Down</title>
 <meta name="robots" content="noindex">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
@@ -16,7 +19,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/wd-tokens.css">
 <link rel="stylesheet" href="/assets/wd-consent.css">
-<style>
+<style is:inline>
 body{font-family:Georgia,'Times New Roman',serif;color:#1C2B20;background:#F8F4EE;line-height:1.7;margin:0}
 main{max-width:720px;margin:0 auto;padding:48px 24px 72px}
 h1{color:#2D5A3D;font-size:30px;margin-bottom:4px}
@@ -26,7 +29,7 @@ p,li{font-size:16px}
 a{color:#3D7A50}
 </style>
 <!-- Meta Pixel — Wire Down (solo con consentimiento de Marketing). Lo usa el aviso de cookies. -->
-<script src="/assets/wd-pixel.js"></script>
+<script is:inline src="/assets/wd-pixel.js"></script>
 </head>
 <body>
 <main>
@@ -60,20 +63,7 @@ a{color:#3D7A50}
 </main>
 
 <!-- COOKIE CONSENT (mismo aviso y clave que la home; estilos y lógica en /assets/) -->
-<div class="wd-consent" id="wd-consent" role="dialog" aria-label="Preferencias de cookies">
-  <p>Usamos Google Analytics para medir cómo se usa el sitio y cookies de Meta para medir qué anuncios llegan a las personas indicadas. Solo se activan si las aceptas. Más detalles en la <a href="/privacidad.html">política de privacidad</a><span id="wd-customize-wrap"> o <button type="button" class="wd-consent-link" id="wd-customize">personaliza tu elección</button></span>.</p>
-  <div class="wd-consent-panel" id="wd-consent-panel" hidden>
-    <label class="wd-consent-opt"><input type="checkbox" id="wd-opt-analytics"><span><strong>Analítica</strong> · Google Analytics: cuántas personas visitan el sitio y qué páginas leen.</span></label>
-    <label class="wd-consent-opt"><input type="checkbox" id="wd-opt-marketing"><span><strong>Marketing</strong> · Meta: medir nuestros anuncios y mostrarlos a personas a las que puedan servirles.</span></label>
-  </div>
-  <div class="wd-consent-btns" id="wd-consent-main">
-    <button type="button" id="wd-reject">Rechazar todo</button>
-    <button type="button" id="wd-accept">Aceptar todo</button>
-  </div>
-  <div class="wd-consent-btns" id="wd-consent-save-row" hidden>
-    <button type="button" id="wd-save">Guardar selección</button>
-  </div>
-</div>
-<script src="/assets/wd-consent.js"></script>
+<ConsentBanner />
+<script is:inline src="/assets/wd-consent.js"></script>
 </body>
 </html>

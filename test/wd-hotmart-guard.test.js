@@ -3,9 +3,10 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const G = require('../assets/wd-hotmart-guard.js');
+const G = require('../public/assets/wd-hotmart-guard.js');
 
-const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+// Página del build (dist/); `npm test` corre `astro build` antes (pretest).
+const html = fs.readFileSync(path.join(__dirname, '..', 'dist', 'index.html'), 'utf8');
 const CHECKOUT = 'https://pay.hotmart.com/K105460326C?checkoutMode=2';
 
 // DOM mínimo: lo justo para insertBefore/appendChild/remove e isConnected.
