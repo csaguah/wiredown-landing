@@ -90,7 +90,8 @@ Estructura:
 
 Cómo agregar una página:
 
-1. Crear `src/pages/<nombre>.astro` (→ `/<nombre>.html`) o `src/pages/<carpeta>/index.astro` (→ `/<carpeta>/`). Partir de una página existente con el mismo `<head>` (GTM y eventos primero, favicons, fuentes, `wd-tokens.css`, `wd-base.css`, `wd-consent.css`, `wd-pixel.js`) y `data-track-section`/`data-cta` según `docs/medicion.md`.
+1. Crear `src/pages/<nombre>.astro` (→ `/<nombre>.html`) o `src/pages/<carpeta>/index.astro` (→ `/<carpeta>/`). Partir de una página existente con el mismo `<head>` (GTM y eventos primero, `<SEOHead>`, favicons, fuentes, `wd-tokens.css`, `wd-base.css`, `wd-consent.css`, `wd-pixel.js`) y `data-track-section`/`data-cta` según `docs/medicion.md`.
+   - `<SEOHead title description path />` (`src/components/SEOHead.astro`) pone title, description, canonical, Open Graph, Twitter card y JSON-LD opcional (`jsonLd`). `path` con barra final para carpetas (`/test/`), nunca `/index.html`. Con `noIndex` la página emite `noindex`, no declara canonical y queda fuera del sitemap automáticamente (`astro.config.mjs` lee el HTML generado). `test/seo.test.js` lo comprueba.
 2. **Todo `<script>` y `<style>` lleva `is:inline`**. Sin él, Astro hace scoped el CSS, agrupa y mueve los scripts a `/_astro/` y cambia el orden de carga, lo que rompe los overrides de Hotmart (`.hotmart-fb…`, con `!important`) y la regla de cargar `wd-hotmart-guard.js` antes del widget. `test/astro-build.test.js` falla si eso pasa.
 3. Si la página mide o tiene enlaces internos: aviso con `import ConsentBanner from '../components/ConsentBanner.astro';` en el frontmatter y `<ConsentBanner />` + `wd-consent.js` al final del `<body>`.
 4. Llaves `{ }` fuera de `<script>`/`<style>`: en Astro son expresiones. Si un texto las necesita, escribir `{'{'}`.

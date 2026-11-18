@@ -1,5 +1,58 @@
 ---
 import ConsentBanner from '../components/ConsentBanner.astro';
+import SEOHead from '../components/SEOHead.astro';
+
+// JSON-LD de la página de la guía. Solo datos visibles en la página: sin valoraciones ni reseñas.
+// La guía es ["Product", "Book"]: Product aporta brand, category y offers; Book aporta author
+// (Product no tiene author en schema.org). El autor es Person (nunca Physician), dentro de la
+// guía y no como entidad principal; su nombre es el de la firma de «Palabras del autor».
+const SITE = 'https://wire-down.com';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': `${SITE}/#organization`,
+      name: 'Wire Down',
+      url: `${SITE}/`,
+      logo: `${SITE}/apple-touch-icon.png`,
+      email: 'soporte@wire-down.com',
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${SITE}/#website`,
+      name: 'Wire Down',
+      url: `${SITE}/`,
+      inLanguage: 'es',
+      publisher: { '@id': `${SITE}/#organization` },
+    },
+    {
+      '@type': ['Product', 'Book'],
+      '@id': `${SITE}/#guia`,
+      name: 'Wire Down · Guía práctica de regulación',
+      description: 'Una guía para personas que viven con dolor o tensión persistente y quieren entender qué papel juega el estrés, y qué pueden hacer cada día para ayudar a su cuerpo a regularse. Incluye la Bitácora Wire Down y un test orientativo.',
+      url: `${SITE}/`,
+      image: `${SITE}/og/wire-down-og.png`,
+      category: 'Ebook',
+      brand: { '@type': 'Brand', name: 'Wire Down' },
+      bookFormat: 'https://schema.org/EBook',
+      inLanguage: 'es',
+      publisher: { '@id': `${SITE}/#organization` },
+      author: {
+        '@type': 'Person',
+        name: 'Carlos Sagua H.',
+        jobTitle: 'Kinesiólogo y quiropráctico',
+      },
+      offers: {
+        '@type': 'Offer',
+        price: '17.00',
+        priceCurrency: 'USD',
+        url: 'https://pay.hotmart.com/K105460326C?checkoutMode=2',
+        availability: 'https://schema.org/InStock',
+      },
+    },
+  ],
+};
 ---
 <!DOCTYPE html>
 <html lang="es">
@@ -10,8 +63,12 @@ import ConsentBanner from '../components/ConsentBanner.astro';
 <script is:inline src="/assets/wd-gtm.js"></script>
 <!-- Eventos al dataLayer (solo con consentimiento de Analítica y con GTM ya cargado). -->
 <script is:inline src="/assets/wd-events.js" defer></script>
-<title>Wire Down — Calma tu sistema nervioso y sana tu cuerpo</title>
-<meta name="description" content="Una guía de herramientas simples para personas que viven con dolor y tensión asociados al estrés. Ebook + Bitácora + test orientativo. Escrito por un kinesiólogo y quiropráctico con más de 20 años de experiencia clínica.">
+<SEOHead
+  title="Dolor y tensión asociados al estrés: guía práctica | Wire Down"
+  description="Herramientas simples para regular tu sistema nervioso cuando el estrés se instala en el cuerpo como dolor o tensión. Ebook, Bitácora y test orientativo."
+  path="/"
+  jsonLd={jsonLd}
+/>
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -379,6 +436,7 @@ h1,h2,h3,h4 { font-family: 'Lora', serif; line-height: 1.2; }
   color: var(--osc);
   line-height: 1.7;
 }
+.author-sign { margin: 16px 0 0; }
 @media (max-width: 520px) {
   .author-inner { flex-direction: column; align-items: center; text-align: center; }
 }
@@ -914,6 +972,7 @@ footer strong { color: rgba(255,255,255,0.8); }
           musculoesquelético sobre la influencia que tiene el estrés en lo que sienten, y entregarles
           herramientas simples para intentar regularlo.
         </p>
+        <p class="author-role author-sign">Carlos Sagua H. · Kinesiólogo y quiropráctico</p>
       </div>
     </div>
   </div>
