@@ -55,7 +55,8 @@ Un clic en un botón de checkout envía **solo** `click_checkout`, nunca `cta_cl
 | `/` | Botón del hero (`#cta-hero`) | — (solo `click_checkout`) | `hero` |
 | `/` | Botón del CTA final (`#cta-final`) | — (solo `click_checkout`) | `final` |
 | `/` | Botón fijo en móvil (`.sticky-cta`) | — (solo `click_checkout`) | `sticky` |
-| `/` | Enlace «Haz el test orientativo» | `hacer_test` | `bonos` |
+| `/` | Enlace «Haz el test orientativo» (bajo la línea de confianza del hero) | `hacer_test` | `hero` |
+| `/` | Botón «Haz el test orientativo →» | `hacer_test` | `bonos` |
 | `/test/` | «Comenzar» | `comenzar_test` | `intro` |
 | `/test/` | «Conocer la guía Wire Down» | `ver_guia` | `resultado` |
 | `/test/` | «Volver a hacer el test» | `repetir_test` | `resultado` |

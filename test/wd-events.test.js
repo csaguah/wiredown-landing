@@ -208,6 +208,20 @@ test('cada enlace a pay.hotmart.com tiene data-cta y una ubicación válida', ()
   assert.deepEqual(locs.sort(), ['final', 'hero', 'sticky']);
 });
 
+test('index.html: CTA al test en bonos (botón) y en el hero (enlace secundario), sin checkout', () => {
+  const html = read('index.html');
+  const ctas = html.match(/<a\b[^>]*data-cta="hacer_test"[^>]*>/g) || [];
+  const byLoc = Object.fromEntries(ctas.map(a => [(a.match(/data-cta-location="([a-z_]+)"/) || [])[1], a]));
+  assert.deepEqual(Object.keys(byLoc).sort(), ['bonos', 'hero']);
+  for (const a of ctas) {
+    assert.match(a, /href="test\/"/);
+    assert.ok(!/hotmart/i.test(a), 'el CTA del test no es un checkout');
+  }
+  assert.match(byLoc.bonos, /class="btn-secondary"/);
+  // En el hero no compite con el botón de compra: sin clase de botón.
+  assert.ok(!/class=/.test(byLoc.hero), 'el enlace del hero no lleva clase de botón');
+});
+
 test('cada pregunta frecuente tiene un data-faq único (no el texto)', () => {
   const qs = read('index.html').match(/<div class="faq-q"[^>]*>/g) || [];
   assert.equal(qs.length, 6);
