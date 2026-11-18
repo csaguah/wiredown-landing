@@ -17,6 +17,5 @@ Allow: /
 User-agent: *
 Allow: /
 
-# PENDIENTE (fase 4b): el sitemap aún no existe. Lo generará @astrojs/sitemap en la
-# migración a Astro; hasta entonces esta URL responde 404 y los buscadores la ignoran.
+# Generado por @astrojs/sitemap en cada build (ver astro.config.mjs).
 Sitemap: https://wire-down.com/sitemap-index.xml

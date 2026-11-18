@@ -1,0 +1,56 @@
+---
+// Metadatos SEO de cada página: title, description, robots, canonical, Open Graph, Twitter card
+// y JSON-LD opcional. Va dentro de <head>, justo donde antes estaban <title> y la description.
+//
+// - path: ruta pública con barra final para carpetas ('/', '/test/'). Nunca '/index.html'.
+// - noIndex: emite <meta name="robots" content="noindex"> y omite canonical y og:url (una página
+//   que no se indexa no declara URL canónica; 404 se sirve en cualquier ruta). Las páginas con
+//   noIndex quedan fuera del sitemap (filtro en astro.config.mjs y test en test/seo.test.js).
+// - noFollow: solo junto con noIndex (/gracias.html usa "noindex, nofollow").
+// - jsonLd: objeto o lista de objetos schema.org. Se serializa a un <script is:inline> sin procesar.
+//
+// Sin <style> ni <script> procesados por Astro: solo marcado.
+interface Props {
+  title: string;
+  description?: string;
+  path: string;
+  noIndex?: boolean;
+  noFollow?: boolean;
+  ogType?: 'website' | 'article';
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const { title, description, path, noIndex = false, noFollow = false, ogType = 'website', jsonLd } = Astro.props;
+
+const SITE = 'https://wire-down.com';
+if (!path.startsWith('/') || path.endsWith('/index.html')) throw new Error(`SEOHead: path inválido "${path}"`);
+const url = new URL(path, SITE).href;
+const robots = noIndex ? (noFollow ? 'noindex, nofollow' : 'noindex') : null;
+
+const OG_IMAGE = `${SITE}/og/wire-down-og.png`;
+const OG_IMAGE_ALT = 'Wire Down: herramientas simples para cuando el estrés se instala en el cuerpo.';
+
+// "<" escapado: un texto con "</script>" no puede cerrar el bloque JSON-LD.
+const ld = jsonLd ? JSON.stringify(jsonLd, null, 2).replace(/</g, '\\u003c') : null;
+---
+<title>{title}</title>
+{description && <meta name="description" content={description}>}
+{robots && <meta name="robots" content={robots}>}
+{!noIndex && <link rel="canonical" href={url}>}
+<meta property="og:type" content={ogType}>
+<meta property="og:site_name" content="Wire Down">
+<meta property="og:locale" content="es_CL">
+<meta property="og:title" content={title}>
+{description && <meta property="og:description" content={description}>}
+{!noIndex && <meta property="og:url" content={url}>}
+<meta property="og:image" content={OG_IMAGE}>
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content={OG_IMAGE_ALT}>
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content={title}>
+{description && <meta name="twitter:description" content={description}>}
+<meta name="twitter:image" content={OG_IMAGE}>
+<meta name="twitter:image:alt" content={OG_IMAGE_ALT}>
+{ld && <script is:inline type="application/ld+json" set:html={ld}></script>}

@@ -1,5 +1,21 @@
 ---
 import ConsentBanner from '../../components/ConsentBanner.astro';
+import SEOHead from '../../components/SEOHead.astro';
+
+const SITE = 'https://wire-down.com';
+const description = '10 preguntas para reconocer cómo se expresa el estrés en tu cuerpo y por dónde empezar a regularte. Gratis. Orientativo, no es un diagnóstico.';
+// WebPage, no MedicalWebPage ni nada que sugiera evaluación clínica.
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  '@id': `${SITE}/test/#webpage`,
+  name: 'Test orientativo Wire Down',
+  description: 'Autoevaluación orientativa de 10 preguntas para reconocer cómo se expresa el estrés en tu cuerpo y por dónde empezar a regularte. No ha sido validada como instrumento clínico, no es un diagnóstico y no reemplaza la evaluación de un profesional de salud.',
+  url: `${SITE}/test/`,
+  inLanguage: 'es',
+  isPartOf: { '@type': 'WebSite', '@id': `${SITE}/#website`, name: 'Wire Down', url: `${SITE}/` },
+  publisher: { '@type': 'Organization', '@id': `${SITE}/#organization`, name: 'Wire Down', url: `${SITE}/` },
+};
 ---
 <!DOCTYPE html>
 <html lang="es">
@@ -11,8 +27,7 @@ import ConsentBanner from '../../components/ConsentBanner.astro';
 <!-- Eventos al dataLayer (solo con consentimiento de Analítica y con GTM ya cargado). -->
 <script is:inline src="/assets/wd-events.js" defer></script>
 <!-- Título y descripción fijos: nunca cambian según respuestas o resultado. -->
-<title>Test orientativo · Wire Down</title>
-<meta name="description" content="Una autoevaluación orientativa de 10 preguntas para reconocer tu punto de partida y decidir por dónde empezar con la guía Wire Down.">
+<SEOHead title="Test de estrés y tensión en el cuerpo (orientativo) | Wire Down" description={description} path="/test/" jsonLd={jsonLd} />
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">

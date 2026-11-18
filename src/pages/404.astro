@@ -1,5 +1,6 @@
 ---
 import ConsentBanner from '../components/ConsentBanner.astro';
+import SEOHead from '../components/SEOHead.astro';
 ---
 <!DOCTYPE html>
 <html lang="es">
@@ -10,8 +11,7 @@ import ConsentBanner from '../components/ConsentBanner.astro';
 <script is:inline src="/assets/wd-gtm.js"></script>
 <!-- Eventos al dataLayer (solo con consentimiento de Analítica y con GTM ya cargado). -->
 <script is:inline src="/assets/wd-events.js" defer></script>
-<title>Página no encontrada — Wire Down</title>
-<meta name="robots" content="noindex">
+<SEOHead title="Página no encontrada — Wire Down" path="/404.html" noIndex />
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
