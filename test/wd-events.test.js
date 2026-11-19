@@ -154,6 +154,8 @@ test('el contenedor equivocado no cuenta como GTM cargado', () => {
 
 // ── Marcado de las páginas ────────────────────────────────
 
+// Las páginas del blog solo existen cuando hay artículos publicados: test/blog.test.js las revisa
+// sobre un build con artículos de prueba (.dist-fixtures/ok).
 const PAGES = ['index.html', 'test/index.html', 'gracias.html', 'privacidad.html', '404.html'];
 
 test('todas las páginas cargan wd-events.js con defer después de wd-gtm.js', () => {

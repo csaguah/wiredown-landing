@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <rect width="1200" height="630" fill="#1C2B20"/>
+  <!-- Línea: picos agudos (alerta) que se transforman en onda suave (calma) -->
+  <path d="M80 420 L130 420 L150 360 L170 470 L190 330 L210 480 L230 350 L250 455 L270 380 L290 440 L320 400 C380 360, 440 440, 500 405 C580 360, 660 445, 740 405 C820 368, 900 435, 980 408 C1040 390, 1080 412, 1120 405"
+        fill="none" stroke="#C8A84B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+  <text x="80" y="150" font-family="Georgia, 'Lora', serif" font-size="30" fill="#C8A84B" letter-spacing="3">REGULACIÓN NERVIOSA</text>
+  <text x="80" y="225" font-family="Georgia, 'Lora', serif" font-size="62" fill="#F3EEE2">Sistema nervioso en</text>
+  <text x="80" y="300" font-family="Georgia, 'Lora', serif" font-size="62" fill="#F3EEE2" font-style="italic">modo supervivencia</text>
+  <line x1="80" y1="545" x2="1120" y2="545" stroke="#C8A84B" stroke-width="1" opacity="0.5"/>
+  <text x="80" y="585" font-family="Georgia, 'Lora', serif" font-size="24" fill="#C8A84B">Wire Down · Blog</text>
+</svg>

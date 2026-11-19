@@ -134,8 +134,11 @@ const sitemapUrls = () => {
   });
 };
 
-test('sitemap: solo / y /test/, con barra final', () => {
-  assert.deepEqual(sitemapUrls().sort(), [`${SITE}/`, `${SITE}/test/`]);
+test('sitemap: / y /test/ (más las páginas del blog publicadas), con barra final', () => {
+  // Las URLs del blog aparecen solas cuando se publica un artículo (test/blog.test.js las revisa).
+  const urls = sitemapUrls();
+  assert.deepEqual(urls.filter(u => !u.startsWith(`${SITE}/blog/`)).sort(), [`${SITE}/`, `${SITE}/test/`]);
+  for (const u of urls) assert.ok(u.endsWith('/'), u);
 });
 
 test('sitemap: ninguna página con noindex y cada URL coincide con el canonical de su página', () => {

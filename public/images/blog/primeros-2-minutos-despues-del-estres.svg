@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <rect width="1200" height="630" fill="#1C2B20"/>
+  <path d="M80 470 L200 470 L240 340 L280 470 C360 470, 420 420, 500 440 C600 465, 700 430, 800 448 C900 462, 1000 445, 1120 450" fill="none" stroke="#C8A84B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+  <text x="80" y="150" font-family="Georgia, 'Lora', serif" font-size="30" fill="#C8A84B" letter-spacing="3">REGULACIÓN NERVIOSA</text>
+  <text x="80" y="225" font-family="Georgia, 'Lora', serif" font-size="58" fill="#F3EEE2">Los primeros 2 minutos</text>
+  <text x="80" y="298" font-family="Georgia, 'Lora', serif" font-size="58" fill="#F3EEE2" font-style="italic">después del estrés</text>
+  <line x1="80" y1="545" x2="1120" y2="545" stroke="#C8A84B" stroke-width="1" opacity="0.5"/>
+  <text x="80" y="585" font-family="Georgia, 'Lora', serif" font-size="24" fill="#C8A84B">Wire Down · Blog</text>
+</svg>

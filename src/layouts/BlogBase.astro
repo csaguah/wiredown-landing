@@ -1,0 +1,184 @@
+---
+// Estructura común de las páginas del blog (artículo, índice, categoría): <head> en el mismo orden
+// que el resto del sitio, barra superior, franja BORRADOR (solo en `npm run dev`), pie y aviso de
+// cookies. Misma estética que /test/ y la 404: wd-tokens.css, Lora + DM Sans, sin colores nuevos.
+//
+// - checkout: la página tiene un botón de Hotmart. Carga wd-hotmart-guard.js ANTES del widget, los
+//   overrides de estilo del botón (iguales a los de la home) e InitiateCheckout del Pixel.
+// - draftReasons: motivos por los que el artículo no se publicaría. Si hay alguno, se muestra la
+//   franja BORRADOR y la página va con noindex (en producción estas páginas no se generan).
+import ConsentBanner from '../components/ConsentBanner.astro';
+import SEOHead from '../components/SEOHead.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  path: string;
+  ogType?: 'website' | 'article';
+  ogImage?: string;
+  ogImageAlt?: string;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  checkout?: boolean;
+  draftReasons?: string[];
+}
+
+const { title, description, path, ogType = 'website', ogImage, ogImageAlt, jsonLd, checkout = false, draftReasons = [] } = Astro.props;
+const isDraft = draftReasons.length > 0;
+---
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- GTM con Consent Mode v2 (todo denegado por defecto). Va antes de cualquier otro script de medición. -->
+<script is:inline src="/assets/wd-gtm.js"></script>
+<!-- Eventos al dataLayer (solo con consentimiento de Analítica y con GTM ya cargado). -->
+<script is:inline src="/assets/wd-events.js" defer></script>
+<SEOHead title={title} description={description} path={path} ogType={ogType} ogImage={ogImage} ogImageAlt={ogImageAlt} jsonLd={jsonLd} noIndex={isDraft} />
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/wd-tokens.css">
+<link rel="stylesheet" href="/assets/wd-base.css">
+<link rel="stylesheet" href="/assets/wd-consent.css">
+<style is:inline>
+/* Variables de marca: /assets/wd-tokens.css · Reset: /assets/wd-base.css
+ * Base igual a /test/ y la 404 (fondo beige, barra superior verde, botones redondeados). */
+body { font-family: 'DM Sans', sans-serif; color: var(--osc); background: var(--beige); line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column; }
+h1, h2, h3 { font-family: 'Lora', serif; line-height: 1.25; color: var(--verde); }
+a { color: var(--verde-m); }
+:focus-visible { outline: 3px solid var(--verde-m); outline-offset: 3px; }
+img { max-width: 100%; height: auto; display: block; }
+
+.topbar { background: var(--verde); color: #fff; text-align: center; padding: 12px 20px; font-size: 14px; }
+.topbar a { color: #fff; text-decoration: none; font-family: 'Lora', serif; font-weight: 600; font-size: 17px; letter-spacing: .3px; }
+
+.draft-band { background: var(--dorado); color: var(--osc); text-align: center; padding: 10px 20px; font-size: 13px; line-height: 1.5; position: sticky; top: 0; z-index: 50; }
+.draft-band strong { letter-spacing: 2px; margin-right: 6px; }
+
+main { flex: 1; width: 100%; max-width: 720px; margin: 0 auto; padding: 24px 20px 56px; }
+@media (min-width: 600px) { main { padding-top: 40px; } }
+
+.crumbs { font-size: 13px; color: var(--gris); margin-bottom: 20px; }
+.crumbs a { color: var(--gris); }
+.crumbs span[aria-hidden] { margin: 0 6px; }
+
+.eyebrow { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--verde-m); font-weight: 600; margin-bottom: 10px; }
+.eyebrow a { color: inherit; text-decoration: none; }
+.meta { font-size: 13px; color: var(--gris); letter-spacing: .3px; }
+
+.btn { display: inline-block; width: 100%; max-width: 360px; font: 600 16px 'DM Sans', sans-serif; padding: 16px 36px; border-radius: 50px; cursor: pointer; text-decoration: none; text-align: center; transition: background .2s, transform .15s; }
+.btn-primary { background: var(--verde); color: #fff; border: none; }
+.btn-primary:hover { background: #1e4029; transform: translateY(-2px); }
+
+/* Lista de artículos (PostList.astro: índice y categorías) */
+.post-list { list-style: none; display: grid; gap: 20px; }
+.post-card { display: block; background: #fff; border: 1.5px solid var(--sage-d); border-radius: 18px; overflow: hidden; text-decoration: none; color: inherit; transition: transform .15s; }
+.post-card:hover { transform: translateY(-2px); }
+.post-card img { width: 100%; aspect-ratio: 1200 / 630; object-fit: cover; }
+.post-card-body { display: block; padding: 18px 20px 20px; }
+.post-card .eyebrow { display: block; margin-bottom: 6px; }
+.post-card-title { display: block; font-family: 'Lora', serif; font-size: 21px; line-height: 1.3; color: var(--verde); margin-bottom: 8px; }
+.post-card-desc { display: block; font-size: 15px; color: var(--osc); margin-bottom: 10px; }
+.post-card .meta { display: block; }
+
+footer { text-align: center; padding: 28px 20px 40px; font-size: 13px; color: var(--gris); }
+footer a { color: inherit; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+</style>
+<slot name="head" />
+{checkout && (
+  <style is:inline>
+/* Botón de Hotmart: mismos overrides que en la home (src/pages/index.astro), con !important porque
+   hotmart-fb.min.css se carga después. */
+.hotmart-fb.btn-primary {
+  background: var(--verde) !important;
+  color: #fff !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  padding: 16px 36px !important;
+  border-radius: 50px !important;
+  display: inline-block !important;
+  text-decoration: none !important;
+  transition: background 0.2s, transform 0.15s !important;
+}
+.hotmart-fb.btn-primary:hover { background: #1e4029 !important; transform: translateY(-2px) !important; }
+.hotmart-fb.hotmart__button-checkout {
+  border: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  line-height: 1.6 !important;
+}
+.hotmart-fb img { display: none !important; }
+  </style>
+)}
+{checkout && (
+  <Fragment>
+  <!-- Evita que el widget borre los botones de checkout cuando falla su health check (ver el archivo). Va antes del widget. -->
+  <script is:inline src="/assets/wd-hotmart-guard.js"></script>
+  <!-- Hotmart Widget (igual que en la home) -->
+  <script is:inline type="text/javascript">
+    function importHotmart(){
+      var imported = document.createElement('script');
+      imported.src = 'https://static.hotmart.com/checkout/widget.min.js';
+      document.head.appendChild(imported);
+      var link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = 'https://static.hotmart.com/css/hotmart-fb.min.css';
+      document.head.appendChild(link);
+    }
+    importHotmart();
+  </script>
+  </Fragment>
+)}
+<!-- Meta Pixel — Wire Down (se carga solo con consentimiento). Igual que en la home. -->
+<script is:inline src="/assets/wd-pixel.js"></script>
+</head>
+<body>
+
+<header class="topbar"><a href="/">Wire Down</a></header>
+{isDraft && (
+  <div class="draft-band" role="note"><strong>BORRADOR</strong> No se publica en producción: {draftReasons.join(' · ')}</div>
+)}
+
+<main>
+  <slot />
+</main>
+
+<footer>
+  <strong>Wire Down</strong> · Santiago, Chile<br>
+  <a href="/privacidad.html">Política de privacidad</a> · <a href="#" id="cookie-settings">Preferencias de cookies</a>
+</footer>
+
+{checkout && (
+  <script is:inline>
+// Meta Pixel — InitiateCheckout al hacer clic en un CTA de Hotmart (igual que en la home).
+// Revisa el consentimiento en el momento del clic: respeta un «Rechazar» hecho en esta visita.
+document.querySelectorAll('a[href*="pay.hotmart.com"]').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    if (wdHasConsent() && typeof fbq === 'function') {
+      fbq('track', 'InitiateCheckout', {
+        value: 17.00,
+        currency: 'USD',
+        content_name: 'Wire Down Ebook',
+        content_ids: ['wiredown_ebook_usd17'],
+        content_type: 'product'
+      });
+    }
+  });
+});
+  </script>
+)}
+
+<!-- COOKIE CONSENT (mismo aviso y clave que la home; estilos y lógica en /assets/) -->
+<ConsentBanner />
+<script is:inline src="/assets/wd-consent.js"></script>
+</body>
+</html>

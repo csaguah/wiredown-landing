@@ -1,0 +1,153 @@
+---
+// Página de un artículo del blog. Recibe el artículo y el HTML de su cuerpo ya procesado
+// (src/lib/blog.ts: enlaces a artículos no publicados convertidos en texto).
+//
+// Orden: migas · cabecera (hero, categoría, título, firma y fecha) · cuerpo · CTA según primaryCta
+// (antes de «Para seguir»/«Fuentes», ver splitForCta) · cierre del artículo · aviso fijo · bio.
+import BlogBase from './BlogBase.astro';
+import ArticleCta from '../components/ArticleCta.astro';
+import AuthorBio from '../components/AuthorBio.astro';
+import { CATEGORY_LABELS } from '../data/categories';
+import { dateKey, formatDate, splitForCta } from '../lib/blog-rules.mjs';
+import type { Post } from '../lib/blog';
+
+interface Props {
+  post: Post;
+  html: string;
+  draftReasons: string[];
+  /** La página de la categoría existe en este build (tiene artículos publicados). */
+  categoryLinked: boolean;
+}
+
+const { post, html, draftReasons, categoryLinked } = Astro.props;
+const d = post.data;
+const SITE = 'https://wire-down.com';
+const path = `/blog/${d.slug}/`;
+const url = `${SITE}${path}`;
+const categoryLabel = CATEGORY_LABELS[d.category];
+const [body, closing] = splitForCta(html);
+const published = dateKey(d.publishDate);
+const modified = d.updatedDate ? dateKey(d.updatedDate) : published;
+
+// JSON-LD: BlogPosting + BreadcrumbList. Solo datos visibles en la página. Autor Person (nunca
+// Physician) y editor la Organization de la home (mismo @id).
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'BlogPosting',
+      '@id': `${url}#articulo`,
+      headline: d.title,
+      description: d.description,
+      image: new URL(d.ogImage, SITE).href,
+      datePublished: published,
+      dateModified: modified,
+      inLanguage: 'es',
+      url,
+      mainEntityOfPage: url,
+      articleSection: categoryLabel,
+      keywords: d.tags.join(', '),
+      author: {
+        '@type': 'Person',
+        name: 'Carlos Sagua H.',
+        jobTitle: 'Kinesiólogo y quiropráctico',
+      },
+      publisher: {
+        '@type': 'Organization',
+        '@id': `${SITE}/#organization`,
+        name: 'Wire Down',
+        url: `${SITE}/`,
+        logo: `${SITE}/apple-touch-icon.png`,
+      },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Inicio', item: `${SITE}/` },
+        { '@type': 'ListItem', position: 2, name: 'Blog', item: `${SITE}/blog/` },
+        { '@type': 'ListItem', position: 3, name: d.title, item: url },
+      ],
+    },
+  ],
+};
+---
+<BlogBase
+  title={d.seoTitle}
+  description={d.seoDescription}
+  path={path}
+  ogType="article"
+  ogImage={d.ogImage}
+  ogImageAlt={d.heroImageAlt}
+  jsonLd={jsonLd}
+  checkout={d.primaryCta === 'comprar_hotmart'}
+  draftReasons={draftReasons}
+>
+  <style is:inline slot="head">
+/* ─── Artículo: lectura cómoda en móvil (≈ 70 % del tráfico) ─── */
+.post-hero { margin: 0 -20px 24px; }
+.post-hero img { width: 100%; aspect-ratio: 1200 / 630; object-fit: cover; }
+@media (min-width: 600px) { .post-hero { margin: 0 0 28px; } .post-hero img { border-radius: 14px; } }
+.post-head h1 { font-size: clamp(27px, 6.4vw, 38px); margin-bottom: 14px; }
+.post-head .meta { margin-bottom: 8px; }
+
+.prose { font-size: 17.5px; line-height: 1.75; overflow-wrap: break-word; }
+@media (min-width: 600px) { .prose { font-size: 18px; } }
+.prose > * + * { margin-top: 1.1em; }
+.prose h2 { font-size: clamp(22px, 5vw, 27px); margin-top: 2em; }
+.prose h3 { font-size: 20px; margin-top: 1.8em; }
+.prose h2 + *, .prose h3 + * { margin-top: .6em; }
+.prose a { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.prose strong { font-weight: 600; color: var(--osc); }
+.prose em { font-style: italic; }
+.prose ul, .prose ol { padding-left: 1.3em; }
+.prose li + li { margin-top: .45em; }
+.prose li::marker { color: var(--verde-m); }
+.prose blockquote { border-left: 3px solid var(--dorado); padding: 4px 0 4px 18px; font-family: 'Lora', serif; font-style: italic; color: var(--gris); }
+.prose hr { border: none; border-top: 1px solid var(--sage-d); margin: 2.2em 0; }
+.prose code { font-size: .9em; background: var(--sage); padding: 1px 5px; border-radius: 4px; }
+/* Fuentes: la lista que sigue al título «Fuentes» va más pequeña. */
+.prose #fuentes, .prose #fuentes ~ * { font-size: 14.5px; line-height: 1.6; color: var(--gris); }
+.prose #fuentes { font-size: 18px; color: var(--verde); }
+.prose #fuentes ~ ul li { overflow-wrap: anywhere; }
+
+.post-cta + .prose > :first-child { margin-top: 0; }
+/* CTA (ArticleCta.astro) */
+.post-cta { background: #fff; border: 1.5px solid var(--sage-d); border-radius: 18px; padding: 28px 22px; text-align: center; margin: 40px 0; }
+.post-cta h2 { font-size: 22px; margin-bottom: 10px; }
+.post-cta p:not(.eyebrow) { font-size: 15px; color: var(--gris); margin-bottom: 20px; }
+@media (min-width: 600px) { .post-cta { padding: 34px 40px; } }
+/* Bio (AuthorBio.astro) */
+.author-bio { margin-top: 36px; padding-top: 20px; border-top: 1px solid var(--sage-d); font-size: 13px; color: var(--gris); line-height: 1.6; }
+.author-bio .author-sign { font-size: 12px; letter-spacing: .3px; margin-bottom: 4px; color: var(--verde); font-weight: 600; }
+.disclaimer { margin-top: 36px; background: var(--sage); border-radius: 12px; padding: 16px 18px; font-size: 14px; line-height: 1.6; color: var(--osc); }
+  </style>
+
+  <nav class="crumbs" aria-label="Ruta de navegación">
+    <a href="/">Inicio</a><span aria-hidden="true">›</span><a href="/blog/">Blog</a>
+  </nav>
+
+  <article>
+    <section class="post-head" data-track-section="articulo_cabecera">
+      <figure class="post-hero">
+        <img src={d.heroImage} alt={d.heroImageAlt} width="1200" height="630" fetchpriority="high" decoding="async">
+      </figure>
+      <p class="eyebrow">{categoryLinked ? <a href={`/blog/categoria/${d.category}/`}>{categoryLabel}</a> : categoryLabel}</p>
+      <h1>{d.title}</h1>
+      <p class="meta">Carlos Sagua H. · Kinesiólogo y quiropráctico</p>
+      <p class="meta">
+        <time datetime={published}>{formatDate(d.publishDate)}</time>
+        {d.updatedDate && <Fragment> · Actualizado el <time datetime={modified}>{formatDate(d.updatedDate)}</time></Fragment>}
+      </p>
+    </section>
+
+    <section class="prose" data-track-section="articulo_cuerpo" set:html={body} />
+
+    <ArticleCta kind={d.primaryCta} />
+
+    {closing && <section class="prose" data-track-section="articulo_cierre" set:html={closing} />}
+
+    <p class="disclaimer" role="note">Este contenido es educativo y no reemplaza la evaluación ni el tratamiento de un profesional de salud. Si tienes síntomas que te preocupan, consulta en forma presencial.</p>
+
+    <AuthorBio />
+  </article>
+</BlogBase>

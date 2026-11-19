@@ -1,0 +1,25 @@
+---
+// Estilos: en el <head> de la página (BlogPostLayout.astro / BlogBase.astro), no en el <body>.
+// Lista de artículos del índice del blog y de las páginas de categoría.
+import { CATEGORY_LABELS } from '../data/categories';
+import { dateKey, formatDate } from '../lib/blog-rules.mjs';
+import type { Post } from '../lib/blog';
+
+interface Props { posts: Post[]; reasons: (p: Post) => string[]; }
+const { posts, reasons } = Astro.props;
+---
+<ul class="post-list">
+  {posts.map(p => (
+    <li>
+      <a class="post-card" href={`/blog/${p.id}/`}>
+        <img src={p.data.heroImage} alt="" width="1200" height="630" loading="lazy" decoding="async">
+        <span class="post-card-body">
+          <span class="eyebrow">{CATEGORY_LABELS[p.data.category]}{reasons(p).length > 0 && ' · borrador'}</span>
+          <span class="post-card-title">{p.data.title}</span>
+          <span class="post-card-desc">{p.data.description}</span>
+          <span class="meta"><time datetime={dateKey(p.data.publishDate)}>{formatDate(p.data.publishDate)}</time></span>
+        </span>
+      </a>
+    </li>
+  ))}
+</ul>

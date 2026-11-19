@@ -1,0 +1,38 @@
+---
+// /blog/ — índice del blog. Ruta con parámetro opcional ([...indice] = undefined → /blog/) para
+// que la página NO se genere mientras no haya artículos publicados: getStaticPaths devuelve [].
+import BlogBase from '../../../layouts/BlogBase.astro';
+import PostList from '../../../components/PostList.astro';
+import { getBlog } from '../../../lib/blog';
+import { CATEGORY_LABELS } from '../../../data/categories';
+
+export async function getStaticPaths() {
+  const blog = await getBlog();
+  return blog.posts.length ? [{ params: { indice: undefined } }] : [];
+}
+
+const blog = await getBlog();
+---
+<BlogBase
+  title="Blog: estrés, cuerpo y regulación nerviosa | Wire Down"
+  description="Artículos sobre cómo el estrés crónico se expresa en el cuerpo como tensión, dolor y fatiga, y sobre las vías para regular el sistema nervioso."
+  path="/blog/"
+>
+  <style is:inline slot="head">
+.blog-head { margin-bottom: 28px; }
+.blog-head h1 { font-size: clamp(28px, 6vw, 38px); margin-bottom: 10px; }
+.blog-head p { color: var(--gris); font-size: 16px; }
+.blog-cats { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 14px; font-size: 14px; }
+  </style>
+  <section data-track-section="blog_indice">
+    <div class="blog-head">
+      <p class="eyebrow">Blog</p>
+      <h1>El estrés en el cuerpo</h1>
+      <p>Cómo el estrés crónico se expresa como tensión, dolor y fatiga, y qué ayuda a regular el sistema nervioso.</p>
+      <nav class="blog-cats" aria-label="Categorías">
+        {blog.categories.map(c => <a href={`/blog/categoria/${c}/`}>{CATEGORY_LABELS[c]}</a>)}
+      </nav>
+    </div>
+    <PostList posts={blog.posts} reasons={blog.reasons} />
+  </section>
+</BlogBase>
