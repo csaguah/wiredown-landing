@@ -63,6 +63,9 @@ Este repo es **público**. Por eso:
 - 2 o 3 enlaces internos por artículo, con slugs confirmados.
 - Sin metacomentarios sobre la honestidad del texto.
 - Referencias en formato APA (el que ya usan los artículos), verificadas contra PubMed o PMC.
+- Los artículos se escriben en neutro por construcción: sin adjetivos ni participios con marca de género referidos al lector («agotada», «cansado», «preocupada»). Se reformula la frase («cuando el cansancio no se va», «si llevas meses con tensión»), sin «/a», «@», «x» ni «todos y todas».
+- Las situaciones frecuentes en mujeres (carga mental, cuidar a otros, doble jornada) se mantienen como ejemplos, sin decir que el lector es mujer.
+- El femenino se permite solo en `targetAudience`, `socialHook`, anuncios y redes, nunca en el cuerpo del artículo ni en `title`, `description`, `seoTitle` o `seoDescription`.
 
 ### Esquema de los artículos (tres capas)
 

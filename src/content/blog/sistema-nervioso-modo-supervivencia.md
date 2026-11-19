@@ -25,7 +25,7 @@ primaryCta: "hacer_test"
 citationsVerified: false
 ---
 
-Duermes ocho horas y despiertas cansada. Te duele el cuello sin haber hecho fuerza. Llegas a la noche agotada, pero cuando por fin te acuestas, la cabeza no se detiene. Te dices que tienes que relajarte, lo intentas, y el cuerpo no obedece.
+Duermes ocho horas y el cansancio sigue ahí al despertar. Te duele el cuello sin haber hecho fuerza. Llegas a la noche sin fuerzas, pero cuando por fin te acuestas, la cabeza no se detiene. Te dices que tienes que relajarte, lo intentas, y el cuerpo no obedece.
 
 Si te reconoces aquí, es probable que no te falte voluntad ni disciplina. Lo más probable es que tu sistema nervioso lleve mucho tiempo funcionando en **modo supervivencia**, y que ese modo no se apague porque tú lo decidas.
 
@@ -53,9 +53,9 @@ Esto explica una de las experiencias más frustrantes del estrés crónico: *ent
 
 ## Las dos caras del modo supervivencia
 
-Solemos imaginar el estrés como aceleración: estar tensa, irritable, con el corazón rápido. Pero el modo supervivencia tiene dos caras.
+Solemos imaginar el estrés como aceleración: tensión, irritabilidad, el corazón rápido. Pero el modo supervivencia tiene dos caras.
 
-La primera es el **acelerador**: hiperalerta, músculos tensos, dificultad para quedarse quieta, una mente que salta de una cosa a otra, sobresaltos con ruidos pequeños.
+La primera es el **acelerador**: hiperalerta, músculos tensos, dificultad para estar sin hacer nada, una mente que salta de una cosa a otra, sobresaltos con ruidos pequeños.
 
 La segunda es el **freno de emergencia**: cuando la activación se sostiene demasiado tiempo, el sistema puede responder bajando la energía. Aparece el agotamiento que no se quita durmiendo, la desconexión, la sensación de ir en piloto automático, la falta de ganas de cosas que antes disfrutabas. Porges describe este circuito más antiguo de defensa como una estrategia de inmovilización (Porges, 2009).
 
@@ -69,7 +69,7 @@ El neuroendocrinólogo Bruce McEwen dio nombre a algo que la clínica ve todos l
 
 McEwen describió cuatro situaciones que producen esa carga. Una es obvia: el estrés frecuente. Pero otra es la que mejor explica el modo supervivencia: **la incapacidad de apagar la respuesta cuando el desafío ya pasó**. El problema no es activarse; es no volver.
 
-Por eso el descanso pasivo a veces no alcanza. Puedes tomarte un fin de semana libre y volver igual de cansada, porque el sistema siguió en guardia mientras tú estabas en el sillón. Descansar el cuerpo y desactivar la alarma no son lo mismo.
+Por eso el descanso pasivo a veces no alcanza. Puedes tomarte un fin de semana libre y volver con el mismo cansancio, porque el sistema siguió en guardia mientras tú estabas en el sillón. Descansar el cuerpo y desactivar la alarma no son lo mismo.
 
 ## Cómo suele notarse en el día a día
 
@@ -87,7 +87,7 @@ Ninguna de estas molestias, por sí sola, demuestra nada. Lo que llama la atenci
 
 ## Por qué pensar en calma no basta
 
-Si el sistema nervioso decide por neurocepción, a partir de lo que lee en el cuerpo y en el entorno, la salida tiene que hablarle en ese mismo idioma. Repetirte "tranquila, no pasa nada" rara vez convence a un sistema que está leyendo otra cosa en tu respiración y en tus músculos.
+Si el sistema nervioso decide por neurocepción, a partir de lo que lee en el cuerpo y en el entorno, la salida tiene que hablarle en ese mismo idioma. Repetirte "calma, no pasa nada" rara vez convence a un sistema que está leyendo otra cosa en tu respiración y en tus músculos.
 
 Lo que sí le llega son **señales de seguridad**: información concreta, que entra por el cuerpo, de que el peligro que está esperando no está aquí. No son trucos de relajación ni pensamientos positivos. Son datos en el único formato que la neurocepción sabe leer.
 
@@ -97,9 +97,9 @@ Las señales de seguridad llegan, en general, por cuatro vías. Conocerlas te ay
 
 **El ritmo.** Un cuerpo en peligro respira rápido, alto y de forma irregular. Un cuerpo a salvo respira lento y parejo. El sistema nervioso usa ese ritmo como pista: no solo responde a cómo te sientes, también lee cómo estás respirando para decidir cómo sentirse.
 
-**El movimiento.** El cuerpo en alerta se mueve rígido, como esperando un golpe, o se queda congelado. El cuerpo seguro se mueve con fluidez y sin apuro. Por eso la quietud forzada ("quédate quieta y relájate") muchas veces no funciona cuando la alerta está alta: el sistema necesita primero moverse de una forma que no se parezca a huir.
+**El movimiento.** El cuerpo en alerta se mueve rígido, como esperando un golpe, o se queda congelado. El cuerpo seguro se mueve con fluidez y sin apuro. Por eso la quietud forzada ("no te muevas y relájate") muchas veces no funciona cuando la alerta está alta: el sistema necesita primero moverse de una forma que no se parezca a huir.
 
-**El contacto y la presión.** La presión firme, predecible y lenta es una de las señales de calma más antiguas que conocemos: es la que recibimos cuando nos sostuvieron de niñas. El tacto brusco o inesperado, en cambio, activa.
+**El contacto y la presión.** La presión firme, predecible y lenta es una de las señales de calma más antiguas que conocemos: es la que recibimos cuando nos sostuvieron en la infancia. El tacto brusco o inesperado, en cambio, activa.
 
 **El entorno.** La neurocepción revisa todo el tiempo lo que ves, oyes y hueles. Una pieza con ruido constante, luz blanca intensa y notificaciones sonando es, para el sistema nervioso, un ambiente que pide vigilancia, aunque tú ya ni lo notes.
 

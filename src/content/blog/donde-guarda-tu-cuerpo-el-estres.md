@@ -25,7 +25,7 @@ primaryCta: "hacer_test"
 citationsVerified: false
 ---
 
-Siempre es el mismo lugar. Para algunas es el cuello, que al final del día parece de piedra. Para otras, la mandíbula, que amanece cansada como si hubiera masticado toda la noche. O la espalda baja, que se queja sin que hayas levantado nada pesado.
+Siempre es el mismo lugar. Para algunas personas es el cuello, que al final del día parece de piedra. Para otras, la mandíbula, que amanece cansada como si hubiera masticado toda la noche. O la espalda baja, que se queja sin que hayas levantado nada pesado.
 
 No es casualidad. La tensión por estrés no se reparte al azar por el cuerpo: sigue patrones bastante predecibles, y entender esos patrones cambia la forma de abordarla.
 
@@ -74,7 +74,7 @@ Si buscas información sobre el psoas, encontrarás una idea repetida en todas p
 
 **Lo que sabemos:** el psoas es un músculo profundo que une las vértebras lumbares con el fémur. Flexiona la cadera (te permite llevar la rodilla hacia el pecho) y participa en la estabilidad de la columna lumbar. Es, además, uno de los músculos que intervienen en el patrón de retirada: cuando el cuerpo se protege cerrándose sobre sí mismo, las caderas se flexionan.
 
-**Lo que no hay:** evidencia de que el psoas almacene emociones, recuerdos o trauma. Los músculos no guardan contenido emocional. Lo que sí pueden tener es **tono elevado de forma sostenida**, porque el sistema nervioso que los controla está en alerta, y también porque pasar muchas horas sentada mantiene la cadera flexionada y el músculo en posición acortada.
+**Lo que no hay:** evidencia de que el psoas almacene emociones, recuerdos o trauma. Los músculos no guardan contenido emocional. Lo que sí pueden tener es **tono elevado de forma sostenida**, porque el sistema nervioso que los controla está en alerta, y también porque pasar muchas horas en una silla mantiene la cadera flexionada y el músculo en posición acortada.
 
 La diferencia no es un detalle. Si el psoas guardara emociones, la salida sería procesar emociones. Como lo que hay es tono sostenido, gobernado por un sistema nervioso en guardia y por posiciones que se mantienen horas, la salida pasa por el movimiento, la respiración y los cambios de posición. Esto no le quita importancia a lo emocional: el estrés emocional es justamente lo que mantiene encendido el sistema. Pero el músculo es el que obedece, no el que recuerda.
 
@@ -82,7 +82,7 @@ La diferencia no es un detalle. Si el psoas guardara emociones, la salida sería
 
 La zona lumbar suele recibir tensión desde dos frentes.
 
-Uno es el reflejo de luz verde que describe Hanna: el patrón de acción, de estar siempre lista para responder, mantiene activos los músculos que extienden la espalda. Es frecuente en personas que sienten que todo depende de ellas y que no pueden permitirse parar.
+Uno es el reflejo de luz verde que describe Hanna: el patrón de acción, de estar siempre alerta para responder, mantiene activos los músculos que extienden la espalda. Es frecuente en personas que sienten que todo depende de ellas y que no pueden permitirse parar.
 
 El otro frente es la compensación. Cuando el diafragma y la musculatura profunda del abdomen no están haciendo bien su trabajo de estabilización, los músculos de la espalda baja toman el relevo. Funcionan, pero a costa de quedar tensos todo el día.
 

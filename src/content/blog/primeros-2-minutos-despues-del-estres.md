@@ -37,7 +37,7 @@ Una discusión, una mala noticia, un correo que te cae como un balde de agua fr�
 
 En segundos, el cuerpo libera adrenalina. El corazón se acelera. La respiración se acorta o directamente se contiene. Los hombros suben, la mandíbula se aprieta, el abdomen se endurece. Los músculos quedan listos para actuar, como si tuvieras que defenderte o salir corriendo.
 
-Nada de eso es un error. Es el cuerpo haciendo bien su trabajo. Lo que ocurre es que, en la gran mayoría de los casos, no corres ni te defiendes: sigues sentada frente al computador, o al volante, o en la cocina. El cuerpo se preparó para una acción que nunca llega.
+Nada de eso es un error. Es el cuerpo haciendo bien su trabajo. Lo que ocurre es que, en la gran mayoría de los casos, no corres ni te defiendes: sigues en la silla frente al computador, o al volante, o en la cocina. El cuerpo se preparó para una acción que nunca llega.
 
 ## Por qué los minutos siguientes importan
 
@@ -70,7 +70,7 @@ En un ensayo controlado aleatorizado, un equipo de la Universidad de Stanford co
 3. **Exhala por la boca, lento y largo**, hasta vaciar. La exhalación debe durar claramente más que las dos inhalaciones juntas.
 4. **Repite** a un ritmo cómodo, sin apuro, durante uno o dos minutos.
 
-**Cuándo:** lo antes posible después del momento tenso. Antes de responder ese mensaje, antes de volver a entrar a la reunión, en el auto antes de arrancar, en el baño si es el único lugar donde puedes estar sola un minuto. No requiere cerrar los ojos ni que nadie se dé cuenta.
+**Cuándo:** lo antes posible después del momento tenso. Antes de responder ese mensaje, antes de volver a entrar a la reunión, en el auto antes de arrancar, en el baño si es el único lugar donde puedes tener un minuto a solas. No requiere cerrar los ojos ni que nadie se dé cuenta.
 
 Si la segunda inhalación te resulta incómoda, omítela y quédate solo con la exhalación larga. Lo esencial es que soltar el aire tome más tiempo que tomarlo.
 
@@ -80,7 +80,7 @@ Si la segunda inhalación te resulta incómoda, omítela y quédate solo con la 
 
 - **Responder en caliente.** El mensaje, el correo, la réplica. Con el cuerpo en alerta, la atención se estrecha y cuesta ver matices. Un par de minutos de diferencia suelen cambiar bastante lo que dices.
 - **Repetir la escena en la cabeza.** Es casi inevitable que la mente vuelva sobre lo ocurrido, pero cada repetición reactiva al cuerpo. Cuando lo notes, vuelve a la exhalación.
-- **Quedarte inmóvil en la misma posición.** Si puedes, párate, cambia de lugar, camina hasta la ventana. El cuerpo se preparó para moverse, y quedarte rígida en la silla prolonga la tensión.
+- **Quedarte inmóvil en la misma posición.** Si puedes, párate, cambia de lugar, camina hasta la ventana. El cuerpo se preparó para moverse, y quedarte con el cuerpo rígido en la silla prolonga la tensión.
 - **Exigirte que no te afecte.** "No debería ponerme así" agrega una segunda capa de tensión sobre la primera. Te afectó porque tu sistema nervioso funciona. Lo que importa es ayudarlo a volver.
 
 ## Qué esperar, y qué no
