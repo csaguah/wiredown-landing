@@ -1,0 +1,20 @@
+---
+// /blog/<slug>/ — un artículo. Solo se generan los publicados (src/lib/blog.ts); en `npm run dev`
+// también los borradores, con la franja BORRADOR.
+import BlogPostLayout from '../../../layouts/BlogPostLayout.astro';
+import { getBlog, type Post } from '../../../lib/blog';
+
+export async function getStaticPaths() {
+  const blog = await getBlog();
+  return blog.posts.map(post => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props as { post: Post };
+const blog = await getBlog();
+---
+<BlogPostLayout
+  post={post}
+  html={blog.html(post)}
+  draftReasons={blog.reasons(post)}
+  categoryLinked={blog.categories.includes(post.data.category)}
+/>

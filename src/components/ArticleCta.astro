@@ -1,0 +1,26 @@
+---
+// Estilos: en el <head> de la página (BlogPostLayout.astro / BlogBase.astro), no en el <body>.
+// CTA del artículo según primaryCta (docs/medicion.md):
+// - hacer_test (por defecto): botón a /test/ → cta_click { cta_name: hacer_test, cta_location: articulo }.
+// - comprar_hotmart: botón de checkout → solo click_checkout { cta_location: articulo }. La página
+//   debe cargar wd-hotmart-guard.js antes del widget (BlogBase con checkout).
+interface Props { kind: 'hacer_test' | 'comprar_hotmart'; }
+const { kind } = Astro.props;
+---
+<section class="post-cta" data-track-section="articulo_cta">
+  {kind === 'hacer_test' ? (
+    <Fragment>
+      <p class="eyebrow">Test orientativo</p>
+      <h2>¿Cómo se expresa el estrés en tu cuerpo?</h2>
+      <p>10 preguntas para reconocer tu punto de partida y por dónde empezar. Toma unos cinco minutos. Es orientativo, no es un diagnóstico.</p>
+      <a href="/test/" class="btn btn-primary" data-cta="hacer_test" data-cta-location="articulo">Haz el test orientativo →</a>
+    </Fragment>
+  ) : (
+    <Fragment>
+      <p class="eyebrow">Guía Wire Down</p>
+      <h2>Herramientas simples para cuando el estrés se instala en el cuerpo</h2>
+      <p>Ebook, Bitácora y test orientativo para practicar a tu ritmo. Pago único, acceso inmediato.</p>
+      <a onclick="return false;" href="https://pay.hotmart.com/K105460326C?checkoutMode=2" class="hotmart-fb hotmart__button-checkout btn-primary" data-cta="checkout" data-cta-location="articulo">Acceder a la guía · USD 17</a>
+    </Fragment>
+  )}
+</section>

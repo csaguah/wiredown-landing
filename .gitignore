@@ -6,3 +6,6 @@ brief-test-wire-down.md
 node_modules/
 dist/
 .astro/
+
+# Builds de los tests del blog (test/blog.test.js)
+.dist-fixtures/

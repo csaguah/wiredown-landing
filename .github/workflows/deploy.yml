@@ -1,11 +1,18 @@
 # Workflow oficial de Astro para GitHub Pages (docs.astro.build/en/guides/deploy/github/).
 # Único cambio: build-cmd corre `npm test`, que hace `astro build` (pretest) y luego los tests;
 # si un test falla, no se publica. Requiere Settings → Pages → Source: GitHub Actions.
+#
+# schedule: build diario de main para que un artículo con publishDate futura salga solo ese día
+# (src/lib/blog-rules.mjs publica según la fecha del build en America/Santiago). 09:17 UTC =
+# 06:17 en Chile en horario de verano (05:17 en invierno; la fecha sigue siendo la del mismo día).
+# GitHub puede atrasar unos minutos los cron y los desactiva tras 60 días sin actividad en el repo.
 name: Deploy to GitHub Pages
 
 on:
   push:
     branches: [ main ]
+  schedule:
+    - cron: '17 9 * * *'
   workflow_dispatch:
 
 permissions:

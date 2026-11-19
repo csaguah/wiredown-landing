@@ -1,0 +1,37 @@
+---
+// /blog/categoria/<categoria>/ — solo para categorías con artículos publicados.
+import BlogBase from '../../../../layouts/BlogBase.astro';
+import PostList from '../../../../components/PostList.astro';
+import { CATEGORY_LABELS, type Category } from '../../../../data/categories';
+import { getBlog } from '../../../../lib/blog';
+
+export async function getStaticPaths() {
+  const blog = await getBlog();
+  return blog.categories.map(categoria => ({ params: { categoria } }));
+}
+
+const categoria = Astro.params.categoria as Category;
+const label = CATEGORY_LABELS[categoria];
+const blog = await getBlog();
+const posts = blog.posts.filter(p => p.data.category === categoria);
+---
+<BlogBase
+  title={`${label} | Blog Wire Down`}
+  description={`Artículos de Wire Down sobre ${label.toLowerCase()}: cómo el estrés crónico se expresa en el cuerpo y qué ayuda a regularlo.`}
+  path={`/blog/categoria/${categoria}/`}
+>
+  <style is:inline slot="head">
+.blog-head { margin-bottom: 28px; }
+.blog-head h1 { font-size: clamp(28px, 6vw, 38px); }
+  </style>
+  <nav class="crumbs" aria-label="Ruta de navegación">
+    <a href="/">Inicio</a><span aria-hidden="true">›</span><a href="/blog/">Blog</a>
+  </nav>
+  <section data-track-section="blog_categoria">
+    <div class="blog-head">
+      <p class="eyebrow">Categoría</p>
+      <h1>{label}</h1>
+    </div>
+    <PostList posts={posts} reasons={blog.reasons} />
+  </section>
+</BlogBase>

@@ -16,7 +16,10 @@ import fs from 'node:fs';
 // - carpeta con index.html → URL con barra final ('/test/'), la misma del canonical;
 // - cualquier página cuyo HTML lleve <meta name="robots" content="noindex…"> queda fuera
 //   (gracias, privacidad, 404 y toda página nueva con <SEOHead noIndex>).
-const DIST = new URL('./dist/', import.meta.url);
+// WD_OUT_DIR solo lo usan los tests (test/blog.test.js) para construir con artículos de prueba en
+// otra carpeta sin tocar dist/. En el deploy no se define.
+const OUT_DIR = process.env.WD_OUT_DIR || './dist/';
+const DIST = new URL(OUT_DIR.endsWith('/') ? OUT_DIR : `${OUT_DIR}/`, import.meta.url);
 const resolvePage = (/** @type {string} */ page) => {
   const u = new URL(page);
   const p = u.pathname.replace(/^\/+|\/+$/g, ''); // '' para la portada, 'test', 'gracias'…
@@ -32,6 +35,7 @@ const isNoIndex = (/** @type {string} */ html) => /<meta name="robots" content="
 export default defineConfig({
   site: 'https://wire-down.com',
   output: 'static',
+  outDir: DIST.pathname,
   compressHTML: false,
   build: { format: 'preserve' },
   devToolbar: { enabled: false },

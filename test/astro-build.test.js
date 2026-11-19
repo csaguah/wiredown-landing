@@ -8,6 +8,8 @@ const path = require('node:path');
 const ROOT = path.join(__dirname, '..');
 const DIST = path.join(ROOT, 'dist');
 const read = f => fs.readFileSync(path.join(DIST, f), 'utf8');
+// Las páginas del blog solo existen cuando hay artículos publicados: test/blog.test.js las revisa
+// sobre un build con artículos de prueba (.dist-fixtures/ok).
 const PAGES = ['index.html', 'test/index.html', 'gracias.html', 'privacidad.html', '404.html'];
 
 test('las URLs de siempre existen en dist/ con el mismo nombre', () => {

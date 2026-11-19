@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <rect width="1200" height="630" fill="#1C2B20"/>
+  <g fill="#C8A84B"><circle cx="1000" cy="110" r="10"/><circle cx="1000" cy="190" r="10"/><circle cx="1000" cy="270" r="10" opacity="0.85"/><circle cx="1000" cy="350" r="10" opacity="0.7"/><circle cx="1000" cy="430" r="10" opacity="0.55"/></g><line x1="1000" y1="110" x2="1000" y2="430" stroke="#C8A84B" stroke-width="1.5" opacity="0.4"/>
+  <text x="80" y="150" font-family="Georgia, 'Lora', serif" font-size="30" fill="#C8A84B" letter-spacing="3">CUERPO Y ESTRÉS</text>
+  <text x="80" y="225" font-family="Georgia, 'Lora', serif" font-size="58" fill="#F3EEE2">Dónde se acumula</text>
+  <text x="80" y="298" font-family="Georgia, 'Lora', serif" font-size="58" fill="#F3EEE2" font-style="italic">la tensión por estrés</text>
+  <line x1="80" y1="545" x2="1120" y2="545" stroke="#C8A84B" stroke-width="1" opacity="0.5"/>
+  <text x="80" y="585" font-family="Georgia, 'Lora', serif" font-size="24" fill="#C8A84B">Wire Down · Blog</text>
+</svg>

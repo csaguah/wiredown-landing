@@ -8,6 +8,8 @@
 //   noIndex quedan fuera del sitemap (filtro en astro.config.mjs y test en test/seo.test.js).
 // - noFollow: solo junto con noIndex (/gracias.html usa "noindex, nofollow").
 // - jsonLd: objeto o lista de objetos schema.org. Se serializa a un <script is:inline> sin procesar.
+// - ogImage: ruta del sitio ('/images/blog/x.png') de una imagen PNG o JPG de 1200×630. Por
+//   defecto, la imagen de la guía (/og/wire-down-og.png). ogImageAlt acompaña a ogImage.
 //
 // Sin <style> ni <script> procesados por Astro: solo marcado.
 interface Props {
@@ -18,17 +20,21 @@ interface Props {
   noFollow?: boolean;
   ogType?: 'website' | 'article';
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  ogImage?: string;
+  ogImageAlt?: string;
 }
 
-const { title, description, path, noIndex = false, noFollow = false, ogType = 'website', jsonLd } = Astro.props;
+const { title, description, path, noIndex = false, noFollow = false, ogType = 'website', jsonLd, ogImage, ogImageAlt } = Astro.props;
 
 const SITE = 'https://wire-down.com';
 if (!path.startsWith('/') || path.endsWith('/index.html')) throw new Error(`SEOHead: path inválido "${path}"`);
 const url = new URL(path, SITE).href;
 const robots = noIndex ? (noFollow ? 'noindex, nofollow' : 'noindex') : null;
 
-const OG_IMAGE = `${SITE}/og/wire-down-og.png`;
-const OG_IMAGE_ALT = 'Wire Down: herramientas simples para cuando el estrés se instala en el cuerpo.';
+if (ogImage && !/^\/[^/].*\.(png|jpe?g)$/.test(ogImage)) throw new Error(`SEOHead: ogImage debe ser una ruta del sitio a un PNG o JPG ("${ogImage}")`);
+const OG_IMAGE = new URL(ogImage ?? '/og/wire-down-og.png', SITE).href;
+const OG_IMAGE_TYPE = /\.png$/.test(OG_IMAGE) ? 'image/png' : 'image/jpeg';
+const OG_IMAGE_ALT = (ogImage && ogImageAlt) || 'Wire Down: herramientas simples para cuando el estrés se instala en el cuerpo.';
 
 // "<" escapado: un texto con "</script>" no puede cerrar el bloque JSON-LD.
 const ld = jsonLd ? JSON.stringify(jsonLd, null, 2).replace(/</g, '\\u003c') : null;
@@ -44,7 +50,7 @@ const ld = jsonLd ? JSON.stringify(jsonLd, null, 2).replace(/</g, '\\u003c') : n
 {description && <meta property="og:description" content={description}>}
 {!noIndex && <meta property="og:url" content={url}>}
 <meta property="og:image" content={OG_IMAGE}>
-<meta property="og:image:type" content="image/png">
+<meta property="og:image:type" content={OG_IMAGE_TYPE}>
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content={OG_IMAGE_ALT}>

@@ -52,15 +52,49 @@ Este repo es **público**. Por eso:
 
 ## Contenido del blog (YMYL)
 
-- Cada artículo es un `.md` validado por schema Zod. Si no cumple, el build falla.
-- Se publica solo si `draft: false`, `reviewed: true` **y** `publishDate` ≤ fecha del build. La revisión humana de Carlos es obligatoria (política de contenido a escala de Google).
-- Tres niveles epistémicos siempre separados: (1) evidencia con cita verificada, (2) modelos de otros autores atribuidos por nombre, (3) lectura propia rotulada como tal.
-- Referencias en formato Vancouver, verificadas contra PubMed o PMC. Cualquier `VERIFICAR` se resuelve antes del merge.
-- Relaciones observacionales se describen como asociación, no causa. Sin promesas de curación. Sin metacomentarios sobre la honestidad.
-- Aviso fijo del layout: contenido educativo que no reemplaza la atención de un profesional de salud.
-- El autor se modela en schema como `Person` ("Kinesiólogo y quiropráctico"), nunca `Physician`. El protagonismo es de las herramientas, no del autor: byline discreto, bio breve.
+### Regla editorial
+
+- Los artículos NO entregan material del libro. El blog entrega: conceptos y mecanismos con fuentes publicadas; cómo reconocer el patrón, en palabras propias; las vías de regulación en principio (qué y por qué); señales de alarma y cuándo consultar. El libro se reserva: ejercicios, protocolos y sus pasos; tests y autoevaluaciones; secuencia, progresión y ruta por perfil; casos clínicos y bitácora.
+- Si un artículo incluye una acción concreta, debe ser una que no esté en el libro y que tenga evidencia publicada (ejemplo: el suspiro cíclico, Balban et al., 2023).
+- Enfoque: estrés crónico y su expresión en el cuerpo (tensión, dolor, fatiga). La ansiedad aparece solo como derivación, no como eje.
+- El CTA por defecto de un artículo es el test orientativo (`primaryCta: "hacer_test"`): el tráfico frío va al test, no al checkout.
+- Se mantienen: niveles epistémicos separados, relaciones observacionales como asociación y no causa, sin promesas de curación, señales de alarma en cada artículo, citas verificadas antes de publicar (`citationsVerified: true` solo tras revisión humana de Carlos).
 - El ángulo cortisol–metabolismo–peso en mujeres 40+ no se usa como gancho de artículos.
 - 2 o 3 enlaces internos por artículo, con slugs confirmados.
+- Sin metacomentarios sobre la honestidad del texto.
+- Referencias en formato APA (el que ya usan los artículos), verificadas contra PubMed o PMC.
+
+### Esquema de los artículos (tres capas)
+
+Cada artículo es `src/content/blog/<slug>.md`, validado por el schema Zod de `src/content.config.ts`. Si un campo no cumple, o sobra un campo desconocido, **el build falla** (y con él `npm test` y el deploy).
+
+1. **Núcleo:** `title`, `slug` (igual al nombre del archivo), `description`, `seoTitle` (máx. 60), `seoDescription` (máx. 160), `publishDate`, `updatedDate` (opcional, no anterior a `publishDate`), `draft`, `author`, `category` (enum), `tags`, `heroImage` y `ogImage` (deben existir en `public/`; `ogImage` en PNG o JPG de 1200×630, nunca SVG), `heroImageAlt` (obligatorio), `codigo` (`a001`…, único; reservado para la atribución de la fase 3, no se envía a GA4).
+2. **Marketing:** `socialHook`, `linkedinSummary`, `targetAudience`, `primaryCta` (`"hacer_test"` | `"comprar_hotmart"`).
+3. **Salud:** `citationsVerified` (compuerta YMYL).
+
+Reglas sobre toda la colección (`src/lib/blog.ts`, también hacen fallar el build): `slug` = nombre del archivo, `codigo` único, y todo enlace `/blog/<slug>/` dentro de un artículo apunta a un slug que existe en `src/content/blog/` (un slug mal escrito es un error).
+
+### Cómo se publica un artículo
+
+- En producción solo se genera un artículo con **`draft: false` + `citationsVerified: true` + `publishDate` ≤ fecha del build en America/Santiago**. Lo demás no se genera: no tiene URL ni entra al sitemap.
+- Un artículo con fecha futura **sale solo ese día**: el workflow de deploy corre también a diario a las 09:17 UTC (06:17 de Chile en horario de verano) sobre `main`. Basta con mergear el artículo listo (`draft: false`, `citationsVerified: true`) antes de su fecha.
+- Un enlace a `/blog/<slug>/` cuyo artículo todavía no se publica se muestra como texto normal y se convierte en enlace solo en el primer build después de que el destino se publique. Lo mismo para `/blog/` y `/blog/categoria/<categoria>/`.
+- Mientras no haya artículos publicados, `/blog/` no se genera y ningún enlace apunta al blog. `/blog/categoria/<categoria>/` existe solo si esa categoría tiene artículos publicados.
+- En `npm run dev` se ven también los borradores, con una franja «BORRADOR» que dice por qué no se publicarían (y con `noindex`).
+- Imagen OG: `public/images/blog/<slug>.png` a 1200×630, generada desde la SVG con Chrome headless.
+
+### Cómo agregar una categoría
+
+Tocar a la vez, en el mismo cambio: el arreglo `CATEGORIES` de `src/content.config.ts` (valor en minúsculas con guiones; es también el segmento de `/blog/categoria/<categoria>/`) y `src/data/categories.ts` (etiqueta visible). Si no coinciden, el build falla y también `test/blog.test.js`.
+
+### Qué pone el layout (los artículos no lo traen)
+
+`src/layouts/BlogPostLayout.astro`: hero, categoría, título, firma discreta «Carlos Sagua H. · Kinesiólogo y quiropráctico» (texto fijo; el campo `author` solo se valida) y fecha; CTA según `primaryCta` antes de «Para seguir»/«Fuentes» (o al final del cuerpo); aviso fijo «Este contenido es educativo y no reemplaza la evaluación ni el tratamiento de un profesional de salud. Si tienes síntomas que te preocupan, consulta en forma presencial.»; bio breve (`src/components/AuthorBio.astro`). JSON-LD `BlogPosting` + `BreadcrumbList`, con el autor como `Person`, nunca `Physician`. Los enlaces a `/test/` dentro del cuerpo reciben `data-cta="hacer_test" data-cta-location="articulo_texto"` al procesar el HTML (no se escriben a mano en los `.md`).
+
+### Pendientes del blog
+
+- Traspaso de UTM al botón de checkout de los artículos (`primaryCta: "comprar_hotmart"`), como hace la home: fase 3, junto con la atribución por `codigo`.
+- Enlace al blog desde la home: cuando se publique el primer artículo (mientras no haya publicados, ninguna página enlaza al blog).
 
 ## Flujo de trabajo
 
@@ -78,12 +112,14 @@ El sitio es Astro 6 con salida estática (`astro.config.mjs`: `build.format: 'pr
 
 - `npm install` una vez. `npm run dev` para trabajar (http://localhost:4321), `npm run build` genera `dist/`, `npm run preview` sirve `dist/`.
 - `npm test` corre `astro build` (en `pretest`) y luego `node --test "test/*.test.js"`. Los tests de marcado leen `dist/`, lo que se publica; los de lógica leen `public/assets/` y `public/test/`. Las comillas importan: en Node 24, `node --test test/` falla porque toma la carpeta como módulo.
-- Deploy: `.github/workflows/deploy.yml` (workflow oficial de Astro). Cada push a `main` corre `npm test` y, si pasa, publica `dist/` en GitHub Pages. Settings → Pages → Source: **GitHub Actions**. Solo `main` puede publicar (regla del entorno `github-pages`).
+- Deploy: `.github/workflows/deploy.yml` (workflow oficial de Astro). Cada push a `main` corre `npm test` y, si pasa, publica `dist/` en GitHub Pages. Además corre a diario a las 09:17 UTC (`schedule`) para publicar los artículos que llegan a su fecha. Settings → Pages → Source: **GitHub Actions**. Solo `main` puede publicar (regla del entorno `github-pages`).
 - `.nojekyll` ya no hace falta: con Actions no corre Jekyll.
 
 Estructura:
 
 - `src/pages/` → páginas. Con `format: 'preserve'`, `src/pages/gracias.astro` → `/gracias.html`, `src/pages/test/index.astro` → `/test/` y `src/pages/404.astro` → `/404.html`.
+- Blog: `src/content/blog/*.md` (artículos), `src/content.config.ts` (schema), `src/data/categories.ts` (etiquetas), `src/lib/blog.ts` y `src/lib/blog-rules.mjs` (publicación y enlaces), `src/layouts/BlogBase.astro` y `BlogPostLayout.astro`, y las rutas `src/pages/blog/[slug]/index.astro` → `/blog/<slug>/`, `src/pages/blog/[...indice]/index.astro` → `/blog/` (ruta opcional para no generarla sin artículos) y `src/pages/blog/categoria/[categoria]/index.astro`. Imágenes en `public/images/blog/`.
+- `test/blog.test.js` construye además el sitio con los artículos de `test/fixtures/blog/ok` en `.dist-fixtures/` (ignorada) usando `WD_BLOG_DIR` y `WD_OUT_DIR`; esas variables son solo para tests.
 - `src/components/ConsentBanner.astro` → marcado del aviso de cookies (`#wd-consent`). Se usa como `<ConsentBanner />` justo antes de `<script is:inline src="/assets/wd-consent.js"></script>`.
 - `public/` → se copia tal cual: `assets/` (CSS y JS compartidos, en `/assets/`), `test/scoring.js` y `test/test-data.js` (los carga `/test/`), `CNAME`, `robots.txt` y favicons.
 - `test/` en la raíz → solo tests de Node (`*.test.js`). No se publica.

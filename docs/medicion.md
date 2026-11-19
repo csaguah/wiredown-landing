@@ -46,7 +46,7 @@ Un clic en un botón de checkout envía **solo** `click_checkout`, nunca `cta_cl
 
 ### Valores de los parámetros
 
-**`page_code`** — se deduce de la URL: `/` → `guia`, `/test/` → `test`, `/gracias.html` → `gracias`, `/privacidad.html` → `privacidad`, `/blog/<slug>/` → `<slug>`. Un `data-page-code` en `<body>` tiene prioridad: `404.html` usa `data-page-code="404"`, porque GitHub Pages la sirve en cualquier ruta inexistente.
+**`page_code`** — se deduce de la URL: `/` → `guia`, `/test/` → `test`, `/gracias.html` → `gracias`, `/privacidad.html` → `privacidad`, `/blog/<slug>/` → `<slug>` (el slug del artículo; el campo `codigo` del frontmatter, `a001`…, queda reservado para la atribución de la fase 3 y no se envía). Un `data-page-code` en `<body>` tiene prioridad: `404.html` usa `data-page-code="404"`, porque GitHub Pages la sirve en cualquier ruta inexistente.
 
 **`cta_location`** — atributo `data-cta-location` del elemento o de un ancestro. Si falta: `sin_definir` (revisar el marcado).
 
@@ -62,13 +62,17 @@ Un clic en un botón de checkout envía **solo** `click_checkout`, nunca `cta_cl
 | `/test/` | «Volver a hacer el test» | `repetir_test` | `resultado` |
 | 404 | «Hacer el test orientativo» | `hacer_test` | `404` |
 | 404 | «Conocer la guía Wire Down» | `ver_guia` | `404` |
-| artículos | Enlace a checkout dentro del artículo | — (solo `click_checkout`) | `articulo` |
+| artículos | Botón «Haz el test orientativo →» del CTA del artículo (`primaryCta: "hacer_test"`) | `hacer_test` | `articulo` |
+| artículos | Enlace a `/test/` dentro del texto del artículo (se marca al generar la página, no en el `.md`) | `hacer_test` | `articulo_texto` |
+| artículos | Botón de checkout del CTA del artículo (`primaryCta: "comprar_hotmart"`) | — (solo `click_checkout`) | `articulo` |
 
 **`section_name`**
 
 - `/`: `hero`, `dolor`, `cita`, `producto`, `bonos`, `autor`, `cta_final`, `faq`
 - `/test/`: `test_intro`, `test_preguntas`, `test_resultado`
 - 404: `no_encontrada`
+- artículos (`/blog/<slug>/`): `articulo_cabecera`, `articulo_cuerpo`, `articulo_cta`, `articulo_cierre` (solo si el artículo tiene «Para seguir» o «Fuentes»), `articulo_autor`
+- `/blog/`: `blog_indice` · `/blog/categoria/<categoria>/`: `blog_categoria`
 
 **`faq_id`** (`/`): `formato`, `conocimientos`, `tiempo`, `dolor_cronico`, `test_diagnostico`, `pago`
 
@@ -82,7 +86,7 @@ Un clic en un botón de checkout envía **solo** `click_checkout`, nunca `cta_cl
 - `data-cta="<nombre>"` y `data-cta-location="<ubicación>"` en cada botón o enlace de llamado a la acción. En artículos, los enlaces a checkout llevan `data-cta="checkout" data-cta-location="articulo"`.
 - `data-faq="<id_corto>"` en cada pregunta. Funciona con el acordeón actual (clase `.open` o `aria-expanded="true"`) y con `<details data-faq>` / `<summary data-faq>`.
 - Solo atributos: ningún cambio visual.
-- `test/wd-events.test.js` comprueba el marcado de `/` y `/test/`; agregar las páginas nuevas a esos tests.
+- `test/wd-events.test.js` comprueba el marcado de `/` y `/test/`; agregar las páginas nuevas a esos tests. Las páginas del blog las comprueba `test/blog.test.js` sobre un build con artículos de prueba (solo existen cuando hay artículos publicados).
 
 ## GA4: configuración
 
