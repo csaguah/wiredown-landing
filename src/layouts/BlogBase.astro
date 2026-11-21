@@ -7,6 +7,8 @@
 //   overrides de estilo del botón (iguales a los de la home) e InitiateCheckout del Pixel.
 // - draftReasons: motivos por los que el artículo no se publicaría. Si hay alguno, se muestra la
 //   franja BORRADOR y la página va con noindex (en producción estas páginas no se generan).
+// - codigo: el `codigo` del artículo (a001…). Va en <body data-codigo>; wd-attribution.js lo usa
+//   como página de entrada en el sck y en attr_entrada.
 import ConsentBanner from '../components/ConsentBanner.astro';
 import SEOHead from '../components/SEOHead.astro';
 
@@ -19,10 +21,11 @@ interface Props {
   ogImageAlt?: string;
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   checkout?: boolean;
+  codigo?: string;
   draftReasons?: string[];
 }
 
-const { title, description, path, ogType = 'website', ogImage, ogImageAlt, jsonLd, checkout = false, draftReasons = [] } = Astro.props;
+const { title, description, path, ogType = 'website', ogImage, ogImageAlt, jsonLd, checkout = false, codigo, draftReasons = [] } = Astro.props;
 const isDraft = draftReasons.length > 0;
 ---
 <!DOCTYPE html>
@@ -32,6 +35,8 @@ const isDraft = draftReasons.length > 0;
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- GTM con Consent Mode v2 (todo denegado por defecto). Va antes de cualquier otro script de medición. -->
 <script is:inline src="/assets/wd-gtm.js"></script>
+<!-- Atribución de ventas: sck, UTM y click ID en los enlaces de checkout (ver el archivo). Sin defer, después de wd-gtm.js. -->
+<script is:inline src="/assets/wd-attribution.js"></script>
 <!-- Eventos al dataLayer (solo con consentimiento de Analítica y con GTM ya cargado). -->
 <script is:inline src="/assets/wd-events.js" defer></script>
 <SEOHead title={title} description={description} path={path} ogType={ogType} ogImage={ogImage} ogImageAlt={ogImageAlt} jsonLd={jsonLd} noIndex={isDraft} />
@@ -141,7 +146,7 @@ footer a { color: inherit; }
 <!-- Meta Pixel — Wire Down (se carga solo con consentimiento). Igual que en la home. -->
 <script is:inline src="/assets/wd-pixel.js"></script>
 </head>
-<body>
+<body data-codigo={codigo}>
 
 <header class="topbar"><a href="/">Wire Down</a></header>
 {isDraft && (

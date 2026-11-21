@@ -9,6 +9,8 @@
  * - Cada evento lleva solo los parámetros de su lista blanca (EVENT_PARAMS). Nunca se lee el texto
  *   de la página: los nombres salen de atributos data-* fijos. Del test no sale ni respuesta ni perfil.
  * - Los eventos de Meta (TestStarted, TestCompleted, InitiateCheckout) van por wd-pixel.js y no se tocan.
+ * - click_checkout lleva además attr_fuente, attr_entrada y attr_boton (wd-attribution.js): solo
+ *   códigos cortos, nunca UTM, fbclid ni gclid.
  *
  * API pública: window.wdTrack(nombre, params). Lo usa test/index.html para test_start,
  * test_complete y test_to_guide (sin parámetros).
@@ -22,7 +24,7 @@
 
   // Lista blanca: evento → parámetros permitidos. Lo que no esté aquí no sale.
   var EVENT_PARAMS = {
-    click_checkout: ['cta_location', 'page_code'],
+    click_checkout: ['cta_location', 'page_code', 'attr_fuente', 'attr_entrada', 'attr_boton'],
     cta_click: ['cta_name', 'cta_location'],
     test_start: [],
     test_complete: [],
@@ -111,7 +113,11 @@
     var out = [];
     var kind = !c.link ? null : c.link.checkoutClass ? 'checkout' : linkKind(c.link.href, c.host);
     if (c.cta && kind !== 'checkout') out.push(['cta_click', { cta_name: c.cta.name, cta_location: c.cta.location }]);
-    if (kind === 'checkout') out.push(['click_checkout', { cta_location: c.link.location, page_code: c.pageCode }]);
+    if (kind === 'checkout') {
+      var params = { cta_location: c.link.location, page_code: c.pageCode };
+      if (c.attr) ['attr_fuente', 'attr_entrada', 'attr_boton'].forEach(function (k) { params[k] = c.attr[k]; });
+      out.push(['click_checkout', params]);
+    }
     else if (kind === 'outbound') out.push(['outbound_click', { link_domain: linkDomain(c.link.href) }]);
     return out;
   }
@@ -190,7 +196,9 @@
           location: ctaLocation(link)
         } : null,
         host: win.location.hostname,
-        pageCode: code
+        pageCode: code,
+        // Códigos de atribución (wd-attribution.js): fuente, entrada y botón. Nada de UTM ni click ID.
+        attr: link && win.wdAttribution && win.wdAttribution.linkParams ? win.wdAttribution.linkParams(link) : null
       }).forEach(function (ev) { track(ev[0], ev[1]); });
     }, true);
 

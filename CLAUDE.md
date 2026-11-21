@@ -71,7 +71,7 @@ Este repo es **público**. Por eso:
 
 Cada artículo es `src/content/blog/<slug>.md`, validado por el schema Zod de `src/content.config.ts`. Si un campo no cumple, o sobra un campo desconocido, **el build falla** (y con él `npm test` y el deploy).
 
-1. **Núcleo:** `title`, `slug` (igual al nombre del archivo), `description`, `seoTitle` (máx. 60), `seoDescription` (máx. 160), `publishDate`, `updatedDate` (opcional, no anterior a `publishDate`), `draft`, `author`, `category` (enum), `tags`, `heroImage` y `ogImage` (deben existir en `public/`; `ogImage` en PNG o JPG de 1200×630, nunca SVG), `heroImageAlt` (obligatorio), `codigo` (`a001`…, único; reservado para la atribución de la fase 3, no se envía a GA4).
+1. **Núcleo:** `title`, `slug` (igual al nombre del archivo), `description`, `seoTitle` (máx. 60), `seoDescription` (máx. 160), `publishDate`, `updatedDate` (opcional, no anterior a `publishDate`), `draft`, `author`, `category` (enum), `tags`, `heroImage` y `ogImage` (deben existir en `public/`; `ogImage` en PNG o JPG de 1200×630, nunca SVG), `heroImageAlt` (obligatorio), `codigo` (`a001`…, único; página de entrada de la atribución: va en `<body data-codigo>`, en el `sck` y en `attr_entrada` de `click_checkout`; ver `docs/medicion.md`).
 2. **Marketing:** `socialHook`, `linkedinSummary`, `targetAudience`, `primaryCta` (`"hacer_test"` | `"comprar_hotmart"`).
 3. **Salud:** `citationsVerified` (compuerta YMYL).
 
@@ -96,7 +96,6 @@ Tocar a la vez, en el mismo cambio: el arreglo `CATEGORIES` de `src/content.conf
 
 ### Pendientes del blog
 
-- Traspaso de UTM al botón de checkout de los artículos (`primaryCta: "comprar_hotmart"`), como hace la home: fase 3, junto con la atribución por `codigo`.
 - Enlace al blog desde la home: cuando se publique el primer artículo (mientras no haya publicados, ninguna página enlaza al blog).
 
 ## Flujo de trabajo
@@ -129,7 +128,7 @@ Estructura:
 
 Cómo agregar una página:
 
-1. Crear `src/pages/<nombre>.astro` (→ `/<nombre>.html`) o `src/pages/<carpeta>/index.astro` (→ `/<carpeta>/`). Partir de una página existente con el mismo `<head>` (GTM y eventos primero, `<SEOHead>`, favicons, fuentes, `wd-tokens.css`, `wd-base.css`, `wd-consent.css`, `wd-pixel.js`) y `data-track-section`/`data-cta` según `docs/medicion.md`.
+1. Crear `src/pages/<nombre>.astro` (→ `/<nombre>.html`) o `src/pages/<carpeta>/index.astro` (→ `/<carpeta>/`). Partir de una página existente con el mismo `<head>` (GTM, atribución (`wd-attribution.js`, sin `defer`) y eventos primero, `<SEOHead>`, favicons, fuentes, `wd-tokens.css`, `wd-base.css`, `wd-consent.css`, `wd-pixel.js`) y `data-track-section`/`data-cta` según `docs/medicion.md`.
    - `<SEOHead title description path />` (`src/components/SEOHead.astro`) pone title, description, canonical, Open Graph, Twitter card y JSON-LD opcional (`jsonLd`). `path` con barra final para carpetas (`/test/`), nunca `/index.html`. Con `noIndex` la página emite `noindex`, no declara canonical y queda fuera del sitemap automáticamente (`astro.config.mjs` lee el HTML generado). `test/seo.test.js` lo comprueba.
 2. **Todo `<script>` y `<style>` lleva `is:inline`**. Sin él, Astro hace scoped el CSS, agrupa y mueve los scripts a `/_astro/` y cambia el orden de carga, lo que rompe los overrides de Hotmart (`.hotmart-fb…`, con `!important`) y la regla de cargar `wd-hotmart-guard.js` antes del widget. `test/astro-build.test.js` falla si eso pasa.
 3. Si la página mide o tiene enlaces internos: aviso con `import ConsentBanner from '../components/ConsentBanner.astro';` en el frontmatter y `<ConsentBanner />` + `wd-consent.js` al final del `<body>`.
