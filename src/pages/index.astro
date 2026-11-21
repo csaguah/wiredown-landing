@@ -61,6 +61,8 @@ const jsonLd = {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- GTM con Consent Mode v2 (todo denegado por defecto). Va antes de cualquier otro script de medición. -->
 <script is:inline src="/assets/wd-gtm.js"></script>
+<!-- Atribución de ventas: sck, UTM y click ID en los enlaces de checkout (ver el archivo). Sin defer, después de wd-gtm.js. -->
+<script is:inline src="/assets/wd-attribution.js"></script>
 <!-- Eventos al dataLayer (solo con consentimiento de Analítica y con GTM ya cargado). -->
 <script is:inline src="/assets/wd-events.js" defer></script>
 <SEOHead
@@ -1052,13 +1054,7 @@ document.querySelectorAll('.faq-q').forEach(q => {
   });
 });
 
-// ── UTM tracking en CTAs ───────────────────────────────────
-const utms = window.location.search;
-if (utms) {
-  document.querySelectorAll('a[href*="hotmart"]').forEach(a => {
-    a.href = a.href + (a.href.includes('?') ? '&' : '?') + utms.slice(1);
-  });
-}
+// UTM, sck y click ID en los botones de checkout: /assets/wd-attribution.js
 
 // ── Scroll suave al CTA desde hero ────────────────────────
 document.querySelectorAll('a[href="#comprar"]').forEach(a => {

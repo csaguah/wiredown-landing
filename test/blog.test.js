@@ -297,6 +297,23 @@ test('CTA comprar_hotmart: checkout con ubicación articulo y wd-hotmart-guard.j
   assert.ok(!html.includes('data-track-section="articulo_cierre"'));
 });
 
+test('atribución: <body data-codigo> con el codigo del artículo y wd-attribution.js después de wd-gtm.js', () => {
+  const pages = { 'blog/checkout-test/index.html': 'a902', 'blog/publicado-test/index.html': null };
+  for (const [f, codigo] of Object.entries(pages)) {
+    const html = ok(f);
+    const gtm = html.indexOf('<script src="/assets/wd-gtm.js"></script>');
+    const attr = html.indexOf('<script src="/assets/wd-attribution.js"></script>');
+    assert.ok(gtm >= 0 && attr > gtm, f);
+    const m = html.match(/<body data-codigo="(a\d{3})">/);
+    assert.ok(m, `${f}: falta <body data-codigo>`);
+    if (codigo) assert.equal(m[1], codigo);
+  }
+  const ck = ok('blog/checkout-test/index.html');
+  assert.ok(ck.indexOf('wd-attribution.js') < ck.indexOf('static.hotmart.com/checkout/widget.min.js'), 'antes del widget');
+  // El índice y las categorías no son artículos: sin data-codigo (entrada «bl»).
+  assert.match(ok('blog/index.html'), /<body>/);
+});
+
 test('aviso fijo del layout en cada artículo, después del CTA', () => {
   const aviso = 'Este contenido es educativo y no reemplaza la evaluación ni el tratamiento de un profesional de salud. Si tienes síntomas que te preocupan, consulta en forma presencial.';
   for (const s of ['publicado-test', 'checkout-test']) {

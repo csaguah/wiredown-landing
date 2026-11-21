@@ -9,6 +9,8 @@ import SEOHead from '../components/SEOHead.astro';
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- GTM con Consent Mode v2 (todo denegado por defecto). Va antes de cualquier otro script de medición. -->
 <script is:inline src="/assets/wd-gtm.js"></script>
+<!-- Atribución de ventas: sck, UTM y click ID en los enlaces de checkout (ver el archivo). Sin defer, después de wd-gtm.js. -->
+<script is:inline src="/assets/wd-attribution.js"></script>
 <!-- Eventos al dataLayer (solo con consentimiento de Analítica y con GTM ya cargado). -->
 <script is:inline src="/assets/wd-events.js" defer></script>
 <SEOHead title="Política de privacidad — Wire Down" path="/privacidad.html" noIndex />
@@ -44,6 +46,8 @@ a{color:#3D7A50}
 <p><strong>Cookies de analítica (Google Analytics).</strong> Solo si aceptas la categoría «Analítica» en el aviso de cookies, usamos Google Analytics 4, a través de Google Tag Manager, para saber cuántas personas visitan el sitio, qué páginas leen y desde dónde llegan. Google Analytics guarda cookies propias (como <code>_ga</code>) por hasta dos años. Si no la aceptas, Google solo recibe avisos sin cookies ni identificadores, que no permiten reconocerte entre visitas. Tus respuestas y tu resultado del test orientativo nunca se envían a Google.</p>
 <p><strong>Cookies de marketing (Meta Pixel).</strong> Solo si aceptas la categoría «Marketing» en el aviso de cookies, usamos el Pixel de Meta para saber cuántas personas visitan la página y cuántas inician una compra, y así mostrar nuestros contenidos a personas a las que puedan servirles. Si las rechazas, no se cargan. Puedes cambiar tu decisión en cualquier momento desde «Preferencias de cookies», al final de la página. Guardamos tu decisión en tu navegador durante 180 días; después te la volvemos a preguntar.</p>
 <p><strong>Compras.</strong> El pago se realiza en Hotmart, que trata tus datos de compra según su propia política de privacidad. Nosotros recibimos de Hotmart la información necesaria para entregarte el producto y atender consultas sobre tu compra.</p>
+<!-- PENDIENTE DE REVISIÓN LEGAL: párrafo sobre el código de origen que se pasa a Hotmart (Fase atribución). -->
+<p><strong>Origen de la visita.</strong> Al hacer clic en el botón de compra, el sitio pasa a Hotmart un código de origen de tu visita (el canal por el que llegaste, la página por la que entraste y el botón que usaste) y los parámetros de campaña del enlace (UTM). Nos sirve para saber qué contenidos y canales funcionan. Los identificadores de anuncios de Google y Meta (<code>gclid</code>, <code>fbclid</code>) solo se pasan si aceptaste la categoría «Marketing» en el aviso de cookies.</p>
 <p><strong>Test orientativo.</strong> El test orientativo se calcula en tu navegador. Tus respuestas y tu resultado no se envían ni se almacenan.</p>
 <p>No usamos tus datos para tomar decisiones automatizadas que te afecten ni los vendemos a terceros.</p>
 

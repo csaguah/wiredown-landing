@@ -37,6 +37,8 @@
     });
     if (!c.analytics) wdClearAnalyticsCookies();
     if (c.marketing) wdLoadPixel(); else wdRevokePixel();
+    // Atribución: first-touch solo con Marketing; fbclid/gclid en el checkout según la decisión.
+    if (window.wdAttribution && wdAttribution.consentChanged) wdAttribution.consentChanged();
     box.style.display = 'none';
   }
 

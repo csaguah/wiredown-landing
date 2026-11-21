@@ -9,6 +9,8 @@ import SEOHead from '../components/SEOHead.astro';
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- GTM con Consent Mode v2 (todo denegado por defecto). Va antes de cualquier otro script de medición. -->
 <script is:inline src="/assets/wd-gtm.js"></script>
+<!-- Atribución de ventas: sck, UTM y click ID en los enlaces de checkout (ver el archivo). Sin defer, después de wd-gtm.js. -->
+<script is:inline src="/assets/wd-attribution.js"></script>
 <!-- Eventos al dataLayer (solo con consentimiento de Analítica y con GTM ya cargado). -->
 <script is:inline src="/assets/wd-events.js" defer></script>
 <SEOHead title="Página no encontrada — Wire Down" path="/404.html" noIndex />
