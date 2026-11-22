@@ -168,12 +168,36 @@ test('categorías: el enum del esquema y src/data/categories.ts tienen las misma
 
 // ── Filtro de publicación ──────────────────────────────────
 
-test('producción (dist/): con los artículos actuales en borrador no se genera nada del blog ni hay enlaces a él', () => {
-  assert.ok(!fs.existsSync(path.join(DIST, 'blog')), 'dist/blog no debería existir');
+// Estado real de src/content/blog/ según las reglas de publicación de hoy (America/Santiago).
+function realArticles() {
+  const dir = path.join(ROOT, 'src', 'content', 'blog');
+  const today = R.todayInSantiago();
+  return fs.readdirSync(dir).filter(f => f.endsWith('.md')).map(f => {
+    const fm = fs.readFileSync(path.join(dir, f), 'utf8').split(/^---$/m)[1];
+    const get = k => ((fm.match(new RegExp(`^${k}:\\s*"?([^"\\n]*)"?\\s*$`, 'm')) || [])[1] || '').trim();
+    const data = { draft: get('draft') === 'false' ? false : true, citationsVerified: get('citationsVerified') === 'true', publishDate: new Date(get('publishDate') + 'T00:00:00Z') };
+    return { slug: f.replace(/\.md$/, ''), category: get('category'), published: R.isPublished(data, today) };
+  });
+}
+
+test('producción (dist/): solo se generan los artículos publicados hoy; las páginas de siempre no enlazan al blog', () => {
+  const arts = realArticles();
+  const pub = arts.filter(a => a.published);
+  const urls = sitemapUrls(DIST).filter(u => u.includes('/blog'));
+  if (!pub.length) {
+    assert.ok(!fs.existsSync(path.join(DIST, 'blog')), 'dist/blog no debería existir');
+    assert.deepEqual(urls, []);
+  } else {
+    const cats = [...new Set(pub.map(a => a.category))];
+    const expected = [`${SITE}/blog/`, ...pub.map(a => `${SITE}/blog/${a.slug}/`), ...cats.map(c => `${SITE}/blog/categoria/${c}/`)];
+    assert.deepEqual([...urls].sort(), expected.sort());
+    for (const u of expected) assert.ok(fs.existsSync(path.join(DIST, u.slice(SITE.length + 1), 'index.html')), u);
+  }
+  for (const a of arts.filter(x => !x.published)) assert.ok(!fs.existsSync(path.join(DIST, 'blog', a.slug)), `${a.slug} no debería generarse`);
+  // El enlace desde la home al blog es un pendiente aparte (CLAUDE.md): por ahora ninguna página de siempre enlaza.
   for (const f of ['index.html', 'test/index.html', 'gracias.html', 'privacidad.html', '404.html']) {
     assert.ok(!/href="[^"]*\/blog/.test(fs.readFileSync(path.join(DIST, f), 'utf8')), `${f}: enlace al blog`);
   }
-  assert.ok(!sitemapUrls(DIST).some(u => u.includes('/blog')));
 });
 
 test('solo se generan los publicados: draft, citationsVerified false y fecha futura quedan fuera', () => {

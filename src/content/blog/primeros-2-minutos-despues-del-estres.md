@@ -5,7 +5,7 @@ slug: "primeros-2-minutos-despues-del-estres"
 description: "Qué pasa en tu cuerpo después de una discusión, una mala noticia o un correo tenso, por qué los minutos siguientes deciden si esa tensión se queda, y una acción de respiración respaldada por un ensayo clínico."
 seoTitle: "Cómo bajar el estrés en el momento: los primeros 2 minutos"
 seoDescription: "Qué pasa en tu cuerpo después de un momento de estrés, por qué los minutos siguientes importan y una respiración respaldada por un ensayo clínico."
-publishDate: 2026-11-24
+publishDate: 2026-11-29
 draft: true
 author: "Carlos Sagua H., Kinesiólogo y Quiropráctico"
 category: "regulacion-nerviosa"

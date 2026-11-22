@@ -5,7 +5,7 @@ slug: "donde-guarda-tu-cuerpo-el-estres"
 description: "Por qué el estrés se instala en el cuello, la mandíbula, el diafragma, el psoas y la espalda baja, qué hay de cierto en el psoas como 'músculo del alma' y por qué masajear o estirar no siempre alcanza."
 seoTitle: "Dónde se acumula la tensión por estrés: 5 zonas del cuerpo"
 seoDescription: "Por qué el estrés se instala en cuello, mandíbula, diafragma, psoas y espalda baja, y por qué masajear o estirar no siempre alcanza."
-publishDate: 2026-11-26
+publishDate: 2026-12-06
 draft: true
 author: "Carlos Sagua H., Kinesiólogo y Quiropráctico"
 category: "cuerpo-y-estres"
