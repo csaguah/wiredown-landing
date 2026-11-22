@@ -79,6 +79,7 @@ Reglas sobre toda la colección (`src/lib/blog.ts`, también hacen fallar el bui
 
 ### Cómo se publica un artículo
 
+- Los artículos del blog se publican **los domingos**: `publishDate` siempre es un domingo.
 - En producción solo se genera un artículo con **`draft: false` + `citationsVerified: true` + `publishDate` ≤ fecha del build en America/Santiago**. Lo demás no se genera: no tiene URL ni entra al sitemap.
 - Un artículo con fecha futura **sale solo ese día**: el workflow de deploy corre también a diario a las 09:17 UTC (06:17 de Chile en horario de verano) sobre `main`. Basta con mergear el artículo listo (`draft: false`, `citationsVerified: true`) antes de su fecha.
 - Un enlace a `/blog/<slug>/` cuyo artículo todavía no se publica se muestra como texto normal y se convierte en enlace solo en el primer build después de que el destino se publique. Lo mismo para `/blog/` y `/blog/categoria/<categoria>/`.

@@ -5,8 +5,8 @@ slug: "sistema-nervioso-modo-supervivencia"
 description: "Qué significa que tu sistema nervioso esté en modo supervivencia, por qué no se apaga con descansar y qué tipo de señales sí entiende para empezar a salir de la alerta."
 seoTitle: "Sistema nervioso en modo supervivencia: por qué no se apaga"
 seoDescription: "Qué es el modo supervivencia del sistema nervioso, por qué no se apaga con descansar y qué señales necesita tu cuerpo para salir de la alerta."
-publishDate: 2026-11-24
-draft: true
+publishDate: 2026-11-22
+draft: false
 author: "Carlos Sagua H., Kinesiólogo y Quiropráctico"
 category: "regulacion-nerviosa"
 tags: ["modo supervivencia", "sistema nervioso autónomo", "neurocepción", "carga alostática", "regulación nerviosa", "señales de seguridad"]
@@ -22,7 +22,7 @@ targetAudience: "Mujeres de 40 y más con tensión muscular, cansancio o mal sue
 primaryCta: "hacer_test"
 
 # Capa 3 · Salud (gate YMYL)
-citationsVerified: false
+citationsVerified: true
 ---
 
 Duermes ocho horas y el cansancio sigue ahí al despertar. Te duele el cuello sin haber hecho fuerza. Llegas a la noche sin fuerzas, pero cuando por fin te acuestas, la cabeza no se detiene. Te dices que tienes que relajarte, lo intentas, y el cuerpo no obedece.
