@@ -92,6 +92,33 @@ test('tagTestLinks: enlaces a /test/ del texto con data-cta hacer_test / articul
   assert.equal(R.tagTestLinks(untouched), untouched);
 });
 
+test('pruneParaSeguir: quita el ítem cuyo único enlace va a un no publicado; sin ítems, sin sección', () => {
+  const ctx = { exists: new Set(['a', 'b', 'c']), published: new Set(['a']) };
+  const html = '<p>Texto con <a href="/blog/b/">B</a>.</p>\n<h2 id="para-seguir">Para seguir</h2>\n<ul>\n' +
+    '<li><a href="/blog/a/">A</a>: publicado.</li>\n<li><a href="/blog/b/">B</a>: borrador.</li>\n' +
+    '<li><a href="/test/">Test</a>: siempre.</li>\n<li><a href="/blog/c/">C</a> y <a href="/test/">test</a>: dos enlaces.</li>\n' +
+    '</ul>\n<p>Cierre.</p>\n<hr>\n<h3 id="fuentes">Fuentes</h3>\n<ul>\n<li><a href="/blog/b/">B</a></li>\n</ul>';
+  const out = R.pruneParaSeguir(html, ctx);
+  assert.ok(out.includes('<li><a href="/blog/a/">A</a>: publicado.</li>'));
+  assert.ok(!out.includes('B</a>: borrador.'), 'se quita el <li> completo');
+  assert.ok(out.includes('<li><a href="/test/">Test</a>: siempre.</li>'));
+  assert.ok(out.includes('<a href="/blog/c/">C</a> y <a href="/test/">test</a>'), 'con más de un enlace se deja (rewriteBlogLinks lo pasa a texto)');
+  assert.ok(out.startsWith('<p>Texto con <a href="/blog/b/">B</a>.</p>'), 'fuera de «Para seguir» no se toca');
+  assert.ok(out.includes('<h3 id="fuentes">Fuentes</h3>\n<ul>\n<li><a href="/blog/b/">B</a></li>'), 'Fuentes no se toca');
+
+  // Todos los ítems llevan a no publicados → sin título ni lista; el cierre se mantiene.
+  const solo = '<p>x</p>\n<h2 id="para-seguir">Para seguir</h2>\n<ul>\n<li><a href="/blog/b/">B</a>: uno.</li>\n' +
+    '<li><a href="https://wire-down.com/blog/c/">C</a>: dos.</li>\n</ul>\n<p>Cierre.</p>\n<hr>\n<h3 id="fuentes">F</h3>';
+  assert.equal(R.pruneParaSeguir(solo, ctx), '<p>x</p>\n<p>Cierre.</p>\n<hr>\n<h3 id="fuentes">F</h3>');
+  // Sin cambios si todo está publicado o no hay «Para seguir».
+  const all = { exists: ctx.exists, published: ctx.exists };
+  assert.equal(R.pruneParaSeguir(solo, all), solo);
+  assert.equal(R.pruneParaSeguir('<p>sin sección</p>', ctx), '<p>sin sección</p>');
+  // Un slug inexistente no se quita aquí: rewriteBlogLinks hace fallar el build.
+  const typo = '<h2 id="para-seguir">P</h2>\n<ul>\n<li><a href="/blog/zz/">Z</a></li>\n</ul>\n';
+  assert.equal(R.pruneParaSeguir(typo, ctx), typo);
+});
+
 test('splitForCta: antes de «Para seguir»; si no, antes de la línea de «Fuentes»; si no, al final', () => {
   assert.deepEqual(R.splitForCta('<p>a</p><h2 id="para-seguir">P</h2><hr>\n<h3 id="fuentes">F</h3>'),
     ['<p>a</p>', '<h2 id="para-seguir">P</h2><hr>\n<h3 id="fuentes">F</h3>']);
@@ -180,7 +207,7 @@ function realArticles() {
   });
 }
 
-test('producción (dist/): solo se generan los artículos publicados hoy; las páginas de siempre no enlazan al blog', () => {
+test('producción (dist/): solo se generan los artículos publicados hoy; la home enlaza al blog solo si hay publicados', () => {
   const arts = realArticles();
   const pub = arts.filter(a => a.published);
   const urls = sitemapUrls(DIST).filter(u => u.includes('/blog'));
@@ -194,8 +221,17 @@ test('producción (dist/): solo se generan los artículos publicados hoy; las p�
     for (const u of expected) assert.ok(fs.existsSync(path.join(DIST, u.slice(SITE.length + 1), 'index.html')), u);
   }
   for (const a of arts.filter(x => !x.published)) assert.ok(!fs.existsSync(path.join(DIST, 'blog', a.slug)), `${a.slug} no debería generarse`);
-  // El enlace desde la home al blog es un pendiente aparte (CLAUDE.md): por ahora ninguna página de siempre enlaza.
-  for (const f of ['index.html', 'test/index.html', 'gracias.html', 'privacidad.html', '404.html']) {
+  // La home enlaza al blog desde el pie, solo si /blog/ existe. Las demás páginas de siempre, nunca.
+  const home = fs.readFileSync(path.join(DIST, 'index.html'), 'utf8');
+  const homeLinks = home.match(/<a\b[^>]*href="[^"]*\/blog[^"]*"[^>]*>/g) || [];
+  if (pub.length) {
+    assert.deepEqual(homeLinks, ['<a href="/blog/" style="color:inherit" data-cta="ver_blog" data-cta-location="footer">']);
+    const footer = home.match(/<footer>[\s\S]*?<\/footer>/)[0];
+    assert.ok(footer.includes(homeLinks[0]), 'el enlace va en el pie');
+  } else {
+    assert.deepEqual(homeLinks, []);
+  }
+  for (const f of ['test/index.html', 'gracias.html', 'privacidad.html', '404.html']) {
     assert.ok(!/href="[^"]*\/blog/.test(fs.readFileSync(path.join(DIST, f), 'utf8')), `${f}: enlace al blog`);
   }
 });
@@ -255,11 +291,17 @@ test('imágenes OG de los artículos reales: PNG de 1200×630 junto a cada SVG',
   }
 });
 
-test('JSON-LD del artículo: BlogPosting (autor Person) + BreadcrumbList Inicio › Blog › artículo', () => {
+test('JSON-LD del artículo: autor Organization Wire Down, WebPage revisada por Person Carlos + BreadcrumbList', () => {
   const blocks = jsonLd(ok('blog/publicado-test/index.html'));
   assert.equal(blocks.length, 1);
-  const [post, crumbs] = blocks[0]['@graph'];
+  const [org, page, post, crumbs] = blocks[0]['@graph'];
   const url = `${SITE}/blog/publicado-test/`;
+  assert.deepEqual(org, { '@type': 'Organization', '@id': `${SITE}/#organization`, name: 'Wire Down', url: `${SITE}/`, logo: `${SITE}/apple-touch-icon.png` });
+  assert.equal(page['@type'], 'WebPage');
+  assert.equal(page['@id'], url);
+  assert.deepEqual(page.reviewedBy, { '@type': 'Person', name: 'Carlos Sagua H.', jobTitle: 'Kinesiólogo y quiropráctico' });
+  assert.equal(page.lastReviewed, '2020-02-01', 'lastReviewed = updatedDate');
+  assert.deepEqual(page.breadcrumb, { '@id': `${url}#migas` });
   assert.equal(post['@type'], 'BlogPosting');
   assert.equal(post.headline, 'Artículo publicado de prueba');
   assert.equal(post.description, 'Descripción del artículo publicado de prueba.');
@@ -267,19 +309,19 @@ test('JSON-LD del artículo: BlogPosting (autor Person) + BreadcrumbList Inicio 
   assert.equal(post.datePublished, '2020-01-15');
   assert.equal(post.dateModified, '2020-02-01');
   assert.equal(post.inLanguage, 'es');
-  assert.equal(post.mainEntityOfPage, url);
-  assert.deepEqual(post.author, { '@type': 'Person', name: 'Carlos Sagua H.', jobTitle: 'Kinesiólogo y quiropráctico' });
-  assert.equal(post.publisher['@type'], 'Organization');
-  assert.equal(post.publisher.name, 'Wire Down');
-  assert.equal(post.publisher['@id'], `${SITE}/#organization`, 'misma entidad que en la home');
+  assert.deepEqual(post.mainEntityOfPage, { '@id': url });
+  assert.deepEqual(post.author, { '@id': `${SITE}/#organization` }, 'autor: la Organization de la home');
+  assert.deepEqual(post.publisher, { '@id': `${SITE}/#organization` });
   assert.equal(crumbs['@type'], 'BreadcrumbList');
+  assert.equal(crumbs['@id'], `${url}#migas`);
   assert.deepEqual(crumbs.itemListElement.map(i => [i.position, i.name, i.item]),
     [[1, 'Inicio', `${SITE}/`], [2, 'Blog', `${SITE}/blog/`], [3, 'Artículo publicado de prueba', url]]);
   // Sin updatedDate, dateModified = datePublished.
-  const [p2] = jsonLd(ok('blog/checkout-test/index.html'))[0]['@graph'];
+  const [, page2, p2] = jsonLd(ok('blog/checkout-test/index.html'))[0]['@graph'];
   assert.equal(p2.dateModified, p2.datePublished);
+  assert.equal(page2.lastReviewed, p2.datePublished, 'sin updatedDate, lastReviewed = publishDate');
   const raw = JSON.stringify(blocks);
-  for (const banned of ['Physician', 'Medical', 'aggregateRating', 'review']) assert.ok(!raw.includes(banned), banned);
+  for (const banned of ['Physician', 'Medical', 'aggregateRating', '"review":', '"Review"']) assert.ok(!raw.includes(banned), banned);
 });
 
 // ── Página del artículo ────────────────────────────────────
@@ -288,10 +330,22 @@ test('cabecera: hero con alt, título, firma discreta, fecha y categoría', () =
   const html = ok('blog/publicado-test/index.html');
   assert.match(html, /<img src="\/images\/blog\/sistema-nervioso-modo-supervivencia\.svg" alt="Portada de prueba"/);
   assert.match(html, /<h1>Artículo publicado de prueba<\/h1>/);
-  assert.ok(html.includes('<p class="meta">Carlos Sagua H. · Kinesiólogo y quiropráctico</p>'));
+  assert.ok(html.includes('<p class="meta">Wire Down · Revisado por Carlos Sagua H., kinesiólogo y quiropráctico</p>'));
   assert.ok(html.includes('<time datetime="2020-01-15">15 de enero de 2020</time>'));
   assert.ok(html.includes('<a href="/blog/categoria/regulacion-nerviosa/">Regulación nerviosa</a>'));
   assert.ok(html.includes('data-track-section="articulo_autor"'), 'bio al final');
+  const bio = html.match(/<section class="author-bio"[\s\S]*?<\/section>/)[0];
+  assert.ok(bio.includes('>Sobre la revisión</p>'));
+  assert.ok(bio.includes('<p class="author-sign">Revisado por Carlos Sagua H. · Kinesiólogo y quiropráctico</p>'));
+  assert.ok(bio.includes('Más de 25 años de experiencia clínica'));
+  assert.ok(html.includes('.author-bio .author-label {'), 'la clase de la etiqueta existe');
+});
+
+test('«Para seguir»: el ítem que solo lleva a un borrador no se muestra; se activa cuando se publica', () => {
+  const html = ok('blog/publicado-test/index.html');
+  const seguir = html.match(/<h2 id="para-seguir">[\s\S]*?<\/ul>/)[0];
+  assert.ok(!seguir.includes('Un borrador en la lista'), 'el <li> completo se quita');
+  assert.ok(seguir.includes('Test orientativo'));
 });
 
 test('CTA hacer_test: botón a /test/ con ubicación articulo, antes de «Para seguir», sin Hotmart', () => {
@@ -383,6 +437,7 @@ test('el enlace se activa solo cuando el destino se publica', () => {
   assert.equal(r.status, 0, r.stdout + r.stderr);
   const html = fs.readFileSync(path.join(out, 'blog', 'publicado-test', 'index.html'), 'utf8');
   assert.ok(html.includes('<a href="/blog/borrador-test/">un borrador</a>'));
+  assert.ok(html.includes('<li><a href="/blog/borrador-test/">Un borrador en la lista</a>'), '«Para seguir» vuelve a mostrar el ítem');
   assert.ok(fs.existsSync(path.join(out, 'blog', 'categoria', 'cuerpo-y-estres', 'index.html')));
   assert.ok(html.includes('<a href="/blog/categoria/cuerpo-y-estres/">la categoría sin artículos</a>'));
 });

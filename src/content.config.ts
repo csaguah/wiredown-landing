@@ -47,7 +47,8 @@ const blog = defineCollection({
     publishDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
     draft: z.boolean(),
-    author: z.string().trim().min(1),
+    // El autor de los artículos es siempre Wire Down; Carlos figura como revisor (lo pone el layout).
+    author: z.literal('Wire Down'),
     category: z.enum(CATEGORIES),
     tags: z.array(z.string().trim().min(1)),
     heroImage: publicFile(/^\/images\/blog\/[a-z0-9-]+\.(svg|png|jpe?g|webp)$/, 'ruta /images/blog/<archivo>'),

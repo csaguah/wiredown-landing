@@ -7,7 +7,7 @@ seoTitle: "Sistema nervioso en modo supervivencia: por qué no se apaga"
 seoDescription: "Qué es el modo supervivencia del sistema nervioso, por qué no se apaga con descansar y qué señales necesita tu cuerpo para salir de la alerta."
 publishDate: 2026-11-22
 draft: false
-author: "Carlos Sagua H., Kinesiólogo y Quiropráctico"
+author: "Wire Down"
 category: "regulacion-nerviosa"
 tags: ["modo supervivencia", "sistema nervioso autónomo", "neurocepción", "carga alostática", "regulación nerviosa", "señales de seguridad"]
 heroImage: "/images/blog/sistema-nervioso-modo-supervivencia.svg"

@@ -6,7 +6,7 @@ seoTitle: "Prueba borrador-test"
 seoDescription: "Descripción borrador-test."
 publishDate: 2020-01-01
 draft: true
-author: "Carlos Sagua H."
+author: "Wire Down"
 category: "cuerpo-y-estres"
 tags: ["prueba"]
 heroImage: "/images/blog/donde-guarda-tu-cuerpo-el-estres.svg"

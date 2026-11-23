@@ -62,6 +62,43 @@ export function rewriteBlogLinks(html, { from, exists, published, categories, al
 }
 
 /**
+ * «Para seguir»: quita cada <li> cuyo único enlace apunta a un artículo que existe pero no se
+ * publica en este build (sin enlace, el ítem no lleva a ninguna parte). Si la lista queda vacía,
+ * se quitan la lista y el título; el resto de la sección (p. ej. una frase de cierre) se mantiene.
+ * Se aplica antes de rewriteBlogLinks: los enlaces a no publicados del texto normal siguen saliendo
+ * como texto, y un slug inexistente se deja para que rewriteBlogLinks haga fallar el build.
+ *
+ * @param {string} html
+ * @param {{ exists: Set<string>, published: Set<string> }} ctx
+ */
+export function pruneParaSeguir(html, { exists, published }) {
+  const head = /<h2 id="para-seguir">[\s\S]*?<\/h2>\n?/.exec(html);
+  if (!head) return html;
+  const start = head.index;
+  const afterHead = start + head[0].length;
+  const next = html.slice(afterHead).search(/<h2[\s>]|<hr>/);
+  const end = next < 0 ? html.length : afterHead + next;
+  const section = html.slice(afterHead, end);
+
+  const list = /<ul>\n?([\s\S]*?)<\/ul>\n?/.exec(section);
+  if (!list) return html;
+  const items = [...list[1].matchAll(/<li>[\s\S]*?<\/li>\n?/g)].map(m => m[0]);
+  const dead = li => {
+    const hrefs = [...li.matchAll(/<a\s+href="([^"]*)"/g)].map(m => m[1]);
+    if (hrefs.length !== 1) return false;
+    const m = hrefs[0].match(/^(?:https:\/\/wire-down\.com)?\/blog\/([a-z0-9-]+)\/(?:#.*)?$/);
+    return !!m && m[1] !== 'categoria' && exists.has(m[1]) && !published.has(m[1]);
+  };
+  const kept = items.filter(li => !dead(li));
+  if (kept.length === items.length) return html;
+
+  const before = section.slice(0, list.index);
+  const after = section.slice(list.index + list[0].length);
+  const newSection = kept.length ? `${before}<ul>\n${kept.join('')}</ul>\n${after}` : `${before}${after}`;
+  return html.slice(0, start) + (kept.length ? head[0] : '') + newSection + html.slice(end);
+}
+
+/**
  * Enlaces a /test/ escritos dentro del texto del artículo (Markdown): se marcan como CTA para que
  * wd-events.js envíe cta_click { cta_name: hacer_test, cta_location: articulo_texto }. Se hace aquí
  * y no a mano en los .md. Un enlace que ya trae data-cta no se toca.

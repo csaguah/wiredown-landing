@@ -29,11 +29,35 @@ const [body, closing] = splitForCta(html);
 const published = dateKey(d.publishDate);
 const modified = d.updatedDate ? dateKey(d.updatedDate) : published;
 
-// JSON-LD: BlogPosting + BreadcrumbList. Solo datos visibles en la página. Autor Person (nunca
-// Physician) y editor la Organization de la home (mismo @id).
+// JSON-LD: Organization + WebPage + BlogPosting + BreadcrumbList. Solo datos visibles en la página.
+// Autor y editor: la Organization Wire Down de la home (mismo @id). La página (WebPage, la
+// mainEntityOfPage del artículo) lleva reviewedBy = Person Carlos Sagua H. (nunca Physician) y
+// lastReviewed = updatedDate o, si no hay, publishDate.
+const ORG_ID = `${SITE}/#organization`;
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': ORG_ID,
+      name: 'Wire Down',
+      url: `${SITE}/`,
+      logo: `${SITE}/apple-touch-icon.png`,
+    },
+    {
+      '@type': 'WebPage',
+      '@id': url,
+      url,
+      name: d.title,
+      inLanguage: 'es',
+      breadcrumb: { '@id': `${url}#migas` },
+      reviewedBy: {
+        '@type': 'Person',
+        name: 'Carlos Sagua H.',
+        jobTitle: 'Kinesiólogo y quiropráctico',
+      },
+      lastReviewed: modified,
+    },
     {
       '@type': 'BlogPosting',
       '@id': `${url}#articulo`,
@@ -44,24 +68,15 @@ const jsonLd = {
       dateModified: modified,
       inLanguage: 'es',
       url,
-      mainEntityOfPage: url,
+      mainEntityOfPage: { '@id': url },
       articleSection: categoryLabel,
       keywords: d.tags.join(', '),
-      author: {
-        '@type': 'Person',
-        name: 'Carlos Sagua H.',
-        jobTitle: 'Kinesiólogo y quiropráctico',
-      },
-      publisher: {
-        '@type': 'Organization',
-        '@id': `${SITE}/#organization`,
-        name: 'Wire Down',
-        url: `${SITE}/`,
-        logo: `${SITE}/apple-touch-icon.png`,
-      },
+      author: { '@id': ORG_ID },
+      publisher: { '@id': ORG_ID },
     },
     {
       '@type': 'BreadcrumbList',
+      '@id': `${url}#migas`,
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Inicio', item: `${SITE}/` },
         { '@type': 'ListItem', position: 2, name: 'Blog', item: `${SITE}/blog/` },
@@ -119,6 +134,7 @@ const jsonLd = {
 @media (min-width: 600px) { .post-cta { padding: 34px 40px; } }
 /* Bio (AuthorBio.astro) */
 .author-bio { margin-top: 36px; padding-top: 20px; border-top: 1px solid var(--sage-d); font-size: 13px; color: var(--gris); line-height: 1.6; }
+.author-bio .author-label { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; }
 .author-bio .author-sign { font-size: 12px; letter-spacing: .3px; margin-bottom: 4px; color: var(--verde); font-weight: 600; }
 .disclaimer { margin-top: 36px; background: var(--sage); border-radius: 12px; padding: 16px 18px; font-size: 14px; line-height: 1.6; color: var(--osc); }
   </style>
@@ -134,7 +150,7 @@ const jsonLd = {
       </figure>
       <p class="eyebrow">{categoryLinked ? <a href={`/blog/categoria/${d.category}/`}>{categoryLabel}</a> : categoryLabel}</p>
       <h1>{d.title}</h1>
-      <p class="meta">Carlos Sagua H. · Kinesiólogo y quiropráctico</p>
+      <p class="meta">Wire Down · Revisado por Carlos Sagua H., kinesiólogo y quiropráctico</p>
       <p class="meta">
         <time datetime={published}>{formatDate(d.publishDate)}</time>
         {d.updatedDate && <Fragment> · Actualizado el <time datetime={modified}>{formatDate(d.updatedDate)}</time></Fragment>}

@@ -7,7 +7,7 @@ seoTitle: "Cómo bajar el estrés en el momento: los primeros 2 minutos"
 seoDescription: "Qué pasa en tu cuerpo después de un momento de estrés, por qué los minutos siguientes importan y una respiración respaldada por un ensayo clínico."
 publishDate: 2026-11-29
 draft: true
-author: "Carlos Sagua H., Kinesiólogo y Quiropráctico"
+author: "Wire Down"
 category: "regulacion-nerviosa"
 tags: ["estrés", "tensión muscular", "suspiro cíclico", "respiración", "sistema nervioso autónomo", "carga alostática", "regulación nerviosa"]
 heroImage: "/images/blog/primeros-2-minutos-despues-del-estres.svg"
