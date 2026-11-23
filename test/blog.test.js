@@ -203,7 +203,7 @@ function realArticles() {
     const fm = fs.readFileSync(path.join(dir, f), 'utf8').split(/^---$/m)[1];
     const get = k => ((fm.match(new RegExp(`^${k}:\\s*"?([^"\\n]*)"?\\s*$`, 'm')) || [])[1] || '').trim();
     const data = { draft: get('draft') === 'false' ? false : true, citationsVerified: get('citationsVerified') === 'true', publishDate: new Date(get('publishDate') + 'T00:00:00Z') };
-    return { slug: f.replace(/\.md$/, ''), category: get('category'), published: R.isPublished(data, today) };
+    return { slug: f.replace(/\.md$/, ''), category: get('category'), date: get('publishDate'), published: R.isPublished(data, today) };
   });
 }
 
@@ -221,19 +221,90 @@ test('producción (dist/): solo se generan los artículos publicados hoy; la hom
     for (const u of expected) assert.ok(fs.existsSync(path.join(DIST, u.slice(SITE.length + 1), 'index.html')), u);
   }
   for (const a of arts.filter(x => !x.published)) assert.ok(!fs.existsSync(path.join(DIST, 'blog', a.slug)), `${a.slug} no debería generarse`);
-  // La home enlaza al blog desde el pie, solo si /blog/ existe. Las demás páginas de siempre, nunca.
+  // La home enlaza al blog (pie y sección «Del blog») solo si /blog/ existe. Las demás páginas de siempre, nunca.
   const home = fs.readFileSync(path.join(DIST, 'index.html'), 'utf8');
   const homeLinks = home.match(/<a\b[^>]*href="[^"]*\/blog[^"]*"[^>]*>/g) || [];
   if (pub.length) {
-    assert.deepEqual(homeLinks, ['<a href="/blog/" style="color:inherit" data-cta="ver_blog" data-cta-location="footer">']);
     const footer = home.match(/<footer>[\s\S]*?<\/footer>/)[0];
-    assert.ok(footer.includes(homeLinks[0]), 'el enlace va en el pie');
+    assert.ok(footer.includes('<a href="/blog/" style="color:inherit" data-cta="ver_blog" data-cta-location="footer">'), 'enlace en el pie');
+    // «Del blog»: los 3 publicados más recientes (fecha descendente; empate por slug).
+    const expected = [...pub].sort((a, b) => b.date.localeCompare(a.date) || a.slug.localeCompare(b.slug)).slice(0, 3).map(a => a.slug);
+    assert.deepEqual(homeBlogSlugs(home), expected);
   } else {
     assert.deepEqual(homeLinks, []);
+    assert.ok(!home.includes('data-track-section="blog_home"'));
   }
+  // Ningún enlace de la home apunta a un artículo no publicado.
+  for (const a of arts.filter(x => !x.published)) assert.ok(!home.includes(`href="/blog/${a.slug}/"`), `${a.slug} enlazado desde la home`);
   for (const f of ['test/index.html', 'gracias.html', 'privacidad.html', '404.html']) {
     assert.ok(!/href="[^"]*\/blog/.test(fs.readFileSync(path.join(DIST, f), 'utf8')), `${f}: enlace al blog`);
   }
+});
+
+// ── Home: sección «Del blog» ───────────────────────────────
+
+// Slugs de las tarjetas de «Del blog», en orden; null si la sección no está.
+function homeBlogSlugs(html) {
+  const sec = html.match(/<section class="home-blog" data-track-section="blog_home">[\s\S]*?<\/section>/);
+  if (!sec) return null;
+  return all(sec[0], /<a class="hb-card" href="\/blog\/([a-z0-9-]+)\/"/g);
+}
+
+// Build con los artículos de prueba y los cambios de frontmatter indicados (archivo → [regex, reemplazo]).
+function buildVariant(name, files, edits = {}) {
+  const dir = path.join(FIX, `src-${name}`);
+  fs.rmSync(dir, { recursive: true, force: true });
+  fs.mkdirSync(dir, { recursive: true });
+  for (const f of files) {
+    let s = fs.readFileSync(path.join(OK_SRC, f), 'utf8');
+    for (const [re, rep] of edits[f] || []) s = s.replace(re, rep);
+    fs.writeFileSync(path.join(dir, f), s);
+  }
+  const out = path.join(FIX, name);
+  const r = build(dir, out);
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  return fs.readFileSync(path.join(out, 'index.html'), 'utf8');
+}
+
+test('home «Del blog»: publicados en orden de fecha, sin borradores, con su marcado y medición', () => {
+  const html = ok('index.html');
+  // publicado-test (2020-01-15) antes que checkout-test (2020-01-10); borrador, sin citas y futuro, fuera.
+  assert.deepEqual(homeBlogSlugs(html), ['publicado-test', 'checkout-test']);
+  for (const s of ['borrador-test', 'sin-citas-test', 'futuro-test']) assert.ok(!html.includes(`/blog/${s}/`), s);
+  const sec = html.match(/<section class="home-blog"[\s\S]*?<\/section>/)[0];
+  const cards = sec.match(/<a class="hb-card"[^>]*>/g);
+  cards.forEach(a => assert.match(a, /data-cta="ver_articulo" data-cta-location="home_blog"/));
+  const imgs = sec.match(/<img\b[^>]*>/g);
+  assert.equal(imgs.length, cards.length);
+  imgs.forEach(i => { assert.match(i, /loading="lazy"/); assert.match(i, /width="1200"/); assert.match(i, /height="630"/); });
+  assert.ok(sec.includes('<span class="hb-cat">Regulación nerviosa</span>'));
+  assert.ok(sec.includes('<span class="hb-title">Artículo publicado de prueba</span>'));
+  assert.ok(sec.includes('<span class="hb-desc">Descripción del artículo publicado de prueba.</span>'));
+  assert.ok(sec.includes('<a href="/blog/" class="btn-secondary" data-cta="ver_blog" data-cta-location="home_blog">Ver todos los artículos</a>'));
+  // Después de las preguntas frecuentes y antes del pie; sin botones de compra dentro.
+  assert.ok(html.indexOf('data-track-section="faq"') < html.indexOf('data-track-section="blog_home"'));
+  assert.ok(html.indexOf('data-track-section="blog_home"') < html.indexOf('<footer>'));
+  assert.ok(!/hotmart/i.test(sec));
+  // Las clases que usa la sección existen en los estilos de la home.
+  for (const c of ['.home-blog {', '.hb-list {', '.hb-card {', '.hb-card img {', '.hb-body {', '.hb-cat {', '.hb-title {', '.hb-desc {', '.hb-all {']) assert.ok(html.includes(c), c);
+});
+
+test('home «Del blog»: máximo 3, los más recientes', () => {
+  // 4 publicados: publicado (01-15), checkout (01-10), borrador y sin-citas (01-01; empate por slug).
+  const html = buildVariant('cuatro', fs.readdirSync(OK_SRC), {
+    'borrador-test.md': [[/^draft: true$/m, 'draft: false']],
+    'sin-citas-test.md': [[/^citationsVerified: false$/m, 'citationsVerified: true']],
+  });
+  assert.deepEqual(homeBlogSlugs(html), ['publicado-test', 'checkout-test', 'borrador-test']);
+  assert.ok(!html.includes('/blog/sin-citas-test/'), 'el cuarto no aparece');
+});
+
+test('home «Del blog»: sin artículos publicados no se genera la sección ni ningún enlace al blog', () => {
+  const html = buildVariant('ninguno', ['futuro-test.md', 'sin-citas-test.md']);
+  assert.equal(homeBlogSlugs(html), null);
+  assert.ok(!html.includes('data-track-section="blog_home"') && !html.includes('class="hb-card"'));
+  assert.ok(!/href="[^"]*\/blog/.test(html), 'ni la sección ni el pie enlazan al blog');
+  assert.ok(!fs.existsSync(path.join(FIX, 'ninguno', 'blog')));
 });
 
 test('solo se generan los publicados: draft, citationsVerified false y fecha futura quedan fuera', () => {

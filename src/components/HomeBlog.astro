@@ -1,0 +1,33 @@
+---
+// Estilos: en el <head> de la home (src/pages/index.astro), con is:inline. Aquí solo marcado.
+// Sección «Del blog» de la home: los artículos publicados más recientes que le pase la home (los 3
+// primeros de getBlog().posts, que ya vienen del más nuevo al más antiguo y sin borradores en el
+// build). Sin artículos, la home no la incluye. Tarjeta con el mismo estilo que PostList del blog.
+// Medición: data-track-section="blog_home"; cada tarjeta ver_articulo y «Ver todos» ver_blog,
+// ambos con data-cta-location="home_blog" (docs/medicion.md).
+import { CATEGORY_LABELS } from '../data/categories';
+import type { Post } from '../lib/blog';
+
+interface Props { posts: Post[]; }
+const { posts } = Astro.props;
+---
+<section class="home-blog" data-track-section="blog_home">
+  <div class="container-wide">
+    <h2>Del blog</h2>
+    <ul class="hb-list">
+      {posts.map(p => (
+        <li>
+          <a class="hb-card" href={`/blog/${p.id}/`} data-cta="ver_articulo" data-cta-location="home_blog">
+            <img src={p.data.heroImage} alt="" width="1200" height="630" loading="lazy" decoding="async">
+            <span class="hb-body">
+              <span class="hb-cat">{CATEGORY_LABELS[p.data.category]}</span>
+              <span class="hb-title">{p.data.title}</span>
+              <span class="hb-desc">{p.data.description}</span>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <p class="hb-all"><a href="/blog/" class="btn-secondary" data-cta="ver_blog" data-cta-location="home_blog">Ver todos los artículos</a></p>
+  </div>
+</section>
