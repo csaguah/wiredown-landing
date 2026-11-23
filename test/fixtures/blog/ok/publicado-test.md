@@ -8,7 +8,7 @@ seoDescription: "Descripción SEO del artículo publicado de prueba."
 publishDate: 2020-01-15
 updatedDate: 2020-02-01
 draft: false
-author: "Carlos Sagua H., Kinesiólogo y Quiropráctico"
+author: "Wire Down"
 category: "regulacion-nerviosa"
 tags: ["estrés", "prueba"]
 heroImage: "/images/blog/sistema-nervioso-modo-supervivencia.svg"
@@ -35,6 +35,7 @@ Texto del cuerpo, con un enlace a [la categoría sin artículos](/blog/categoria
 ## Para seguir
 
 - [Test orientativo](/test/)
+- [Un borrador en la lista](/blog/borrador-test/): este ítem no se muestra mientras el borrador no se publique.
 
 ---
 

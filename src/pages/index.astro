@@ -1,6 +1,11 @@
 ---
 import ConsentBanner from '../components/ConsentBanner.astro';
 import SEOHead from '../components/SEOHead.astro';
+import { getBlog } from '../lib/blog';
+
+// Enlace al blog en el pie: solo si este build genera /blog/ (hay artículos publicados).
+const { posts } = await getBlog();
+const hasBlog = posts.length > 0;
 
 // JSON-LD de la página de la guía. Solo datos visibles en la página: sin valoraciones ni reseñas.
 // La guía es ["Product", "Book"]: Product aporta brand, category y offers; Book aporta author
@@ -1032,7 +1037,7 @@ footer strong { color: rgba(255,255,255,0.8); }
   <strong>Wire Down</strong><br>
   Santiago, Chile · wire-down.com<br><br>
   Este ebook es un producto educativo. No reemplaza diagnóstico ni tratamiento médico.<br><br>
-  <a href="privacidad.html" style="color:inherit">Política de privacidad</a> · <a href="#" id="cookie-settings" style="color:inherit">Preferencias de cookies</a>
+  {hasBlog && <Fragment><a href="/blog/" style="color:inherit" data-cta="ver_blog" data-cta-location="footer">Blog</a> · </Fragment>}<a href="privacidad.html" style="color:inherit">Política de privacidad</a> · <a href="#" id="cookie-settings" style="color:inherit">Preferencias de cookies</a>
 </footer>
 
 <!-- STICKY MOBILE CTA -->

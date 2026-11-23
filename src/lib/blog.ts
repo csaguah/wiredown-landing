@@ -3,7 +3,7 @@
 // fallar el build: las páginas del blog llaman a getBlog() desde getStaticPaths, que siempre corre.
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { CATEGORY_LABELS, type Category } from '../data/categories';
-import { isPublished, rewriteBlogLinks, tagTestLinks, todayInSantiago, unpublishedReasons } from './blog-rules.mjs';
+import { isPublished, pruneParaSeguir, rewriteBlogLinks, tagTestLinks, todayInSantiago, unpublishedReasons } from './blog-rules.mjs';
 
 export type Post = CollectionEntry<'blog'>;
 
@@ -41,7 +41,7 @@ export interface Blog {
   categories: Category[];
   /** Motivos por los que un artículo no se publicaría en producción (vacío = publicado). */
   reasons: (p: Post) => string[];
-  /** HTML del cuerpo: enlaces a artículos no publicados convertidos en texto y enlaces a /test/ marcados como CTA. */
+  /** HTML del cuerpo: en «Para seguir» sin los ítems que solo llevan a no publicados; en el resto, enlaces a no publicados como texto; enlaces a /test/ marcados como CTA. */
   html: (p: Post) => string;
 }
 
@@ -70,7 +70,7 @@ async function load(): Promise<Blog> {
   // falla hoy y no el día en que el artículo sale.
   const htmlById = new Map<string, string>();
   for (const p of all) {
-    htmlById.set(p.id, tagTestLinks(rewriteBlogLinks(p.rendered?.html ?? '', { ...ctx, from: `blog/${p.id}.md` })));
+    htmlById.set(p.id, tagTestLinks(rewriteBlogLinks(pruneParaSeguir(p.rendered?.html ?? '', ctx), { ...ctx, from: `blog/${p.id}.md` })));
   }
 
   return {

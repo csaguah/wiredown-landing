@@ -6,7 +6,7 @@ seoTitle: "Artículo de prueba con checkout"
 seoDescription: "Artículo de prueba cuyo CTA es el checkout."
 publishDate: 2020-01-10
 draft: false
-author: "Carlos Sagua H."
+author: "Wire Down"
 category: "regulacion-nerviosa"
 tags: ["prueba"]
 heroImage: "/images/blog/primeros-2-minutos-despues-del-estres.svg"

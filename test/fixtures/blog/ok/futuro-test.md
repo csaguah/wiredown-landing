@@ -6,7 +6,7 @@ seoTitle: "Prueba futuro-test"
 seoDescription: "Descripción futuro-test."
 publishDate: 2099-01-01
 draft: false
-author: "Carlos Sagua H."
+author: "Wire Down"
 category: "cuerpo-y-estres"
 tags: ["prueba"]
 heroImage: "/images/blog/donde-guarda-tu-cuerpo-el-estres.svg"

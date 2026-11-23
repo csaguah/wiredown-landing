@@ -71,7 +71,7 @@ Este repo es **público**. Por eso:
 
 Cada artículo es `src/content/blog/<slug>.md`, validado por el schema Zod de `src/content.config.ts`. Si un campo no cumple, o sobra un campo desconocido, **el build falla** (y con él `npm test` y el deploy).
 
-1. **Núcleo:** `title`, `slug` (igual al nombre del archivo), `description`, `seoTitle` (máx. 60), `seoDescription` (máx. 160), `publishDate`, `updatedDate` (opcional, no anterior a `publishDate`), `draft`, `author`, `category` (enum), `tags`, `heroImage` y `ogImage` (deben existir en `public/`; `ogImage` en PNG o JPG de 1200×630, nunca SVG), `heroImageAlt` (obligatorio), `codigo` (`a001`…, único; página de entrada de la atribución: va en `<body data-codigo>`, en el `sck` y en `attr_entrada` de `click_checkout`; ver `docs/medicion.md`).
+1. **Núcleo:** `title`, `slug` (igual al nombre del archivo), `description`, `seoTitle` (máx. 60), `seoDescription` (máx. 160), `publishDate`, `updatedDate` (opcional, no anterior a `publishDate`), `draft`, `author` (siempre `"Wire Down"`: el autor es la marca y Carlos es el revisor; el esquema no acepta otro valor), `category` (enum), `tags`, `heroImage` y `ogImage` (deben existir en `public/`; `ogImage` en PNG o JPG de 1200×630, nunca SVG), `heroImageAlt` (obligatorio), `codigo` (`a001`…, único; página de entrada de la atribución: va en `<body data-codigo>`, en el `sck` y en `attr_entrada` de `click_checkout`; ver `docs/medicion.md`).
 2. **Marketing:** `socialHook`, `linkedinSummary`, `targetAudience`, `primaryCta` (`"hacer_test"` | `"comprar_hotmart"`).
 3. **Salud:** `citationsVerified` (compuerta YMYL).
 
@@ -83,7 +83,8 @@ Reglas sobre toda la colección (`src/lib/blog.ts`, también hacen fallar el bui
 - En producción solo se genera un artículo con **`draft: false` + `citationsVerified: true` + `publishDate` ≤ fecha del build en America/Santiago**. Lo demás no se genera: no tiene URL ni entra al sitemap.
 - Un artículo con fecha futura **sale solo ese día**: el workflow de deploy corre también a diario a las 09:17 UTC (06:17 de Chile en horario de verano) sobre `main`. Basta con mergear el artículo listo (`draft: false`, `citationsVerified: true`) antes de su fecha.
 - Un enlace a `/blog/<slug>/` cuyo artículo todavía no se publica se muestra como texto normal y se convierte en enlace solo en el primer build después de que el destino se publique. Lo mismo para `/blog/` y `/blog/categoria/<categoria>/`.
-- Mientras no haya artículos publicados, `/blog/` no se genera y ningún enlace apunta al blog. `/blog/categoria/<categoria>/` existe solo si esa categoría tiene artículos publicados.
+- En «Para seguir», un ítem cuyo único enlace apunta a un artículo no publicado no se muestra (se quita el `<li>` completo); si la lista queda vacía, no se muestra la sección. Vuelve solo en el primer build después de que el destino se publique (`pruneParaSeguir` en `src/lib/blog-rules.mjs`).
+- Mientras no haya artículos publicados, `/blog/` no se genera y ningún enlace apunta al blog. Con artículos publicados, el pie de la home enlaza a `/blog/` (`data-cta="ver_blog" data-cta-location="footer"`). `/blog/categoria/<categoria>/` existe solo si esa categoría tiene artículos publicados.
 - En `npm run dev` se ven también los borradores, con una franja «BORRADOR» que dice por qué no se publicarían (y con `noindex`).
 - Imagen OG: `public/images/blog/<slug>.png` a 1200×630, generada desde la SVG con Chrome headless.
 
@@ -93,11 +94,7 @@ Tocar a la vez, en el mismo cambio: el arreglo `CATEGORIES` de `src/content.conf
 
 ### Qué pone el layout (los artículos no lo traen)
 
-`src/layouts/BlogPostLayout.astro`: hero, categoría, título, firma discreta «Carlos Sagua H. · Kinesiólogo y quiropráctico» (texto fijo; el campo `author` solo se valida) y fecha; CTA según `primaryCta` antes de «Para seguir»/«Fuentes» (o al final del cuerpo); aviso fijo «Este contenido es educativo y no reemplaza la evaluación ni el tratamiento de un profesional de salud. Si tienes síntomas que te preocupan, consulta en forma presencial.»; bio breve (`src/components/AuthorBio.astro`). JSON-LD `BlogPosting` + `BreadcrumbList`, con el autor como `Person`, nunca `Physician`. Los enlaces a `/test/` dentro del cuerpo reciben `data-cta="hacer_test" data-cta-location="articulo_texto"` al procesar el HTML (no se escriben a mano en los `.md`).
-
-### Pendientes del blog
-
-- Enlace al blog desde la home: cuando se publique el primer artículo (mientras no haya publicados, ninguna página enlaza al blog).
+`src/layouts/BlogPostLayout.astro`: hero, categoría, título, firma discreta «Wire Down · Revisado por Carlos Sagua H., kinesiólogo y quiropráctico» (texto fijo) y fecha; CTA según `primaryCta` antes de «Para seguir»/«Fuentes» (o al final del cuerpo); aviso fijo «Este contenido es educativo y no reemplaza la evaluación ni el tratamiento de un profesional de salud. Si tienes síntomas que te preocupan, consulta en forma presencial.»; bloque «Sobre la revisión» (`src/components/AuthorBio.astro`: «Revisado por Carlos Sagua H. · Kinesiólogo y quiropráctico» y los 25 años de experiencia clínica). JSON-LD: `Organization` Wire Down (mismo `@id` que la home, `/#organization`) como `author` y `publisher` del `BlogPosting`; `WebPage` (la `mainEntityOfPage`) con `reviewedBy` = `Person` Carlos Sagua H. (`jobTitle` «Kinesiólogo y quiropráctico», nunca `Physician`) y `lastReviewed` = `updatedDate` o, si no hay, `publishDate`; `BreadcrumbList`. La home no cambia: allí el libro (`Book`) sigue con autor `Person` Carlos. Los enlaces a `/test/` dentro del cuerpo reciben `data-cta="hacer_test" data-cta-location="articulo_texto"` al procesar el HTML (no se escriben a mano en los `.md`).
 
 ## Flujo de trabajo
 

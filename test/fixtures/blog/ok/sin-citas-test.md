@@ -6,7 +6,7 @@ seoTitle: "Prueba sin-citas-test"
 seoDescription: "Descripción sin-citas-test."
 publishDate: 2020-01-01
 draft: false
-author: "Carlos Sagua H."
+author: "Wire Down"
 category: "cuerpo-y-estres"
 tags: ["prueba"]
 heroImage: "/images/blog/donde-guarda-tu-cuerpo-el-estres.svg"
