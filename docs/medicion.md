@@ -58,6 +58,8 @@ Un clic en un botón de checkout envía **solo** `click_checkout`, nunca `cta_cl
 | `/` | Botón fijo en móvil (`.sticky-cta`) | — (solo `click_checkout`) | `sticky` |
 | `/` | Enlace «Haz el test orientativo» (bajo la línea de confianza del hero) | `hacer_test` | `hero` |
 | `/` | Botón «Haz el test orientativo →» | `hacer_test` | `bonos` |
+| `/` | Tarjeta de un artículo en «Del blog» (solo si hay artículos publicados) | `ver_articulo` | `home_blog` |
+| `/` | «Ver todos los artículos» en «Del blog» | `ver_blog` | `home_blog` |
 | `/` | Enlace «Blog» del pie (solo si hay artículos publicados) | `ver_blog` | `footer` |
 | `/test/` | «Comenzar» | `comenzar_test` | `intro` |
 | `/test/` | «Conocer la guía Wire Down» | `ver_guia` | `resultado` |
@@ -72,7 +74,7 @@ Un clic en un botón de checkout envía **solo** `click_checkout`, nunca `cta_cl
 
 **`section_name`**
 
-- `/`: `hero`, `dolor`, `cita`, `producto`, `bonos`, `autor`, `cta_final`, `faq`
+- `/`: `hero`, `dolor`, `cita`, `producto`, `bonos`, `autor`, `cta_final`, `faq`, `blog_home` (sección «Del blog», solo si hay artículos publicados: los 3 más recientes)
 - `/test/`: `test_intro`, `test_preguntas`, `test_resultado`
 - 404: `no_encontrada`
 - artículos (`/blog/<slug>/`): `articulo_cabecera`, `articulo_cuerpo`, `articulo_cta`, `articulo_cierre` (solo si el artículo tiene «Para seguir» o «Fuentes»), `articulo_autor`

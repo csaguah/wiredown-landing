@@ -1,11 +1,14 @@
 ---
 import ConsentBanner from '../components/ConsentBanner.astro';
 import SEOHead from '../components/SEOHead.astro';
+import HomeBlog from '../components/HomeBlog.astro';
 import { getBlog } from '../lib/blog';
 
 // Enlace al blog en el pie: solo si este build genera /blog/ (hay artículos publicados).
 const { posts } = await getBlog();
 const hasBlog = posts.length > 0;
+// Sección «Del blog»: los 3 publicados más recientes (posts ya viene ordenado del más nuevo al más antiguo).
+const latestPosts = posts.slice(0, 3);
 
 // JSON-LD de la página de la guía. Solo datos visibles en la página: sin valoraciones ni reseñas.
 // La guía es ["Product", "Book"]: Product aporta brand, category y offers; Book aporta author
@@ -583,6 +586,32 @@ h1,h2,h3,h4 { font-family: 'Lora', serif; line-height: 1.2; }
 }
 .faq-a.open { display: block; }
 
+/* ─── DEL BLOG (HomeBlog.astro) ─────────────────────────────
+   Tarjeta con el mismo estilo que PostList del blog. Una columna en móvil; hasta 3 en escritorio. */
+.home-blog {
+  background: var(--sage);
+  padding: 70px 24px;
+}
+.home-blog h2 {
+  font-size: clamp(22px, 3vw, 30px);
+  color: var(--verde);
+  text-align: center;
+  margin-bottom: 36px;
+}
+.hb-list { list-style: none; display: grid; gap: 20px; grid-template-columns: 1fr; }
+@media (min-width: 760px) {
+  /* 3 × 288 px + 2 × 20 px = 904 px: caben en los 912 px útiles de .container-wide */
+  .hb-list { grid-template-columns: repeat(auto-fit, minmax(240px, 288px)); justify-content: center; }
+}
+.hb-card { display: flex; flex-direction: column; height: 100%; background: #fff; border: 1.5px solid var(--sage-d); border-radius: 18px; overflow: hidden; text-decoration: none; color: inherit; transition: transform .15s; }
+.hb-card:hover { transform: translateY(-2px); }
+.hb-card img { width: 100%; height: auto; aspect-ratio: 1200 / 630; object-fit: cover; display: block; }
+.hb-body { display: block; padding: 18px 20px 20px; }
+.hb-cat { display: block; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--verde-m); font-weight: 600; margin-bottom: 6px; }
+.hb-title { display: block; font-family: 'Lora', serif; font-size: 19px; line-height: 1.3; color: var(--verde); margin-bottom: 8px; }
+.hb-desc { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; font-size: 14px; color: var(--gris); line-height: 1.6; }
+.hb-all { text-align: center; margin-top: 32px; }
+
 /* ─── LEADS FORM ─────────────────────────────────────────── */
 .leads-section {
   background: var(--sage);
@@ -1031,6 +1060,8 @@ footer strong { color: rgba(255,255,255,0.8); }
     </div>
   </div>
 </section>
+
+{latestPosts.length > 0 && <HomeBlog posts={latestPosts} />}
 
 <!-- FOOTER -->
 <footer>
